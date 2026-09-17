@@ -1,8 +1,8 @@
 class_name ItemColetavel extends Area3D
 
 enum TipoItem {
-	COLETAVEL_NOZ,
-	COLETAVEL_NOZ_PESADA
+	COLETAVEL_NOZ = 111,
+	COLETAVEL_NOZ_PESADA=112
 }
 
 enum EstadoItem {

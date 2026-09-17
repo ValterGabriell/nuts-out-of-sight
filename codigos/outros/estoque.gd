@@ -7,6 +7,7 @@ enum EstadoEstoque {
 }
 
 @export var itens_no_estoque_label: Label3D = null
+@export var area_que_os_itens_guardados_spawnam: AreaParaGuardarOsItens = null
 
 var _jogador: Jogador = null
 var _estado_estoque: EstadoEstoque = EstadoEstoque.PODE_INSERIR
@@ -26,13 +27,24 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _jogador and _estado_estoque == EstadoEstoque.PODE_INSERIR and event.is_action_pressed("interagir"):
 		if GlobalItensQueOJogadorCarrega.itens_coletados.is_empty():
 			return
-		GlobalEstoque.guardar_itens(GlobalItensQueOJogadorCarrega.itens_coletados)
-		GlobalItensQueOJogadorCarrega.remover_todos_itens_do_inventario()
-		GlobalGerenciadorDeSinais.item_adicionado_ao_inventario.emit(0)
-		GlobalGerenciadorDeSinais.velocidade_do_jogador_resetada.emit()
+		var itens_para_guardar: Array[int] = GlobalItensQueOJogadorCarrega.itens_coletados.duplicate()
+		var itens_guardados: Array[int] = GlobalEstoque.guardar_itens(itens_para_guardar)
+		if itens_guardados.is_empty():
+			return
+
+		for tipo_item_guardado: int in itens_guardados:
+			GlobalItensQueOJogadorCarrega.itens_coletados.erase(tipo_item_guardado)
+
+		GlobalGerenciadorDeSinais.item_adicionado_ao_inventario.emit(GlobalItensQueOJogadorCarrega.itens_coletados.size())
+		if GlobalItensQueOJogadorCarrega.itens_coletados.is_empty():
+			GlobalGerenciadorDeSinais.velocidade_do_jogador_resetada.emit()
+		spawnar_itens_guardados(itens_guardados)
 
 func _atualizar_label_itens_no_estoque(quantidade_total_de_itens: int) -> void:
 	if itens_no_estoque_label == null:
 		return
-
 	itens_no_estoque_label.text = str(quantidade_total_de_itens)
+
+func spawnar_itens_guardados(tipos_itens: Array[int]) -> void:
+	if area_que_os_itens_guardados_spawnam:
+		area_que_os_itens_guardados_spawnam.call_deferred("spawnar_itens", tipos_itens)

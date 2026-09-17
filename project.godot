@@ -119,6 +119,7 @@ largar_itens={
 3d_physics/layer_4="item_coletavel"
 3d_physics/layer_5="porta"
 3d_physics/layer_6="estoque"
+3d_physics/layer_7="area_para_guardar_os_itens"
 
 [physics]
 
