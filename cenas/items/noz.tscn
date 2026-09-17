@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://d0xavr5nl12q0"]
+
+[ext_resource type="Texture2D" uid="uid://dtl2cy7wj17oe" path="res://arte/sprites_2d/noz.png" id="1_c6fc5"]
+[ext_resource type="Script" uid="uid://blwp4h6phavft" path="res://codigos/items_coletaveis/item_coletavel.gd" id="1_tdf1p"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_c6fc5"]
+size = Vector3(0.3494873, 0.47192383, 0.4193573)
+
+[node name="Noz" type="Area3D" unique_id=2089380860 node_paths=PackedStringArray("label_acao")]
+collision_layer = 8
+collision_mask = 4
+script = ExtResource("1_tdf1p")
+label_acao = NodePath("Label3D")
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1456583108]
+billboard = 2
+texture_filter = 2
+texture = ExtResource("1_c6fc5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1703918347]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0048217773, 0.03527832, 0.00617218)
+shape = SubResource("BoxShape3D_c6fc5")
+
+[node name="Label3D" type="Label3D" parent="." unique_id=529417692]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3862217, 0)
+visible = false
+billboard = 2
+text = "E"
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
