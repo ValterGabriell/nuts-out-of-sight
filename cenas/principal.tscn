@@ -84,9 +84,21 @@ text = "0"
 
 [node name="Noz" parent="ItensColetaveis/Noz" unique_id=2089380860 instance=ExtResource("8_djk5k")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6343756, 0.20596546, 4.4335995)
+id_unico_do_item_no_mapa = &"principal_noz_1"
+
+[node name="Noz4" parent="ItensColetaveis/Noz" unique_id=1552887845 instance=ExtResource("8_djk5k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1792607, 0.20596546, 6.0994906)
+id_unico_do_item_no_mapa = &"principal_noz_4"
 
 [node name="Noz2" parent="ItensColetaveis/Noz" unique_id=1160903897 instance=ExtResource("9_sflf3")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -3.98499, 0.46267164, 3.258787)
+tipo_item = 112
+id_unico_do_item_no_mapa = &"principal_noz_2"
+
+[node name="Noz3" parent="ItensColetaveis/Noz" unique_id=1915219264 instance=ExtResource("9_sflf3")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -1.8311064, 0.46267164, 1.9542334)
+tipo_item = 112
+id_unico_do_item_no_mapa = &"principal_noz_3"
 
 [node name="PontosDeSpawn" type="Node3D" parent="." unique_id=53468549]
 

@@ -13,6 +13,7 @@ enum EstadoItem {
 @export var tipo_item: TipoItem = TipoItem.COLETAVEL_NOZ
 @export var label_acao: Label3D
 @export var percentual_reducao_velocidade: float = 0.0
+@export var id_unico_do_item_no_mapa: StringName
 
 var _jogador: Jogador = null
 var _estado_item: EstadoItem = EstadoItem.NO_MUNDO
@@ -23,6 +24,9 @@ var _mascara_colisao_original: int = 0
 func _ready() -> void:
 	_camada_colisao_original = collision_layer
 	_mascara_colisao_original = collision_mask
+	if GlobalItensNaCabana.obter_estado_do_item_no_registro(id_unico_do_item_no_mapa) == GlobalItensNaCabana.EstadoDoItemNoRegistro.COLETADO:
+		queue_free()
+		return
 
 func _on_body_entered(body: Node3D) -> void:
 	if body is Jogador:
@@ -44,6 +48,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func coletar() -> void:
+	GlobalItensNaCabana.registrar_item_coletado(id_unico_do_item_no_mapa)
 	_estado_item = EstadoItem.NO_INVENTARIO
 	_jogador = null
 	label_acao.visible = false

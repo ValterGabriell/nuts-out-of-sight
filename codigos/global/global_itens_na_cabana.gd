@@ -1,9 +1,23 @@
 extends Node
 
-var itens_na_cabana: Array[ItemColetavel] = []
+enum EstadoDoItemNoRegistro {
+	NAO_COLETADO,
+	COLETADO
+}
 
-func adicionar_item(item: ItemColetavel) -> void:
-	itens_na_cabana.append(item)
+var _ids_de_itens_coletados: Dictionary[StringName, EstadoDoItemNoRegistro] = {}
 
-func remover_item(item: ItemColetavel) -> void:
-	itens_na_cabana.erase(item)
+func registrar_item_coletado(id_unico_do_item_no_mapa: StringName) -> void:
+	if id_unico_do_item_no_mapa == StringName():
+		return
+	_ids_de_itens_coletados[id_unico_do_item_no_mapa] = EstadoDoItemNoRegistro.COLETADO
+
+func obter_estado_do_item_no_registro(id_unico_do_item_no_mapa: StringName) -> EstadoDoItemNoRegistro:
+	if id_unico_do_item_no_mapa == StringName():
+		return EstadoDoItemNoRegistro.NAO_COLETADO
+	if not _ids_de_itens_coletados.has(id_unico_do_item_no_mapa):
+		return EstadoDoItemNoRegistro.NAO_COLETADO
+	return EstadoDoItemNoRegistro.COLETADO
+
+func limpar_registro_de_itens_coletados() -> void:
+	_ids_de_itens_coletados.clear()

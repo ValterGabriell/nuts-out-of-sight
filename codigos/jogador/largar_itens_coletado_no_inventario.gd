@@ -15,7 +15,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 
 	var itens_para_largar: Array[int] = GlobalItensQueOJogadorCarrega.itens_coletados.duplicate()
-	print("Itens para largar: ", itens_para_largar)
 	GlobalItensQueOJogadorCarrega.itens_coletados.clear()
 	GlobalGerenciadorDeSinais.item_adicionado_ao_inventario.emit(0)
 
