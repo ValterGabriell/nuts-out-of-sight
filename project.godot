@@ -20,6 +20,8 @@ config/icon="res://icon.svg"
 GlobalItensQueOJogadorCarrega="*uid://y8bi6ke2k78i"
 GlobalItensNaCabana="*uid://0mgnl7vy34i4"
 GlobalGerenciadorDeSinais="*uid://cl0xbech2w48c"
+GlobalEstoque="*res://codigos/global/global_estoque.gd"
+GlobalTransicaoDeCena="*res://codigos/global/global_transicao_de_cena.gd"
 
 [display]
 
@@ -115,6 +117,8 @@ largar_itens={
 3d_physics/layer_2="urso"
 3d_physics/layer_3="jogador"
 3d_physics/layer_4="item_coletavel"
+3d_physics/layer_5="porta"
+3d_physics/layer_6="estoque"
 
 [physics]
 

@@ -14,7 +14,7 @@ extends Node3D
 @export var zoom_min: float = 5.0
 @export var zoom_max: float = 30.0
 
-@onready var camera: Camera3D = $Camera3D
+@export var camera: Camera3D
 
 var _offset_alvo: Vector3 = Vector3.ZERO
 var _offset_atual: Vector3 = Vector3.ZERO
@@ -27,6 +27,15 @@ func _ready() -> void:
 	_posicao_inicial_camera = camera.position
 	_zoom_atual_z = _posicao_inicial_camera.z
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+func configurar_pose_inicial(posicao_local: Vector3, rotacao_graus_local: Vector3) -> void:
+	camera.position = posicao_local
+	camera.rotation_degrees = rotacao_graus_local
+	_posicao_inicial_camera = camera.position
+	_zoom_atual_z = _posicao_inicial_camera.z
+	_offset_alvo = Vector3.ZERO
+	_offset_atual = Vector3.ZERO
+	_posicao_acumulada = Vector2.ZERO
 
 func _process(delta: float) -> void:
 	_atualizar_deslocamento_camera(delta)
@@ -70,7 +79,7 @@ func _atualizar_deslocamento_camera(delta: float) -> void:
 	camera.position.z = _zoom_atual_z + _offset_atual.z
 
 func _atualizar_rotacao_suave(delta: float) -> void:
-	rotation.y = lerp_angle(rotation.y, _angulo_y_alvo, velocidade_transicao_rotacao * delta)
+	camera.rotation.y = lerp_angle(camera.rotation.y, _angulo_y_alvo, velocidade_transicao_rotacao * delta)
 
 func _aplicar_zoom(valor: float) -> void:
 	_zoom_atual_z = clamp(
