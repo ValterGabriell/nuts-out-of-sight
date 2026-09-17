@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://mwk4iw3jok1s" path="res://codigos/jogador/jogador.gd" id="1_ismvl"]
 [ext_resource type="Texture2D" uid="uid://th3cwfu16gj" path="res://arte/sprites_2d/jogador.png" id="1_tm1li"]
 [ext_resource type="Script" uid="uid://ckpla0xf8gils" path="res://codigos/jogador/jogador_movimento.gd" id="3_gaiqy"]
+[ext_resource type="Script" uid="uid://vajxr8m870gc" path="res://codigos/debug/ui_jogador.gd" id="4_nkbb3"]
+[ext_resource type="Script" uid="uid://c7rmrprasua8q" path="res://codigos/jogador/largar_itens_coletado_no_inventario.gd" id="4_qtkst"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_42xuo"]
 atlas = ExtResource("1_tm1li")
@@ -39,3 +41,26 @@ shape = SubResource("BoxShape3D_g4v7s")
 [node name="Movimentos" type="Node3D" parent="Codigos" unique_id=741938532 node_paths=PackedStringArray("jogador")]
 script = ExtResource("3_gaiqy")
 jogador = NodePath("../..")
+
+[node name="LargarItensColetadoNoInventario" type="Node3D" parent="Codigos" unique_id=1119924619 node_paths=PackedStringArray("jogador")]
+script = ExtResource("4_qtkst")
+jogador = NodePath("../..")
+
+[node name="DEBUG" type="CanvasLayer" parent="." unique_id=2492568 node_paths=PackedStringArray("jogador", "label_velocidade")]
+script = ExtResource("4_nkbb3")
+jogador = NodePath("..")
+label_velocidade = NodePath("PanelContainer/VBoxContainer/VelocidadeDoJogador")
+
+[node name="PanelContainer" type="PanelContainer" parent="DEBUG" unique_id=99229869]
+custom_minimum_size = Vector2(250, 250)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -250.0
+grow_horizontal = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DEBUG/PanelContainer" unique_id=9525517]
+layout_mode = 2
+
+[node name="VelocidadeDoJogador" type="Label" parent="DEBUG/PanelContainer/VBoxContainer" unique_id=450731210]
+layout_mode = 2
