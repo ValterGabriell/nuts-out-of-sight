@@ -63,6 +63,7 @@ func _sortear_duracao_de_pre_aviso() -> float:
 	return randf_range(pre_aviso_minimo_em_segundos, pre_aviso_maximo_em_segundos)
 
 func _on_timer_timeout() -> void:
+	area_aparecimento_das_folhas.registrar_posicoes_base_das_folhas_ativas()
 	direcao_atual_do_vento = DirecaoDoVento.values()[randi() % DirecaoDoVento.values().size()]
 	duracao_pre_aviso_atual = _sortear_duracao_de_pre_aviso()
 	area_aparecimento_das_folhas.aplicar_pre_aviso_de_vento(direcao_atual_do_vento, duracao_pre_aviso_atual)

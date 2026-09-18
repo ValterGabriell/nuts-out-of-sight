@@ -15,6 +15,7 @@ enum EstadoDoArquivoDeSalvamento {
 const CAMINHO_DO_ARQUIVO_DE_SALVAMENTO: String = "user://save_jogo.json"
 
 var estado_do_arquivo_de_salvamento: EstadoDoArquivoDeSalvamento = EstadoDoArquivoDeSalvamento.NAO_CARREGADO
+var snapshots_de_folhas_por_cena: Dictionary[StringName, Dictionary] = {}
 
 
 func _ready() -> void:
@@ -23,12 +24,15 @@ func _ready() -> void:
 
 
 func salvar_jogo(motivo_do_salvamento: MotivoDeSalvamento) -> void:
+	_atualizar_snapshot_de_folhas_da_cena_atual()
+
 	var dados_do_salvamento: Dictionary = {
 		"versao": 1,
 		"motivo_ultimo_salvamento": MotivoDeSalvamento.keys()[motivo_do_salvamento],
 		"sequencial_id_item_dropado": sequencial_id_item_dropado,
 		"ids_de_itens_coletados": _serializar_ids_de_itens_coletados(),
 		"itens_dropados_por_cena": _serializar_itens_dropados_por_cena(),
+		"snapshots_de_folhas_por_cena": _serializar_snapshots_de_folhas_por_cena(),
 		"inventario_do_jogador": GlobalItensQueOJogadorCarrega.obter_snapshot_para_salvamento(),
 		"estoque": GlobalEstoque.obter_snapshot_para_salvamento()
 	}
@@ -72,9 +76,59 @@ func carregar_jogo_do_disco() -> void:
 	sequencial_id_item_dropado = int(dados_do_salvamento.get("sequencial_id_item_dropado", 0))
 	_carregar_ids_de_itens_coletados(dados_do_salvamento.get("ids_de_itens_coletados", []))
 	_carregar_itens_dropados_por_cena(dados_do_salvamento.get("itens_dropados_por_cena", {}))
+	_carregar_snapshots_de_folhas_por_cena(dados_do_salvamento.get("snapshots_de_folhas_por_cena", {}))
 	GlobalItensQueOJogadorCarrega.carregar_snapshot_do_salvamento(dados_do_salvamento.get("inventario_do_jogador", {}))
 	GlobalEstoque.carregar_snapshot_do_salvamento(dados_do_salvamento.get("estoque", {}))
 	estado_do_arquivo_de_salvamento = EstadoDoArquivoDeSalvamento.CARREGADO
+
+func _atualizar_snapshot_de_folhas_da_cena_atual() -> void:
+	var cena_atual = get_tree().current_scene
+	if cena_atual == null:
+		return
+
+	var id_da_cena_atual = _obter_id_da_cena_atual()
+	if id_da_cena_atual == StringName():
+		return
+
+	var snapshots_da_cena: Dictionary = {}
+	for node in get_tree().get_nodes_in_group("persistencia_de_folhas"):
+		if not (node is AreasDeAparecimentoDasFolhas):
+			continue
+		if not cena_atual.is_ancestor_of(node):
+			continue
+
+		var areas_de_folhas = node as AreasDeAparecimentoDasFolhas
+		var caminho_relativo = StringName(String(cena_atual.get_path_to(areas_de_folhas)))
+		snapshots_da_cena[caminho_relativo] = areas_de_folhas.obter_snapshot_para_salvamento()
+
+	snapshots_de_folhas_por_cena[id_da_cena_atual] = snapshots_da_cena
+
+func obter_snapshot_de_folhas_da_cena_atual_para(areas_de_folhas: AreasDeAparecimentoDasFolhas) -> Dictionary:
+	if areas_de_folhas == null:
+		return {}
+
+	var cena_atual = get_tree().current_scene
+	if cena_atual == null:
+		return {}
+
+	var id_da_cena_atual = _obter_id_da_cena_atual()
+	if id_da_cena_atual == StringName():
+		return {}
+	if not snapshots_de_folhas_por_cena.has(id_da_cena_atual):
+		return {}
+
+	var snapshots_da_cena = snapshots_de_folhas_por_cena[id_da_cena_atual] as Dictionary
+	if snapshots_da_cena == null:
+		return {}
+
+	var caminho_relativo = StringName(String(cena_atual.get_path_to(areas_de_folhas)))
+	if not snapshots_da_cena.has(caminho_relativo):
+		return {}
+
+	var snapshot = snapshots_da_cena[caminho_relativo] as Dictionary
+	if snapshot == null:
+		return {}
+	return snapshot
 
 func _serializar_posicao_global_para_registro(posicao_global: Vector3) -> Variant:
 	return {
@@ -111,6 +165,16 @@ func _serializar_itens_dropados_por_cena() -> Dictionary:
 		dados_serializados[String(id_da_cena)] = itens_serializados
 	return dados_serializados
 
+func _serializar_snapshots_de_folhas_por_cena() -> Dictionary:
+	var dados_serializados: Dictionary = {}
+	for id_da_cena: StringName in snapshots_de_folhas_por_cena.keys():
+		var snapshots_da_cena: Dictionary = snapshots_de_folhas_por_cena[id_da_cena]
+		var snapshots_serializados: Dictionary = {}
+		for caminho_do_no: StringName in snapshots_da_cena.keys():
+			snapshots_serializados[String(caminho_do_no)] = snapshots_da_cena[caminho_do_no]
+		dados_serializados[String(id_da_cena)] = snapshots_serializados
+	return dados_serializados
+
 
 func _carregar_ids_de_itens_coletados(ids_serializados: Array) -> void:
 	ids_de_itens_coletados.clear()
@@ -136,6 +200,22 @@ func _carregar_itens_dropados_por_cena(dados_serializados: Dictionary) -> void:
 				continue
 			itens_da_cena_tipados[StringName(String(id_item_dropado_serializado))] = dados_do_item_dropado
 		itens_dropados_por_cena[id_da_cena] = itens_da_cena_tipados
+
+func _carregar_snapshots_de_folhas_por_cena(dados_serializados: Dictionary) -> void:
+	snapshots_de_folhas_por_cena.clear()
+	for id_da_cena_serializado: Variant in dados_serializados.keys():
+		var id_da_cena: StringName = StringName(String(id_da_cena_serializado))
+		var snapshots_da_cena_serializados: Dictionary = dados_serializados[id_da_cena_serializado] as Dictionary
+		if snapshots_da_cena_serializados == null:
+			continue
+
+		var snapshots_tipados: Dictionary = {}
+		for caminho_do_no_serializado: Variant in snapshots_da_cena_serializados.keys():
+			var snapshot_do_no: Dictionary = snapshots_da_cena_serializados[caminho_do_no_serializado] as Dictionary
+			if snapshot_do_no == null:
+				continue
+			snapshots_tipados[StringName(String(caminho_do_no_serializado))] = snapshot_do_no
+		snapshots_de_folhas_por_cena[id_da_cena] = snapshots_tipados
 
 
 func _desserializar_posicao_global(posicao_serializada: Dictionary) -> Vector3:
