@@ -21,8 +21,8 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_g4v7s"]
-size = Vector3(0.6888428, 0.6414795, 0.0513916)
+[sub_resource type="SphereShape3D" id="SphereShape3D_31w1i"]
+radius = 0.36251777
 
 [node name="Jogador" type="CharacterBody3D" unique_id=830939475]
 collision_layer = 4
@@ -36,7 +36,7 @@ sprite_frames = SubResource("SpriteFrames_g4v7s")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=445834647]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0037231445, 0.002380371, -0.006652832)
-shape = SubResource("BoxShape3D_g4v7s")
+shape = SubResource("SphereShape3D_31w1i")
 
 [node name="Codigos" type="Node3D" parent="." unique_id=1836952779]
 

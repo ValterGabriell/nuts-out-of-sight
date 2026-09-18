@@ -116,7 +116,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88340425, 6.603328)
 script = ExtResource("8_k1xmn")
 areas_de_spawn = [NodePath("AreaParaSpawnarOItem")]
 cena_da_folha = ExtResource("9_eewb4")
-distancia_minima_entre_folhas_em_metros = 0.5
 
 [node name="AreaParaSpawnarOItem" type="Area3D" parent="AreasDeAparecimentoDasFolhas" unique_id=138727865]
 script = ExtResource("9_cfg_area_folha")

@@ -21,6 +21,7 @@ enum DirecaoDoVento {
 var timer_que_representa_o_tempo_que_fica_sem_ventar: Timer
 var timer_que_representa_o_tempo_ate_rajada: Timer
 var direcao_atual_do_vento: DirecaoDoVento
+var direcao_anterior_do_vento: int = -1
 var estado_atual_do_ciclo: EstadoDoCicloDoVento = EstadoDoCicloDoVento.AGUARDANDO_PRE_AVISO
 var duracao_pre_aviso_atual: float = 0.0
 
@@ -64,11 +65,27 @@ func _sortear_duracao_de_pre_aviso() -> float:
 
 func _on_timer_timeout() -> void:
 	area_aparecimento_das_folhas.registrar_posicoes_base_das_folhas_ativas()
-	direcao_atual_do_vento = DirecaoDoVento.values()[randi() % DirecaoDoVento.values().size()]
+	direcao_atual_do_vento = _sortear_direcao_sem_repeticao()
+	direcao_anterior_do_vento = direcao_atual_do_vento
 	duracao_pre_aviso_atual = _sortear_duracao_de_pre_aviso()
 	area_aparecimento_das_folhas.aplicar_pre_aviso_de_vento(direcao_atual_do_vento, duracao_pre_aviso_atual)
 	state_aguardando_rajada(duracao_pre_aviso_atual)
 	_emitir_debug_de_vento()
+
+func _sortear_direcao_sem_repeticao() -> int:
+	var direcoes_disponiveis = DirecaoDoVento.values()
+	if direcoes_disponiveis.size() <= 1:
+		return int(direcoes_disponiveis[0])
+
+	var direcoes_filtradas: Array = []
+	for direcao in direcoes_disponiveis:
+		if int(direcao) != direcao_anterior_do_vento:
+			direcoes_filtradas.append(direcao)
+
+	if direcoes_filtradas.is_empty():
+		return int(direcoes_disponiveis[randi() % direcoes_disponiveis.size()])
+
+	return int(direcoes_filtradas[randi() % direcoes_filtradas.size()])
 
 func _on_timer_ate_rajada_timeout() -> void:
 	area_aparecimento_das_folhas.aplicar_vento(direcao_atual_do_vento)

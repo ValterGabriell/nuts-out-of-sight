@@ -12,6 +12,8 @@ extends Node3D
 @export var fator_minimo_forca_frontal_rajada: float = 0.6
 @export var fator_maximo_forca_frontal_rajada: float = 2.1
 @export var fator_desvio_lateral_rajada: float = 0.35
+@export var duracao_cauda_rajada_em_segundos: float = 0.35
+@export var percentual_extra_cauda_rajada: float = 0.18
 
 var indice_da_area_por_id_da_folha: Dictionary = {}
 var posicao_base_por_id_da_folha: Dictionary = {}
@@ -159,6 +161,9 @@ func registrar_posicoes_base_das_folhas_ativas() -> void:
 		posicao_base_por_id_da_folha[folha.get_instance_id()] = folha.global_position
 
 func aplicar_vento(direcao: int) -> void:
+	# Garante que a rajada parta sempre da posicao atual, sem "puxar" para tras.
+	registrar_posicoes_base_das_folhas_ativas()
+
 	var folhas_por_area = _obter_folhas_ativas_por_area()
 	for indice_area in folhas_por_area.keys():
 		var area = _obter_area_por_indice(indice_area)
@@ -204,21 +209,23 @@ func _mover_folhas_por_vento(folhas: Array[Node3D], direcao: int, distancia: flo
 	var vetor_direcao = _direcao_para_vetor(direcao)
 	if vetor_direcao == Vector3.ZERO:
 		return
-	var vetor_lateral = Vector3(-vetor_direcao.z, 0.0, vetor_direcao.x)
 	var min_forca = min(fator_minimo_forca_frontal_rajada, fator_maximo_forca_frontal_rajada)
 	var max_forca = max(fator_minimo_forca_frontal_rajada, fator_maximo_forca_frontal_rajada)
+	var duracao_principal = max(duracao, 0.05)
+	var duracao_cauda = max(duracao_cauda_rajada_em_segundos, 0.05)
+	var percentual_cauda = max(percentual_extra_cauda_rajada, 0.0)
 
 	for folha in folhas:
 		var posicao_base = _obter_posicao_base_da_folha(folha)
 		var forca_frontal = randf_range(min_forca, max_forca)
-		# Mantem componente lateral proporcional a frontal para evitar leitura de direcao errada.
-		var forca_lateral = randf_range(-1.0, 1.0) * fator_desvio_lateral_rajada * forca_frontal * 0.35
 		var deslocamento_frontal = vetor_direcao * distancia * forca_frontal
-		var deslocamento_lateral = vetor_lateral * distancia * forca_lateral
-		var deslocamento_final = deslocamento_frontal + deslocamento_lateral
-		var destino = _limitar_posicao_na_area_spawn(posicao_base + deslocamento_final, indice_area)
+		var destino_principal = _limitar_posicao_na_area_spawn(posicao_base + deslocamento_frontal, indice_area)
+		var destino_cauda = _limitar_posicao_na_area_spawn(destino_principal + (vetor_direcao * distancia * forca_frontal * percentual_cauda), indice_area)
 		var tween = _criar_tween_da_folha(folha)
-		tween.tween_property(folha, "global_position", destino, max(duracao, 0.05))\
+		tween.tween_property(folha, "global_position", destino_principal, duracao_principal)\
+			.set_trans(Tween.TRANS_SINE)\
+			.set_ease(Tween.EASE_OUT)
+		tween.tween_property(folha, "global_position", destino_cauda, duracao_cauda)\
 			.set_trans(Tween.TRANS_SINE)\
 			.set_ease(Tween.EASE_OUT)
 

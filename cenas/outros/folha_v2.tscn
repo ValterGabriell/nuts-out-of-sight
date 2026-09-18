@@ -1,17 +1,19 @@
 [gd_scene format=3 uid="uid://dltv5qryx7ijb"]
 
-[ext_resource type="Script" uid="uid://5ck5k2bih1wh" path="res://codigos/item_que_faz_barulho/item_que_faz_barulho.gd" id="1_bw40s"]
+[ext_resource type="Script" uid="uid://f28q3aq1fv66" path="res://codigos/item_que_faz_barulho/item_que_faz_barulho.gd" id="1_bw40s"]
 [ext_resource type="Texture2D" uid="uid://b0demlq6v8wk1" path="res://arte/sprites_2d/folhas.png" id="2_31w1i"]
 [ext_resource type="PackedScene" uid="uid://d1edh02l3xjcg" path="res://cenas/outros/onda_de_som.tscn" id="2_70ljy"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_sd3vj"]
-radius = 0.16660051
+radius = 0.27040538
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_31w1i"]
 height = 0.15
+radius = 0.07080078
 
 [node name="Folha" type="Node3D" unique_id=419036531 node_paths=PackedStringArray("area_de_propagacao_do_som")]
 script = ExtResource("1_bw40s")
+quantidade_de_barulho_em_pixels_em_area_anelar = 0.5
 cena_onda_de_som = ExtResource("2_70ljy")
 area_de_propagacao_do_som = NodePath("AreaDePropagacaoDoSom")
 

@@ -24,6 +24,8 @@ GlobalEstoque="*res://codigos/global/global_estoque.gd"
 GlobalTransicaoDeCena="*res://codigos/global/global_transicao_de_cena.gd"
 GlobalGerenciadorDeBarulho="*uid://c2bqc6orq5vg3"
 GlobalInicializacaoMapa="*uid://xul4y00s4f0e"
+GlobalGerenciadorDeQuantidadeDeFolhasNasAreas="*uid://do7uu5w1t7w70"
+GlobalGerenciadorDeFase="*uid://7d4byvspvlmj"
 
 [display]
 

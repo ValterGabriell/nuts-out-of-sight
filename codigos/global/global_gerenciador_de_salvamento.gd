@@ -15,6 +15,10 @@ enum EstadoDoArquivoDeSalvamento {
 const CAMINHO_DO_ARQUIVO_DE_SALVAMENTO: String = "user://save_jogo.json"
 
 var estado_do_arquivo_de_salvamento: EstadoDoArquivoDeSalvamento = EstadoDoArquivoDeSalvamento.NAO_CARREGADO
+var deve_persistir_posicao_das_folhas: bool = true
+var percentual_de_folhas_por_area_no_snapshot: float = 0.35
+var quantidade_maxima_de_folhas_por_area_no_snapshot: int = 60
+var casas_decimais_das_posicoes_das_folhas_no_snapshot: int = 2
 var snapshots_de_folhas_por_cena: Dictionary[StringName, Dictionary] = {}
 
 
@@ -24,7 +28,8 @@ func _ready() -> void:
 
 
 func salvar_jogo(motivo_do_salvamento: MotivoDeSalvamento) -> void:
-	_atualizar_snapshot_de_folhas_da_cena_atual()
+	if deve_persistir_posicao_das_folhas:
+		_atualizar_snapshot_de_folhas_da_cena_atual()
 
 	var dados_do_salvamento: Dictionary = {
 		"versao": 1,
@@ -32,10 +37,13 @@ func salvar_jogo(motivo_do_salvamento: MotivoDeSalvamento) -> void:
 		"sequencial_id_item_dropado": sequencial_id_item_dropado,
 		"ids_de_itens_coletados": _serializar_ids_de_itens_coletados(),
 		"itens_dropados_por_cena": _serializar_itens_dropados_por_cena(),
-		"snapshots_de_folhas_por_cena": _serializar_snapshots_de_folhas_por_cena(),
 		"inventario_do_jogador": GlobalItensQueOJogadorCarrega.obter_snapshot_para_salvamento(),
-		"estoque": GlobalEstoque.obter_snapshot_para_salvamento()
+		"estoque": GlobalEstoque.obter_snapshot_para_salvamento(),
+		"fase_da_rodada": GlobalGerenciadorDeFase.obter_snapshot_para_salvamento()
 	}
+
+	if deve_persistir_posicao_das_folhas:
+		dados_do_salvamento["snapshots_de_folhas_por_cena"] = _serializar_snapshots_de_folhas_por_cena()
 
 	var arquivo_de_salvamento: FileAccess = FileAccess.open(CAMINHO_DO_ARQUIVO_DE_SALVAMENTO, FileAccess.WRITE)
 	if arquivo_de_salvamento == null:
@@ -76,12 +84,19 @@ func carregar_jogo_do_disco() -> void:
 	sequencial_id_item_dropado = int(dados_do_salvamento.get("sequencial_id_item_dropado", 0))
 	_carregar_ids_de_itens_coletados(dados_do_salvamento.get("ids_de_itens_coletados", []))
 	_carregar_itens_dropados_por_cena(dados_do_salvamento.get("itens_dropados_por_cena", {}))
-	_carregar_snapshots_de_folhas_por_cena(dados_do_salvamento.get("snapshots_de_folhas_por_cena", {}))
+	if deve_persistir_posicao_das_folhas:
+		_carregar_snapshots_de_folhas_por_cena(dados_do_salvamento.get("snapshots_de_folhas_por_cena", {}))
+	else:
+		snapshots_de_folhas_por_cena.clear()
 	GlobalItensQueOJogadorCarrega.carregar_snapshot_do_salvamento(dados_do_salvamento.get("inventario_do_jogador", {}))
 	GlobalEstoque.carregar_snapshot_do_salvamento(dados_do_salvamento.get("estoque", {}))
+	GlobalGerenciadorDeFase.carregar_snapshot_do_salvamento(dados_do_salvamento.get("fase_da_rodada", {}))
 	estado_do_arquivo_de_salvamento = EstadoDoArquivoDeSalvamento.CARREGADO
 
 func _atualizar_snapshot_de_folhas_da_cena_atual() -> void:
+	if not deve_persistir_posicao_das_folhas:
+		return
+
 	var cena_atual = get_tree().current_scene
 	if cena_atual == null:
 		return
@@ -99,11 +114,15 @@ func _atualizar_snapshot_de_folhas_da_cena_atual() -> void:
 
 		var areas_de_folhas = node as AreasDeAparecimentoDasFolhas
 		var caminho_relativo = StringName(String(cena_atual.get_path_to(areas_de_folhas)))
-		snapshots_da_cena[caminho_relativo] = areas_de_folhas.obter_snapshot_para_salvamento()
+		var snapshot_bruto = areas_de_folhas.obter_snapshot_para_salvamento()
+		snapshots_da_cena[caminho_relativo] = _otimizar_snapshot_de_folhas(snapshot_bruto)
 
 	snapshots_de_folhas_por_cena[id_da_cena_atual] = snapshots_da_cena
 
 func obter_snapshot_de_folhas_da_cena_atual_para(areas_de_folhas: AreasDeAparecimentoDasFolhas) -> Dictionary:
+	if not deve_persistir_posicao_das_folhas:
+		return {}
+
 	if areas_de_folhas == null:
 		return {}
 
@@ -174,6 +193,66 @@ func _serializar_snapshots_de_folhas_por_cena() -> Dictionary:
 			snapshots_serializados[String(caminho_do_no)] = snapshots_da_cena[caminho_do_no]
 		dados_serializados[String(id_da_cena)] = snapshots_serializados
 	return dados_serializados
+
+func _otimizar_snapshot_de_folhas(snapshot_bruto: Dictionary) -> Dictionary:
+	if snapshot_bruto == null or snapshot_bruto.is_empty():
+		return {}
+
+	var folhas_por_area_bruto: Dictionary = snapshot_bruto.get("folhas_por_area", {}) as Dictionary
+	if folhas_por_area_bruto == null:
+		return {}
+
+	var snapshot_otimizado: Dictionary = {
+		"folhas_por_area": {}
+	}
+	var folhas_por_area_otimizado: Dictionary = snapshot_otimizado["folhas_por_area"]
+	var percentual = clamp(percentual_de_folhas_por_area_no_snapshot, 0.01, 1.0)
+	var limite_por_area = maxi(1, quantidade_maxima_de_folhas_por_area_no_snapshot)
+
+	for chave_area: Variant in folhas_por_area_bruto.keys():
+		var posicoes_da_area: Array = folhas_por_area_bruto[chave_area] as Array
+		if posicoes_da_area == null or posicoes_da_area.is_empty():
+			folhas_por_area_otimizado[chave_area] = []
+			continue
+
+		var quantidade_total_da_area = posicoes_da_area.size()
+		var quantidade_por_percentual = maxi(1, int(round(float(quantidade_total_da_area) * percentual)))
+		var quantidade_alvo = mini(quantidade_total_da_area, mini(quantidade_por_percentual, limite_por_area))
+		var subconjunto = _selecionar_subconjunto_uniforme(posicoes_da_area, quantidade_alvo)
+		var posicoes_compactadas: Array = []
+
+		for posicao_serializada: Variant in subconjunto:
+			posicoes_compactadas.append(_compactar_posicao_serializada(posicao_serializada))
+
+		folhas_por_area_otimizado[chave_area] = posicoes_compactadas
+
+	return snapshot_otimizado
+
+func _selecionar_subconjunto_uniforme(valores: Array, quantidade_alvo: int) -> Array:
+	if quantidade_alvo >= valores.size():
+		return valores.duplicate()
+
+	var resultado: Array = []
+	var ultimo_indice = max(valores.size() - 1, 1)
+	for i in range(quantidade_alvo):
+		var indice = int(round((float(i) / float(max(quantidade_alvo - 1, 1))) * float(ultimo_indice)))
+		resultado.append(valores[indice])
+	return resultado
+
+func _compactar_posicao_serializada(posicao_serializada: Variant) -> Dictionary:
+	var posicao = _desserializar_posicao_global(posicao_serializada)
+	return {
+		"x": _arredondar_para_casas_decimais(posicao.x, casas_decimais_das_posicoes_das_folhas_no_snapshot),
+		"y": _arredondar_para_casas_decimais(posicao.y, casas_decimais_das_posicoes_das_folhas_no_snapshot),
+		"z": _arredondar_para_casas_decimais(posicao.z, casas_decimais_das_posicoes_das_folhas_no_snapshot)
+	}
+
+func _arredondar_para_casas_decimais(valor: float, casas_decimais: int) -> float:
+	var casas = maxi(0, casas_decimais)
+	var fator = pow(10.0, casas)
+	if fator <= 0.0:
+		return valor
+	return round(valor * fator) / fator
 
 
 func _carregar_ids_de_itens_coletados(ids_serializados: Array) -> void:
