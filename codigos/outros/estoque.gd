@@ -33,12 +33,13 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 
 		for tipo_item_guardado: int in itens_guardados:
-			GlobalItensQueOJogadorCarrega.itens_coletados.erase(tipo_item_guardado)
+			GlobalItensQueOJogadorCarrega.remover_primeiro_item_do_inventario_por_tipo(tipo_item_guardado)
 
 		GlobalGerenciadorDeSinais.item_adicionado_ao_inventario.emit(GlobalItensQueOJogadorCarrega.itens_coletados.size())
 		if GlobalItensQueOJogadorCarrega.itens_coletados.is_empty():
 			GlobalGerenciadorDeSinais.velocidade_do_jogador_resetada.emit()
 		spawnar_itens_guardados(itens_guardados)
+		GlobalGerenciadorDeSalvamento.salvar_jogo(GlobalGerenciadorDeSalvamento.MotivoDeSalvamento.GUARDAR_NO_ESTOQUE)
 
 func _atualizar_label_itens_no_estoque(quantidade_total_de_itens: int) -> void:
 	if itens_no_estoque_label == null:

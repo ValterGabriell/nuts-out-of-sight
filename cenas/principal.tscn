@@ -92,12 +92,10 @@ id_unico_do_item_no_mapa = &"principal_noz_4"
 
 [node name="Noz2" parent="ItensColetaveis/Noz" unique_id=1160903897 instance=ExtResource("9_sflf3")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -3.98499, 0.46267164, 3.258787)
-tipo_item = 112
 id_unico_do_item_no_mapa = &"principal_noz_2"
 
 [node name="Noz3" parent="ItensColetaveis/Noz" unique_id=1915219264 instance=ExtResource("9_sflf3")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -1.8311064, 0.46267164, 1.9542334)
-tipo_item = 112
 id_unico_do_item_no_mapa = &"principal_noz_3"
 
 [node name="PontosDeSpawn" type="Node3D" parent="." unique_id=53468549]

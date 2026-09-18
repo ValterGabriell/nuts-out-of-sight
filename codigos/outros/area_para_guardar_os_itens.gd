@@ -15,6 +15,7 @@ var _ordem_slots_cache: Array[Vector2i] = []
 func _ready() -> void:
 	if not area_entered.is_connected(_on_area_entered):
 		area_entered.connect(_on_area_entered)
+	_spawnar_itens_ja_guardados_no_estoque()
 
 
 func spawnar_itens(tipos_itens: Array[int]) -> void:
@@ -30,8 +31,34 @@ func _on_area_entered(area: Area3D) -> void:
 		return
 	if not GlobalEstoque.guardar_item(item.tipo_item):
 		return
+	if item.has_meta("id_item_dropado_no_mundo"):
+		GlobalGerenciadorDeSalvamento.remover_item_dropado_da_cena_atual(StringName(item.get_meta("id_item_dropado_no_mundo")))
 
 	item.set_meta("spawnado_pelo_estoque", true)
+	GlobalGerenciadorDeSalvamento.salvar_jogo(GlobalGerenciadorDeSalvamento.MotivoDeSalvamento.GUARDAR_NO_ESTOQUE)
+
+
+func _spawnar_itens_ja_guardados_no_estoque() -> void:
+	_limpar_visuais_atuais_do_estoque()
+	_proximo_indice_de_spawn = 0
+	var tipos_itens_guardados: Array[int] = GlobalEstoque.retornar_itens_guardados()
+	if tipos_itens_guardados.is_empty():
+		return
+	call_deferred("spawnar_itens", tipos_itens_guardados)
+
+
+func _limpar_visuais_atuais_do_estoque() -> void:
+	var cena_atual: Node = get_tree().current_scene
+	if cena_atual == null:
+		return
+
+	for no_filho: Node in cena_atual.get_children():
+		var item_coletavel: ItemColetavel = no_filho as ItemColetavel
+		if item_coletavel == null:
+			continue
+		if not item_coletavel.has_meta("spawnado_pelo_estoque"):
+			continue
+		item_coletavel.queue_free()
 
 
 func _spawnar_item_no_proximo_slot(tipo_item: int) -> void:
@@ -40,8 +67,13 @@ func _spawnar_item_no_proximo_slot(tipo_item: int) -> void:
 		return
 
 	item_instanciado.set_meta("spawnado_pelo_estoque", true)
-	get_tree().current_scene.add_child(item_instanciado)
-	item_instanciado.largar_na_posicao(_obter_posicao_do_proximo_slot())
+	var cena_atual: Node = get_tree().current_scene
+	if cena_atual == null:
+		return
+
+	var posicao_do_spawn: Vector3 = _obter_posicao_do_proximo_slot()
+	cena_atual.call_deferred("add_child", item_instanciado)
+	item_instanciado.call_deferred("largar_na_posicao", posicao_do_spawn)
 
 
 func _obter_posicao_do_proximo_slot() -> Vector3:

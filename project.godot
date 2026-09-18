@@ -18,7 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 GlobalItensQueOJogadorCarrega="*uid://y8bi6ke2k78i"
-GlobalItensNaCabana="*uid://0mgnl7vy34i4"
+GlobalGerenciadorDeSalvamento="*res://codigos/global/global_gerenciador_de_salvamento.gd"
 GlobalGerenciadorDeSinais="*uid://cl0xbech2w48c"
 GlobalEstoque="*res://codigos/global/global_estoque.gd"
 GlobalTransicaoDeCena="*res://codigos/global/global_transicao_de_cena.gd"

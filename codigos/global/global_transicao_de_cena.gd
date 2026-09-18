@@ -40,6 +40,7 @@ func trocar_cena_com_fade(cena: PackedScene, nome_da_area_para_spawnar: String) 
 	if estado_da_transicao != EstadoDaTransicao.OCIOSO:
 		return
 
+	GlobalGerenciadorDeSalvamento.salvar_jogo(GlobalGerenciadorDeSalvamento.MotivoDeSalvamento.TROCA_DE_CENA)
 	_proxima_cena = cena
 	_nome_da_area_de_spawn = nome_da_area_para_spawnar
 	await _executar_fade_out()

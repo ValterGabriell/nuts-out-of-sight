@@ -24,7 +24,9 @@ var _mascara_colisao_original: int = 0
 func _ready() -> void:
 	_camada_colisao_original = collision_layer
 	_mascara_colisao_original = collision_mask
-	if GlobalItensNaCabana.obter_estado_do_item_no_registro(id_unico_do_item_no_mapa) == GlobalItensNaCabana.EstadoDoItemNoRegistro.COLETADO:
+	if has_meta("item_spawnado_via_drop_persistido"):
+		return
+	if GlobalGerenciadorDeSalvamento.obter_estado_do_item_no_registro(id_unico_do_item_no_mapa) == GlobalGerenciadorDeSalvamento.EstadoDoItemNoRegistro.COLETADO:
 		queue_free()
 		return
 
@@ -48,16 +50,14 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func coletar() -> void:
-	GlobalItensNaCabana.registrar_item_coletado(id_unico_do_item_no_mapa)
+	if has_meta("id_item_dropado_no_mundo"):
+		GlobalGerenciadorDeSalvamento.remover_item_dropado_da_cena_atual(StringName(get_meta("id_item_dropado_no_mundo")))
+	GlobalGerenciadorDeSalvamento.registrar_item_coletado(id_unico_do_item_no_mapa)
 	_estado_item = EstadoItem.NO_INVENTARIO
 	_jogador = null
-	label_acao.visible = false
-	visible = false
-	monitoring = false
-	monitorable = false
-	collision_layer = 0
-	collision_mask = 0
-	set_process_unhandled_input(false)
+	queue_free()
+	
+	
 
 
 func largar_na_posicao(posicao_global: Vector3) -> void:
@@ -69,3 +69,4 @@ func largar_na_posicao(posicao_global: Vector3) -> void:
 	collision_layer = _camada_colisao_original
 	collision_mask = _mascara_colisao_original
 	set_process_unhandled_input(true)
+ 

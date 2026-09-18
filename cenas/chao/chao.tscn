@@ -1,6 +1,10 @@
 [gd_scene format=3 uid="uid://d0rjtb85kkdpn"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wgbst"]
+albedo_color = Color(1, 0.7019608, 0.4745098, 1)
+
 [sub_resource type="BoxMesh" id="BoxMesh_g4v7s"]
+material = SubResource("StandardMaterial3D_wgbst")
 size = Vector3(20, 0.1, 20)
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_cadyc"]
