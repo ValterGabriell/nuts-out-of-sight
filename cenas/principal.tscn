@@ -9,17 +9,18 @@
 [ext_resource type="PackedScene" uid="uid://tw762cwq7bpt" path="res://cenas/urso/urso.tscn" id="5_ff0xt"]
 [ext_resource type="PackedScene" uid="uid://d0xavr5nl12q0" path="res://cenas/items/noz.tscn" id="8_djk5k"]
 [ext_resource type="PackedScene" uid="uid://by60h74njj6os" path="res://cenas/items/noz_pesada.tscn" id="9_sflf3"]
+[ext_resource type="PackedScene" uid="uid://cvqos22k487uc" path="res://cenas/entradas_portas/porta_cabana.tscn" id="10_wgbst"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ff0xt"]
 sky_top_color = Color(1, 0.7019608, 0.4745098, 1)
 sky_horizon_color = Color(0.5921569, 0.25490198, 0.2, 1)
 
-[sub_resource type="Sky" id="Sky_42xuo"]
+[sub_resource type="Sky" id="Sky_sflf3"]
 sky_material = SubResource("ProceduralSkyMaterial_ff0xt")
 
 [sub_resource type="Environment" id="Environment_j2ut6"]
 background_mode = 2
-sky = SubResource("Sky_42xuo")
+sky = SubResource("Sky_sflf3")
 
 [node name="Principal" type="Node3D" unique_id=830613941]
 
@@ -30,12 +31,13 @@ sky = SubResource("Sky_42xuo")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="ConfiguracaoGlobal/Iluminacao" unique_id=1116798111]
 environment = SubResource("Environment_j2ut6")
 
-[node name="Camera" type="Node3D" parent="ConfiguracaoGlobal" unique_id=1713308816]
+[node name="Camera" type="Node3D" parent="ConfiguracaoGlobal" unique_id=1713308816 node_paths=PackedStringArray("camera")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9.295964)
 script = ExtResource("1_42xuo")
+camera = NodePath("Camera3D")
 
 [node name="Camera3D" type="Camera3D" parent="ConfiguracaoGlobal/Camera" unique_id=1552525419]
-transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 3.1046472, 3.9880648)
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 3, 4)
 size = 50.999
 
 [node name="SeguirJogador" type="Node3D" parent="ConfiguracaoGlobal/Camera" unique_id=1975449664 node_paths=PackedStringArray("jogador", "camera_pivot")]
@@ -74,16 +76,7 @@ texture_filter = 1
 layout_mode = 2
 text = "0"
 
-[node name="Chao" parent="." unique_id=1707402539 instance=ExtResource("1_ym8g7")]
-
-[node name="Jogador" parent="." unique_id=830939475 node_paths=PackedStringArray("camera_pivot") instance=ExtResource("2_j2ut6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48719418, 9.295964)
-collision_layer = 4
-collision_mask = 11
-camera_pivot = NodePath("../ConfiguracaoGlobal/Camera")
-
-[node name="Urso" parent="." unique_id=164182681 instance=ExtResource("5_ff0xt")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.81219935, 0)
+[node name="Chao" parent="ConfiguracaoGlobal" unique_id=1707402539 instance=ExtResource("1_ym8g7")]
 
 [node name="ItensColetaveis" type="Node3D" parent="." unique_id=241571282]
 
@@ -91,6 +84,34 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.81219935, 0)
 
 [node name="Noz" parent="ItensColetaveis/Noz" unique_id=2089380860 instance=ExtResource("8_djk5k")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6343756, 0.20596546, 4.4335995)
+id_unico_do_item_no_mapa = &"principal_noz_1"
+
+[node name="Noz4" parent="ItensColetaveis/Noz" unique_id=1552887845 instance=ExtResource("8_djk5k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1792607, 0.20596546, 6.0994906)
+id_unico_do_item_no_mapa = &"principal_noz_4"
 
 [node name="Noz2" parent="ItensColetaveis/Noz" unique_id=1160903897 instance=ExtResource("9_sflf3")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -3.98499, 0.46267164, 3.258787)
+id_unico_do_item_no_mapa = &"principal_noz_2"
+
+[node name="Noz3" parent="ItensColetaveis/Noz" unique_id=1915219264 instance=ExtResource("9_sflf3")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -1.8311064, 0.46267164, 1.9542334)
+id_unico_do_item_no_mapa = &"principal_noz_3"
+
+[node name="PontosDeSpawn" type="Node3D" parent="." unique_id=53468549]
+
+[node name="PRINCIPAL" type="Node3D" parent="PontosDeSpawn" unique_id=522324275]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88340425, 6.603328)
+
+[node name="Jogador" parent="." unique_id=830939475 node_paths=PackedStringArray("camera_pivot") instance=ExtResource("2_j2ut6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48719418, 9.295964)
+collision_mask = 11
+camera_pivot = NodePath("../ConfiguracaoGlobal/Camera")
+
+[node name="Urso" parent="." unique_id=164182681 instance=ExtResource("5_ff0xt")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.81219935, 0)
+
+[node name="PortaCabana" parent="." unique_id=616394942 instance=ExtResource("10_wgbst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6463099, 1.0491469, 9.758276)
+nome_da_area_pra_spawnar = 1
+caminho_da_cena_para_abrir = "uid://cndo1nr3c25nb"

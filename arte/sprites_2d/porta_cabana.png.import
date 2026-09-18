@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b0demlq6v8wk1"
-path.s3tc="res://.godot/imported/folhas.png-bb368e0934af6e370553e56a87e8cd92.s3tc.ctex"
+uid="uid://bxnxkos8woyfv"
+path.s3tc="res://.godot/imported/porta_cabana.png-c389d357f04c27abdbe9e9c8de3d72fc.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://arte/sprites_2d/folhas.png"
-dest_files=["res://.godot/imported/folhas.png-bb368e0934af6e370553e56a87e8cd92.s3tc.ctex"]
+source_file="res://arte/sprites_2d/porta_cabana.png"
+dest_files=["res://.godot/imported/porta_cabana.png-c389d357f04c27abdbe9e9c8de3d72fc.s3tc.ctex"]
 
 [params]
 

@@ -25,6 +25,8 @@ animations = [{
 size = Vector3(0.6888428, 0.6414795, 0.0513916)
 
 [node name="Jogador" type="CharacterBody3D" unique_id=830939475]
+collision_layer = 4
+collision_mask = 17
 script = ExtResource("1_ismvl")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=296664329]

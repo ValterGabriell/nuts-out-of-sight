@@ -1,8 +1,8 @@
 class_name ItemColetavel extends Area3D
 
 enum TipoItem {
-	COLETAVEL_NOZ,
-	COLETAVEL_NOZ_PESADA
+	COLETAVEL_NOZ = 111,
+	COLETAVEL_NOZ_PESADA=112
 }
 
 enum EstadoItem {
@@ -13,6 +13,7 @@ enum EstadoItem {
 @export var tipo_item: TipoItem = TipoItem.COLETAVEL_NOZ
 @export var label_acao: Label3D
 @export var percentual_reducao_velocidade: float = 0.0
+@export var id_unico_do_item_no_mapa: StringName
 
 var _jogador: Jogador = null
 var _estado_item: EstadoItem = EstadoItem.NO_MUNDO
@@ -23,6 +24,11 @@ var _mascara_colisao_original: int = 0
 func _ready() -> void:
 	_camada_colisao_original = collision_layer
 	_mascara_colisao_original = collision_mask
+	if has_meta("item_spawnado_via_drop_persistido"):
+		return
+	if GlobalGerenciadorDeSalvamento.obter_estado_do_item_no_registro(id_unico_do_item_no_mapa) == GlobalGerenciadorDeSalvamento.EstadoDoItemNoRegistro.COLETADO:
+		queue_free()
+		return
 
 func _on_body_entered(body: Node3D) -> void:
 	if body is Jogador:
@@ -44,15 +50,14 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func coletar() -> void:
+	if has_meta("id_item_dropado_no_mundo"):
+		GlobalGerenciadorDeSalvamento.remover_item_dropado_da_cena_atual(StringName(get_meta("id_item_dropado_no_mundo")))
+	GlobalGerenciadorDeSalvamento.registrar_item_coletado(id_unico_do_item_no_mapa)
 	_estado_item = EstadoItem.NO_INVENTARIO
 	_jogador = null
-	label_acao.visible = false
-	visible = false
-	monitoring = false
-	monitorable = false
-	collision_layer = 0
-	collision_mask = 0
-	set_process_unhandled_input(false)
+	queue_free()
+	
+	
 
 
 func largar_na_posicao(posicao_global: Vector3) -> void:
@@ -64,3 +69,4 @@ func largar_na_posicao(posicao_global: Vector3) -> void:
 	collision_layer = _camada_colisao_original
 	collision_mask = _mascara_colisao_original
 	set_process_unhandled_input(true)
+ 

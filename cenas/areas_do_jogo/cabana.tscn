@@ -1,0 +1,94 @@
+[gd_scene format=3 uid="uid://cndo1nr3c25nb"]
+
+[ext_resource type="Script" uid="uid://cgttcoxqju26t" path="res://codigos/camera/camera.gd" id="1_cla5y"]
+[ext_resource type="Script" uid="uid://c6660pdwjipjj" path="res://codigos/portas/entrada_da_cena.gd" id="1_mt1rg"]
+[ext_resource type="Script" uid="uid://bgy7exkq20vxo" path="res://codigos/camera/seguir_jogador.gd" id="2_mt1rg"]
+[ext_resource type="Script" uid="uid://dpn3lcrc3pky" path="res://codigos/ui/ui_hud.gd" id="3_5hle0"]
+[ext_resource type="Texture2D" uid="uid://dtl2cy7wj17oe" path="res://arte/sprites_2d/noz.png" id="4_2n0ck"]
+[ext_resource type="PackedScene" uid="uid://d28jweqoh7w5x" path="res://cenas/chao/chao_cabana.tscn" id="5_cla5y"]
+[ext_resource type="PackedScene" uid="uid://cvqos22k487uc" path="res://cenas/entradas_portas/porta_cabana.tscn" id="7_5hle0"]
+[ext_resource type="PackedScene" uid="uid://4jnt4pnkbk5t" path="res://cenas/jogador/jogador.tscn" id="8_2n0ck"]
+[ext_resource type="PackedScene" uid="uid://dsaca221woyvn" path="res://cenas/outros/estoque.tscn" id="9_4pwu7"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_djeqo"]
+sky_top_color = Color(1, 0.7019608, 0.4745098, 1)
+sky_horizon_color = Color(0.5921569, 0.25490198, 0.2, 1)
+
+[sub_resource type="Sky" id="Sky_42xuo"]
+sky_material = SubResource("ProceduralSkyMaterial_djeqo")
+
+[sub_resource type="Environment" id="Environment_4t3i8"]
+background_mode = 2
+sky = SubResource("Sky_42xuo")
+
+[node name="Cabana" type="Node3D" unique_id=1076139326]
+script = ExtResource("1_mt1rg")
+
+[node name="Camera" type="Node3D" parent="." unique_id=366459874 node_paths=PackedStringArray("camera")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9.295964)
+script = ExtResource("1_cla5y")
+camera = NodePath("Camera3D")
+
+[node name="Camera3D" type="Camera3D" parent="Camera" unique_id=138320752]
+transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 4.1463437, 1.9498682)
+size = 50.999
+
+[node name="SeguirJogador" type="Node3D" parent="Camera" unique_id=1390643850 node_paths=PackedStringArray("jogador", "camera_pivot")]
+script = ExtResource("2_mt1rg")
+jogador = NodePath("../../Jogador")
+camera_pivot = NodePath("..")
+
+[node name="ConfiguracaoGlobal" type="Node3D" parent="." unique_id=1524966652]
+
+[node name="Iluminacao" type="Node3D" parent="ConfiguracaoGlobal" unique_id=67115206]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="ConfiguracaoGlobal/Iluminacao" unique_id=250108739]
+environment = SubResource("Environment_4t3i8")
+
+[node name="UI" type="Control" parent="ConfiguracaoGlobal" unique_id=334257038]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="UI_Principal" type="CanvasLayer" parent="ConfiguracaoGlobal/UI" unique_id=1812701785 node_paths=PackedStringArray("label_quantidade_de_itens_no_inventario")]
+script = ExtResource("3_5hle0")
+label_quantidade_de_itens_no_inventario = NodePath("MarginContainer/HBoxContainer/NumeroDeNozes")
+
+[node name="MarginContainer" type="MarginContainer" parent="ConfiguracaoGlobal/UI/UI_Principal" unique_id=1301147050]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ConfiguracaoGlobal/UI/UI_Principal/MarginContainer" unique_id=1830784792]
+layout_mode = 2
+
+[node name="SpriteNoz" type="TextureRect" parent="ConfiguracaoGlobal/UI/UI_Principal/MarginContainer/HBoxContainer" unique_id=557932133]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("4_2n0ck")
+
+[node name="NumeroDeNozes" type="Label" parent="ConfiguracaoGlobal/UI/UI_Principal/MarginContainer/HBoxContainer" unique_id=392178204]
+texture_filter = 1
+layout_mode = 2
+text = "0"
+
+[node name="ChaoCabana" parent="ConfiguracaoGlobal" unique_id=1707402539 instance=ExtResource("5_cla5y")]
+
+[node name="PontosDeSpawn" type="Node3D" parent="." unique_id=1843714655]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0736551, 8.298649)
+
+[node name="CABANA" type="Node3D" parent="PontosDeSpawn" unique_id=1711896312]
+
+[node name="PortaCabana" parent="." unique_id=616394942 instance=ExtResource("7_5hle0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.79731, 0.9467007, 8.526369)
+caminho_da_cena_para_abrir = "uid://c1ayrcp8gpmux"
+
+[node name="Jogador" parent="." unique_id=830939475 instance=ExtResource("8_2n0ck")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.378368, 0.52000004, 8.299341)
+
+[node name="Estoque" parent="." unique_id=1559190117 instance=ExtResource("9_4pwu7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.969273, 0.6154529, 4.173459)

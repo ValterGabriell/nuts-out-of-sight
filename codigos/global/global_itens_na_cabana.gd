@@ -1,9 +1,5 @@
-extends Node
+extends BaseRegistroGlobalItensDropados
 
-var itens_na_cabana: Array[ItemColetavel] = []
 
-func adicionar_item(item: ItemColetavel) -> void:
-	itens_na_cabana.append(item)
-
-func remover_item(item: ItemColetavel) -> void:
-	itens_na_cabana.erase(item)
+func limpar_registro_de_itens_coletados() -> void:
+	ids_de_itens_coletados.clear()
