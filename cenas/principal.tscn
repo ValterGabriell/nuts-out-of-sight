@@ -113,10 +113,10 @@ id_unico_do_item_no_mapa = &"principal_noz_3"
 [node name="PRINCIPAL" type="Node3D" parent="PontosDeSpawn" unique_id=522324275]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88340425, 6.603328)
 
-[node name="AreasDeAparecimentoDasFolhas" type="Node3D" parent="." unique_id=892277124 node_paths=PackedStringArray("area_spawn")]
+[node name="AreasDeAparecimentoDasFolhas" type="Node3D" parent="." unique_id=892277124 node_paths=PackedStringArray("area_de_spawn")]
 script = ExtResource("8_k1xmn")
-area_spawn = NodePath("AreaParaSpawnarOItem")
-cena_folha = ExtResource("9_eewb4")
+area_de_spawn = NodePath("AreaParaSpawnarOItem")
+cena_da_folha = ExtResource("9_eewb4")
 
 [node name="AreaParaSpawnarOItem" type="Area3D" parent="AreasDeAparecimentoDasFolhas" unique_id=138727865]
 

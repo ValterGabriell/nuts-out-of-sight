@@ -2,9 +2,9 @@ class_name MovimentoQueModificaOItemQueFazBarulho
 extends Node3D
 
 @export var area_aparecimento_das_folhas:AreasDeAparecimentoDasFolhas
-@export var intervalo_entre_rajadas_em_segundos: float = 20.0
-@export var pre_aviso_minimo_em_segundos: float = 5.0
-@export var pre_aviso_maximo_em_segundos: float = 10.0
+@export var intervalo_entre_rajadas_em_segundos: float = 10.0
+@export var pre_aviso_minimo_em_segundos: float = 3.0
+@export var pre_aviso_maximo_em_segundos: float = 6.0
 
 enum EstadoDoCicloDoVento {
 	AGUARDANDO_PRE_AVISO,
@@ -78,29 +78,6 @@ func _emitir_debug_de_vento() -> void:
 	GlobalGerenciadorDeSinais.debug_vento_atualizado.emit(_obter_dados_debug_vento())
 
 func _obter_dados_debug_vento() -> Dictionary:
-	var dados_area := {
-		"percentual_folhas_no_pre_aviso": 0.0,
-		"deslocamento_pre_aviso": 0.0,
-		"deslocamento_rajada": 0.0,
-		"duracao_movimento_pre_aviso": 0.0,
-		"duracao_movimento_rajada": 0.0,
-		"quantidade_estagios_pre_aviso": 0,
-		"intensidade_inicial_pre_aviso": 0.0,
-		"expoente_de_intensificacao_pre_aviso": 0.0
-	}
-
-	if area_aparecimento_das_folhas:
-		dados_area = {
-			"percentual_folhas_no_pre_aviso": area_aparecimento_das_folhas.percentual_folhas_no_pre_aviso,
-			"deslocamento_pre_aviso": area_aparecimento_das_folhas.deslocamento_pre_aviso,
-			"deslocamento_rajada": area_aparecimento_das_folhas.deslocamento_rajada,
-			"duracao_movimento_pre_aviso": area_aparecimento_das_folhas.duracao_movimento_pre_aviso,
-			"duracao_movimento_rajada": area_aparecimento_das_folhas.duracao_movimento_rajada,
-			"quantidade_estagios_pre_aviso": area_aparecimento_das_folhas.quantidade_estagios_pre_aviso,
-			"intensidade_inicial_pre_aviso": area_aparecimento_das_folhas.intensidade_inicial_pre_aviso,
-			"expoente_de_intensificacao_pre_aviso": area_aparecimento_das_folhas.expoente_de_intensificacao_pre_aviso
-		}
-
 	return {
 		"estado": _obter_nome_do_estado(),
 		"direcao_atual": _obter_nome_da_direcao_atual(),
@@ -109,8 +86,7 @@ func _obter_dados_debug_vento() -> Dictionary:
 		"intervalo_entre_rajadas_em_segundos": intervalo_entre_rajadas_em_segundos,
 		"pre_aviso_minimo_em_segundos": pre_aviso_minimo_em_segundos,
 		"pre_aviso_maximo_em_segundos": pre_aviso_maximo_em_segundos,
-		"duracao_pre_aviso_atual": duracao_pre_aviso_atual,
-		"config_area_folhas": dados_area
+		"duracao_pre_aviso_atual": duracao_pre_aviso_atual
 	}
 
 func _obter_nome_do_estado() -> String:
