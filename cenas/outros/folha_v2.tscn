@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://dltv5qryx7ijb"]
+
+[ext_resource type="Script" uid="uid://5ck5k2bih1wh" path="res://codigos/item_que_faz_barulho/item_que_faz_barulho.gd" id="1_bw40s"]
+[ext_resource type="Texture2D" uid="uid://b0demlq6v8wk1" path="res://arte/sprites_2d/folhas.png" id="2_31w1i"]
+[ext_resource type="PackedScene" uid="uid://d1edh02l3xjcg" path="res://cenas/outros/onda_de_som.tscn" id="2_70ljy"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_sd3vj"]
+radius = 0.16660051
+
+[node name="Folha" type="Node3D" unique_id=419036531]
+script = ExtResource("1_bw40s")
+cena_onda_de_som = ExtResource("2_70ljy")
+
+[node name="Folha" type="Sprite3D" parent="." unique_id=1423138900]
+transform = Transform3D(1, 0, 0, 0, 0.12851438, -0.9917077, 0, 0.9917077, 0.12851438, 0, 0.09428811, 0)
+pixel_size = 0.003
+billboard = 2
+texture_filter = 2
+texture = ExtResource("2_31w1i")
+
+[node name="Area3D" type="Area3D" parent="Folha" unique_id=2056931152]
+transform = Transform3D(1, 0, 0, 0, 0.12851436, 0.99170756, 0, -0.99170756, 0.12851436, 0, -0.012117377, 0.09350623)
+collision_layer = 128
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Folha/Area3D" unique_id=791889074]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07638514, 0)
+shape = SubResource("SphereShape3D_sd3vj")
+
+[connection signal="body_entered" from="Folha/Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Folha/Area3D" to="." method="_on_area_3d_body_exited"]

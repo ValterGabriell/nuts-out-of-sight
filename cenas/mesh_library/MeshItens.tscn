@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://cpw2612s73gfk"]
+
+[ext_resource type="PackedScene" uid="uid://dltv5qryx7ijb" path="res://cenas/outros/folha_v2.tscn" id="1_sd3vj"]
+
+[node name="MeshItens" type="Node3D" unique_id=1627087839]
+
+[node name="Folha" parent="." unique_id=419036531 instance=ExtResource("1_sd3vj")]

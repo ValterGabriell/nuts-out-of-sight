@@ -22,6 +22,8 @@ GlobalGerenciadorDeSalvamento="*res://codigos/global/global_gerenciador_de_salva
 GlobalGerenciadorDeSinais="*uid://cl0xbech2w48c"
 GlobalEstoque="*res://codigos/global/global_estoque.gd"
 GlobalTransicaoDeCena="*res://codigos/global/global_transicao_de_cena.gd"
+GlobalGerenciadorDeBarulho="*uid://c2bqc6orq5vg3"
+GlobalInicializacaoMapa="*uid://xul4y00s4f0e"
 
 [display]
 
@@ -120,6 +122,7 @@ largar_itens={
 3d_physics/layer_5="porta"
 3d_physics/layer_6="estoque"
 3d_physics/layer_7="area_para_guardar_os_itens"
+3d_physics/layer_8="area_que_faz_barulho"
 
 [physics]
 

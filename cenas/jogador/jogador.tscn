@@ -26,7 +26,7 @@ size = Vector3(0.6888428, 0.6414795, 0.0513916)
 
 [node name="Jogador" type="CharacterBody3D" unique_id=830939475]
 collision_layer = 4
-collision_mask = 17
+collision_mask = 145
 script = ExtResource("1_ismvl")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=296664329]
@@ -48,10 +48,11 @@ jogador = NodePath("../..")
 script = ExtResource("4_qtkst")
 jogador = NodePath("../..")
 
-[node name="DEBUG" type="CanvasLayer" parent="." unique_id=2492568 node_paths=PackedStringArray("jogador", "label_velocidade")]
+[node name="DEBUG" type="CanvasLayer" parent="." unique_id=2492568 node_paths=PackedStringArray("jogador", "label_velocidade", "label_barulho_total_jogador")]
 script = ExtResource("4_nkbb3")
 jogador = NodePath("..")
 label_velocidade = NodePath("PanelContainer/VBoxContainer/VelocidadeDoJogador")
+label_barulho_total_jogador = NodePath("PanelContainer/VBoxContainer/BarulhoTotalDoJogador")
 
 [node name="PanelContainer" type="PanelContainer" parent="DEBUG" unique_id=99229869]
 custom_minimum_size = Vector2(250, 250)
@@ -65,4 +66,7 @@ grow_horizontal = 0
 layout_mode = 2
 
 [node name="VelocidadeDoJogador" type="Label" parent="DEBUG/PanelContainer/VBoxContainer" unique_id=450731210]
+layout_mode = 2
+
+[node name="BarulhoTotalDoJogador" type="Label" parent="DEBUG/PanelContainer/VBoxContainer" unique_id=1728938701]
 layout_mode = 2
