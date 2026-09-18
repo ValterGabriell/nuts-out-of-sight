@@ -8,12 +8,17 @@
 [ext_resource type="Script" uid="uid://dpn3lcrc3pky" path="res://codigos/ui/ui_hud.gd" id="3_vpl54"]
 [ext_resource type="PackedScene" uid="uid://tw762cwq7bpt" path="res://cenas/urso/urso.tscn" id="5_ff0xt"]
 [ext_resource type="PackedScene" uid="uid://d0xavr5nl12q0" path="res://cenas/items/noz.tscn" id="8_djk5k"]
+[ext_resource type="Script" uid="uid://ckqrypniki2ce" path="res://codigos/outros/areas_de_aparecimento_das_folhas.gd" id="8_k1xmn"]
+[ext_resource type="PackedScene" uid="uid://dltv5qryx7ijb" path="res://cenas/outros/folha_v2.tscn" id="9_eewb4"]
 [ext_resource type="PackedScene" uid="uid://by60h74njj6os" path="res://cenas/items/noz_pesada.tscn" id="9_sflf3"]
+[ext_resource type="Script" uid="uid://bv70g2ei6nm8t" path="res://codigos/item_que_faz_barulho/movimento_que_modifica_o_item_que_faz_barulho.gd" id="10_eewb4"]
 [ext_resource type="PackedScene" uid="uid://cvqos22k487uc" path="res://cenas/entradas_portas/porta_cabana.tscn" id="10_wgbst"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ff0xt"]
 sky_top_color = Color(1, 0.7019608, 0.4745098, 1)
 sky_horizon_color = Color(0.5921569, 0.25490198, 0.2, 1)
+sky_curve = 4.3259945
+sky_energy_multiplier = 0.38
 
 [sub_resource type="Sky" id="Sky_sflf3"]
 sky_material = SubResource("ProceduralSkyMaterial_ff0xt")
@@ -22,7 +27,12 @@ sky_material = SubResource("ProceduralSkyMaterial_ff0xt")
 background_mode = 2
 sky = SubResource("Sky_sflf3")
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_g4v7s"]
+size = Vector3(19.866455, 1, 8.215271)
+
 [node name="Principal" type="Node3D" unique_id=830613941]
+
+[node name="CarregarShader" type="Node3D" parent="." unique_id=860779761]
 
 [node name="ConfiguracaoGlobal" type="Node3D" parent="." unique_id=1705741046]
 
@@ -103,8 +113,24 @@ id_unico_do_item_no_mapa = &"principal_noz_3"
 [node name="PRINCIPAL" type="Node3D" parent="PontosDeSpawn" unique_id=522324275]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88340425, 6.603328)
 
+[node name="AreasDeAparecimentoDasFolhas" type="Node3D" parent="." unique_id=892277124 node_paths=PackedStringArray("area_de_spawn")]
+script = ExtResource("8_k1xmn")
+area_de_spawn = NodePath("AreaParaSpawnarOItem")
+cena_da_folha = ExtResource("9_eewb4")
+
+[node name="AreaParaSpawnarOItem" type="Area3D" parent="AreasDeAparecimentoDasFolhas" unique_id=138727865]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem" unique_id=1808956602]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16125488, 0, -6.0166044)
+shape = SubResource("BoxShape3D_g4v7s")
+debug_color = Color(0, 18.892157, 0, 1)
+
+[node name="MovimentoDoVento" type="Node3D" parent="AreasDeAparecimentoDasFolhas" unique_id=1558576058 node_paths=PackedStringArray("area_aparecimento_das_folhas")]
+script = ExtResource("10_eewb4")
+area_aparecimento_das_folhas = NodePath("..")
+
 [node name="Jogador" parent="." unique_id=830939475 node_paths=PackedStringArray("camera_pivot") instance=ExtResource("2_j2ut6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48719418, 9.295964)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.0608673, 0.48719418, 0.52466106)
 collision_mask = 11
 camera_pivot = NodePath("../ConfiguracaoGlobal/Camera")
 

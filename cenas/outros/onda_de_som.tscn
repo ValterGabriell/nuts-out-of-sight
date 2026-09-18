@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://d1edh02l3xjcg"]
+
+[ext_resource type="Shader" uid="uid://sg386vsqxldh" path="res://shader/onda_de_som.gdshader" id="1_a6hq8"]
+[ext_resource type="Script" uid="uid://dahpmdd42jxc7" path="res://codigos/outros/onda_de_som.gd" id="1_fcait"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_elvg7"]
+render_priority = 0
+shader = ExtResource("1_a6hq8")
+shader_parameter/cor_som = Color(1, 0.8, 0.2, 1)
+shader_parameter/progresso = 0.0
+shader_parameter/espessura = 0.05
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_g4v7s"]
+material = SubResource("ShaderMaterial_elvg7")
+size = Vector2(10, 10)
+
+[node name="OndaDeSom" type="Node3D" unique_id=1394297579]
+script = ExtResource("1_fcait")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=447706074]
+mesh = SubResource("PlaneMesh_g4v7s")
