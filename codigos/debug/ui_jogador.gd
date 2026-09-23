@@ -2,8 +2,11 @@ extends CanvasLayer
 
 
 @export var jogador: Jogador
+
 @export var label_velocidade: Label
 @export var label_barulho_total_jogador: Label
+@export var label_estado_visibilidade_jogador: Label
+@export var label_estado_sono_urso: Label
 
 @export var label_debug_estado_do_vento: Label
 @export var label_debug_direcao_do_vento: Label
@@ -18,8 +21,19 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if jogador and label_velocidade:
 		label_velocidade.text = "Velocidade: " + str(jogador.velocidade_atual)
+	if jogador and label_estado_visibilidade_jogador:
+		var estados_visibilidade: PackedStringArray = Jogador.EstadoVisibilidadeJogador.keys()
+		label_estado_visibilidade_jogador.text = "Visibilidade: " + estados_visibilidade[jogador.estado_visibilidade]
 	if jogador and label_barulho_total_jogador:
-		label_barulho_total_jogador.text = "Barulho Total: " + str(GlobalGerenciadorDeBarulho.atual_quantidade_de_barulho_em_pixels_em_area_anelar)
+		if GlobalGerenciadorDeBarulho:
+			var texto_barulho_total: String = "Barulho Total: " + str(GlobalGerenciadorDeBarulho.atual_quantidade_de_barulho_em_pixels_em_area_anelar)
+			if jogador.urso:
+				texto_barulho_total += " | Urso: " + str(jogador.urso.obter_nome_estado_sono_atual()) + " (" + str(snappedf(jogador.urso.percentual_barulho_atual, 0.1)) + "%)"
+			label_barulho_total_jogador.text = texto_barulho_total
+		else:
+			label_barulho_total_jogador.text = "Barulho Total: N/A"
+	if jogador and jogador.urso and label_estado_sono_urso:
+		label_estado_sono_urso.text = "Sono do Urso: " + str(jogador.urso.obter_nome_estado_sono_atual()) + " (" + str(snappedf(jogador.urso.percentual_barulho_atual, 0.1)) + "%)"
 
 func _on_debug_vento_atualizado(dados_debug_vento: Dictionary) -> void:
 	if label_debug_estado_do_vento:

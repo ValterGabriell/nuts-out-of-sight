@@ -42,7 +42,9 @@ func _on_body_exited(body: Node3D) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if _jogador and _estado_item == EstadoItem.NO_MUNDO and event.is_action_pressed("interagir"):
-		GlobalItensQueOJogadorCarrega.adicionar_item_ao_inventario(self)
+		var item_adicionado: bool = GlobalItensQueOJogadorCarrega.adicionar_item_ao_inventario(self)
+		if not item_adicionado:
+			return
 		GlobalGerenciadorDeSinais.item_adicionado_ao_inventario.emit(GlobalItensQueOJogadorCarrega.itens_coletados.size())
 		if percentual_reducao_velocidade > 0.0:
 			GlobalGerenciadorDeSinais.velocidade_do_jogador_alterada.emit(percentual_reducao_velocidade)

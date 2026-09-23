@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://csv65x0rce15x"]
+
+[ext_resource type="Texture2D" uid="uid://bdbx1o8pxc0gv" path="res://arte/sprites_2d/urso_02.png" id="1_a05xj"]
+
+[node name="Urso2d" type="CharacterBody2D" unique_id=1732195477]
+
+[node name="Skeleton2D" type="Skeleton2D" parent="." unique_id=1895342592]
+
+[node name="Root" type="Bone2D" parent="Skeleton2D" unique_id=1936939382]
+position = Vector2(-60.999996, -51.999996)
+rotation = 3.065187
+
+[node name="Hip" type="Bone2D" parent="Skeleton2D/Root" unique_id=1474891368]
+position = Vector2(-14.336034, 16.955181)
+rotation = 0.8348426
+scale = Vector2(0.9999999, 0.9999999)
+
+[node name="Coluna" type="Bone2D" parent="Skeleton2D/Root/Hip" unique_id=768048554]
+position = Vector2(-38.96894, 54.830833)
+rotation = 2.6925888
+scale = Vector2(1.8287324, -0.5073316)
+
+[node name="Cabeca" type="Bone2D" parent="Skeleton2D/Root/Hip/Coluna" unique_id=1964962584]
+position = Vector2(37.307495, 36.091682)
+rotation = -0.0049633253
+scale = Vector2(0.9999999, 0.9999999)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1933571994]
+texture_filter = 1
+texture = ExtResource("1_a05xj")
+
+[node name="Poligonos" type="Node2D" parent="." unique_id=611601340]
+
+[node name="Polygon2D" type="Polygon2D" parent="Poligonos" unique_id=873285976]

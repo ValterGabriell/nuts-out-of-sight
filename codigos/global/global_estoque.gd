@@ -36,7 +36,7 @@ func guardar_itens(itens_para_guardar: Array[int]) -> Array[int]:
 	print("Itens guardados. Quantidade total de itens: %d" % quantidade_total_de_itens)
 	estoque_atualizado.emit(quantidade_total_de_itens)
 	if quantidade_total_de_itens >= MAX_QUANTIDADE_DE_ITENS:
-		print("Estoque cheio. Pode se preparar para não guardar mais itens.")
+		GlobalGerenciadorDeSinais.estoque_atingiu_maximo_pra_aquele_dia.emit()
 	return itens_guardados
 
 func guardar_item(tipo_item: int) -> bool:

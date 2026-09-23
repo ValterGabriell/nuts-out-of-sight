@@ -1,17 +1,16 @@
 [gd_scene format=3 uid="uid://c1ayrcp8gpmux"]
 
-[ext_resource type="Script" uid="uid://cgttcoxqju26t" path="res://codigos/camera/camera.gd" id="1_42xuo"]
 [ext_resource type="PackedScene" uid="uid://d0rjtb85kkdpn" path="res://cenas/chao/chao.tscn" id="1_ym8g7"]
-[ext_resource type="Script" uid="uid://bgy7exkq20vxo" path="res://codigos/camera/seguir_jogador.gd" id="2_0404l"]
 [ext_resource type="PackedScene" uid="uid://4jnt4pnkbk5t" path="res://cenas/jogador/jogador.tscn" id="2_j2ut6"]
 [ext_resource type="Texture2D" uid="uid://dtl2cy7wj17oe" path="res://arte/sprites_2d/noz.png" id="3_0cijk"]
 [ext_resource type="Script" uid="uid://dpn3lcrc3pky" path="res://codigos/ui/ui_hud.gd" id="3_vpl54"]
 [ext_resource type="PackedScene" uid="uid://tw762cwq7bpt" path="res://cenas/urso/urso.tscn" id="5_ff0xt"]
 [ext_resource type="PackedScene" uid="uid://d0xavr5nl12q0" path="res://cenas/items/noz.tscn" id="8_djk5k"]
-[ext_resource type="Script" uid="uid://ckqrypniki2ce" path="res://codigos/outros/areas_de_aparecimento_das_folhas.gd" id="8_k1xmn"]
+[ext_resource type="Script" uid="uid://cunjiy1vtlrnt" path="res://codigos/outros/areas_de_aparecimento_das_folhas.gd" id="8_k1xmn"]
+[ext_resource type="Script" uid="uid://b7tbkmg4s3sjb" path="res://codigos/outros/configuracao_area_de_spawn_folhas.gd" id="9_cfg_area_folha"]
 [ext_resource type="PackedScene" uid="uid://dltv5qryx7ijb" path="res://cenas/outros/folha_v2.tscn" id="9_eewb4"]
 [ext_resource type="PackedScene" uid="uid://by60h74njj6os" path="res://cenas/items/noz_pesada.tscn" id="9_sflf3"]
-[ext_resource type="Script" uid="uid://bv70g2ei6nm8t" path="res://codigos/item_que_faz_barulho/movimento_que_modifica_o_item_que_faz_barulho.gd" id="10_eewb4"]
+[ext_resource type="Script" uid="uid://dcdbm4vlhnomj" path="res://codigos/item_que_faz_barulho/movimento_que_modifica_o_item_que_faz_barulho.gd" id="10_eewb4"]
 [ext_resource type="PackedScene" uid="uid://cvqos22k487uc" path="res://cenas/entradas_portas/porta_cabana.tscn" id="10_wgbst"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ff0xt"]
@@ -28,11 +27,9 @@ background_mode = 2
 sky = SubResource("Sky_sflf3")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_g4v7s"]
-size = Vector3(19.866455, 1, 8.215271)
+size = Vector3(22.36676, 1, 22.343529)
 
 [node name="Principal" type="Node3D" unique_id=830613941]
-
-[node name="CarregarShader" type="Node3D" parent="." unique_id=860779761]
 
 [node name="ConfiguracaoGlobal" type="Node3D" parent="." unique_id=1705741046]
 
@@ -41,19 +38,11 @@ size = Vector3(19.866455, 1, 8.215271)
 [node name="WorldEnvironment" type="WorldEnvironment" parent="ConfiguracaoGlobal/Iluminacao" unique_id=1116798111]
 environment = SubResource("Environment_j2ut6")
 
-[node name="Camera" type="Node3D" parent="ConfiguracaoGlobal" unique_id=1713308816 node_paths=PackedStringArray("camera")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9.295964)
-script = ExtResource("1_42xuo")
-camera = NodePath("Camera3D")
-
-[node name="Camera3D" type="Camera3D" parent="ConfiguracaoGlobal/Camera" unique_id=1552525419]
-transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 3, 4)
-size = 50.999
-
-[node name="SeguirJogador" type="Node3D" parent="ConfiguracaoGlobal/Camera" unique_id=1975449664 node_paths=PackedStringArray("jogador", "camera_pivot")]
-script = ExtResource("2_0404l")
-jogador = NodePath("../../../Jogador")
-camera_pivot = NodePath("..")
+[node name="Camera3D" type="Camera3D" parent="ConfiguracaoGlobal" unique_id=1552525419]
+transform = Transform3D(1, 0, 0, 0, 0.9201787, 0.39149874, 0, -0.39149874, 0.9201787, 0, 6.2268505, 14.655581)
+projection = 1
+current = true
+size = 12.0
 
 [node name="UI" type="Control" parent="ConfiguracaoGlobal" unique_id=2139572802]
 layout_mode = 3
@@ -113,15 +102,17 @@ id_unico_do_item_no_mapa = &"principal_noz_3"
 [node name="PRINCIPAL" type="Node3D" parent="PontosDeSpawn" unique_id=522324275]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88340425, 6.603328)
 
-[node name="AreasDeAparecimentoDasFolhas" type="Node3D" parent="." unique_id=892277124 node_paths=PackedStringArray("area_de_spawn")]
+[node name="AreasDeAparecimentoDasFolhas" type="Node3D" parent="." unique_id=892277124 node_paths=PackedStringArray("areas_de_spawn")]
 script = ExtResource("8_k1xmn")
-area_de_spawn = NodePath("AreaParaSpawnarOItem")
+areas_de_spawn = [NodePath("AreaParaSpawnarOItem")]
 cena_da_folha = ExtResource("9_eewb4")
 
 [node name="AreaParaSpawnarOItem" type="Area3D" parent="AreasDeAparecimentoDasFolhas" unique_id=138727865]
+script = ExtResource("9_cfg_area_folha")
+quantidade_inicial_de_folhas = 500
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem" unique_id=1808956602]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16125488, 0, -6.0166044)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.059173584, 0, -0.16656399)
 shape = SubResource("BoxShape3D_g4v7s")
 debug_color = Color(0, 18.892157, 0, 1)
 
@@ -129,15 +120,16 @@ debug_color = Color(0, 18.892157, 0, 1)
 script = ExtResource("10_eewb4")
 area_aparecimento_das_folhas = NodePath("..")
 
-[node name="Jogador" parent="." unique_id=830939475 node_paths=PackedStringArray("camera_pivot") instance=ExtResource("2_j2ut6")]
+[node name="Jogador" parent="." unique_id=830939475 node_paths=PackedStringArray("urso") instance=ExtResource("2_j2ut6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.0608673, 0.48719418, 0.52466106)
 collision_mask = 11
-camera_pivot = NodePath("../ConfiguracaoGlobal/Camera")
-
-[node name="Urso" parent="." unique_id=164182681 instance=ExtResource("5_ff0xt")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.81219935, 0)
+urso = NodePath("../Urso")
 
 [node name="PortaCabana" parent="." unique_id=616394942 instance=ExtResource("10_wgbst")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6463099, 1.0491469, 9.758276)
 nome_da_area_pra_spawnar = 1
 caminho_da_cena_para_abrir = "uid://cndo1nr3c25nb"
+
+[node name="Urso" parent="." unique_id=164182681 node_paths=PackedStringArray("jogador") instance=ExtResource("5_ff0xt")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0.19068182, 0.83500004, 0.63686347)
+jogador = NodePath("../Jogador")

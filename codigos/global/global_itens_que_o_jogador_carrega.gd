@@ -6,6 +6,7 @@ const CENA_NOZ_PESADA: PackedScene = preload("res://cenas/items/noz_pesada.tscn"
 var itens_coletados: Array[int] = []
 var ids_dos_itens_no_inventario: Array[StringName] = []
 
+
 func obter_snapshot_para_salvamento() -> Dictionary:
 	var ids_serializados: Array[String] = []
 	for id_do_item: StringName in ids_dos_itens_no_inventario:
@@ -31,9 +32,12 @@ func carregar_snapshot_do_salvamento(snapshot_do_inventario: Dictionary) -> void
 		else:
 			ids_dos_itens_no_inventario.append(StringName())
 
-func adicionar_item_ao_inventario(item: ItemColetavel) -> void:
+func adicionar_item_ao_inventario(item: ItemColetavel) -> bool:
+	if itens_coletados.size() >= 1:
+		return false
 	itens_coletados.append(item.tipo_item)
 	ids_dos_itens_no_inventario.append(item.id_unico_do_item_no_mapa)
+	return true
 
 func remover_item_do_inventario(item: ItemColetavel) -> void:
 	remover_primeiro_item_do_inventario_por_tipo(item.tipo_item)
