@@ -33,16 +33,10 @@ enum EstadoSonoUrso {
     JANELA_DE_PANICO,
 }
 
-enum EstadoDisparoDaJanelaDePanico {
-    NAO_DISPARADO,
-    DISPARADO,
-}
-
 var estado_atual: EstadoUrso = EstadoUrso.DORMINDO
 var acao_de_transicao_em_alerta: AcaoDeTransicaoEmAlerta = AcaoDeTransicaoEmAlerta.NENHUMA
 var estado_sono_atual: EstadoSonoUrso = EstadoSonoUrso.SONO_PROFUNDO
 var percentual_barulho_atual: float = 0.0
-var estado_disparo_da_janela_de_panico: EstadoDisparoDaJanelaDePanico = EstadoDisparoDaJanelaDePanico.NAO_DISPARADO
 
 
 func _ready() -> void:
@@ -58,8 +52,6 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-    _atualizar_estado_de_sono_por_barulho_global()
-
     match estado_atual:
         EstadoUrso.PERSEGUINDO:
             _perseguir_jogador(delta)
@@ -71,17 +63,21 @@ func _physics_process(delta: float) -> void:
 
 
 func entrar_em_alerta() -> void:
-    _entrar_em_alerta_com_transicao(AcaoDeTransicaoEmAlerta.IR_PARA_PERSEGUINDO)
-
-
-func tentar_entrar_em_alerta_por_barulho() -> void:
     if estado_sono_atual != EstadoSonoUrso.JANELA_DE_PANICO:
         return
 
     if estado_atual != EstadoUrso.DORMINDO:
         return
 
-    _registrar_disparo_da_janela_de_panico()
+    _entrar_em_alerta_com_transicao(AcaoDeTransicaoEmAlerta.IR_PARA_PERSEGUINDO)
+
+
+func tentar_entrar_em_alerta_por_barulho() -> void:
+    registrar_disparo_de_barulho_detectado()
+
+
+func registrar_disparo_de_barulho_detectado() -> void:
+    _definir_percentual_de_barulho_atual(100.0)
     entrar_em_alerta()
 
 
@@ -106,6 +102,7 @@ func _finalizar_transicao_em_alerta() -> void:
         AcaoDeTransicaoEmAlerta.IR_PARA_PERSEGUINDO:
             _iniciar_perseguicao()
         AcaoDeTransicaoEmAlerta.IR_PARA_DORMINDO:
+            _definir_percentual_de_barulho_atual(0.0)
             _definir_estado(EstadoUrso.DORMINDO)
         AcaoDeTransicaoEmAlerta.NENHUMA:
             pass
@@ -194,27 +191,10 @@ func _obter_nome_animacao_por_estado(estado: EstadoUrso) -> StringName:
     return StringName(chaves_do_enum[estado])
 
 
-func _atualizar_estado_de_sono_por_barulho_global() -> void:
-    percentual_barulho_atual = _obter_percentual_barulho_global()
-
+func _definir_percentual_de_barulho_atual(percentual: float) -> void:
+    percentual_barulho_atual = clampf(percentual, 0.0, 100.0)
     var novo_estado_sono: EstadoSonoUrso = _obter_estado_sono_por_percentual(percentual_barulho_atual)
     _definir_estado_sono(novo_estado_sono)
-
-    if estado_sono_atual == EstadoSonoUrso.JANELA_DE_PANICO:
-        if estado_disparo_da_janela_de_panico == EstadoDisparoDaJanelaDePanico.NAO_DISPARADO and estado_atual == EstadoUrso.DORMINDO:
-            _registrar_disparo_da_janela_de_panico()
-            entrar_em_alerta()
-    else:
-        estado_disparo_da_janela_de_panico = EstadoDisparoDaJanelaDePanico.NAO_DISPARADO
-
-
-func _obter_percentual_barulho_global() -> float:
-    if quantidade_de_barulho_para_panico <= 0.0:
-        return 0.0
-
-    var barulho_global_atual: float = GlobalGerenciadorDeBarulho.atual_quantidade_de_barulho_em_pixels_em_area_anelar
-    var percentual: float = (barulho_global_atual / quantidade_de_barulho_para_panico) * 100.0
-    return clampf(percentual, 0.0, 100.0)
 
 
 func _obter_estado_sono_por_percentual(percentual: float) -> EstadoSonoUrso:
@@ -233,13 +213,15 @@ func _definir_estado_sono(novo_estado_sono: EstadoSonoUrso) -> void:
     estado_sono_alterado.emit(estado_sono_atual, percentual_barulho_atual)
 
 
-func _registrar_disparo_da_janela_de_panico() -> void:
-    estado_disparo_da_janela_de_panico = EstadoDisparoDaJanelaDePanico.DISPARADO
-
-
 func obter_nome_estado_sono_atual() -> StringName:
     var chaves_do_enum: PackedStringArray = EstadoSonoUrso.keys()
     return StringName(chaves_do_enum[estado_sono_atual])
+
+
+func resetar_para_dormindo() -> void:
+    acao_de_transicao_em_alerta = AcaoDeTransicaoEmAlerta.NENHUMA
+    _definir_percentual_de_barulho_atual(0.0)
+    _definir_estado(EstadoUrso.DORMINDO)
 
 
 func _definir_estado(novo_estado: EstadoUrso) -> void:

@@ -12,6 +12,11 @@ enum EstadoDoArquivoDeSalvamento {
 	CARREGADO
 }
 
+enum EstadoDoRegistroDoUrso {
+	NAO_REGISTRADO,
+	REGISTRADO
+}
+
 const CAMINHO_DO_ARQUIVO_DE_SALVAMENTO: String = "user://save_jogo.json"
 
 var estado_do_arquivo_de_salvamento: EstadoDoArquivoDeSalvamento = EstadoDoArquivoDeSalvamento.NAO_CARREGADO
@@ -20,16 +25,20 @@ var percentual_de_folhas_por_area_no_snapshot: float = 0.35
 var quantidade_maxima_de_folhas_por_area_no_snapshot: int = 60
 var casas_decimais_das_posicoes_das_folhas_no_snapshot: int = 2
 var snapshots_de_folhas_por_cena: Dictionary[StringName, Dictionary] = {}
+var registros_do_urso_por_cena: Dictionary[StringName, Dictionary] = {}
 
 
 func _ready() -> void:
 	carregar_jogo_do_disco()
+	if not get_tree().scene_changed.is_connected(_ao_trocar_de_cena_para_restaurar_urso):
+		get_tree().scene_changed.connect(_ao_trocar_de_cena_para_restaurar_urso)
 	super._ready()
 
 
 func salvar_jogo(motivo_do_salvamento: MotivoDeSalvamento) -> void:
 	if deve_persistir_posicao_das_folhas:
 		_atualizar_snapshot_de_folhas_da_cena_atual()
+	_atualizar_registro_do_urso_da_cena_atual()
 
 	var dados_do_salvamento: Dictionary = {
 		"versao": 1,
@@ -44,6 +53,8 @@ func salvar_jogo(motivo_do_salvamento: MotivoDeSalvamento) -> void:
 
 	if deve_persistir_posicao_das_folhas:
 		dados_do_salvamento["snapshots_de_folhas_por_cena"] = _serializar_snapshots_de_folhas_por_cena()
+
+	dados_do_salvamento["registros_do_urso_por_cena"] = _serializar_registros_do_urso_por_cena()
 
 	var arquivo_de_salvamento: FileAccess = FileAccess.open(CAMINHO_DO_ARQUIVO_DE_SALVAMENTO, FileAccess.WRITE)
 	if arquivo_de_salvamento == null:
@@ -88,10 +99,16 @@ func carregar_jogo_do_disco() -> void:
 		_carregar_snapshots_de_folhas_por_cena(dados_do_salvamento.get("snapshots_de_folhas_por_cena", {}))
 	else:
 		snapshots_de_folhas_por_cena.clear()
+	_carregar_registros_do_urso_por_cena(dados_do_salvamento.get("registros_do_urso_por_cena", {}))
 	GlobalItensQueOJogadorCarrega.carregar_snapshot_do_salvamento(dados_do_salvamento.get("inventario_do_jogador", {}))
 	GlobalEstoque.carregar_snapshot_do_salvamento(dados_do_salvamento.get("estoque", {}))
 	GlobalGerenciadorDeFase.carregar_snapshot_do_salvamento(dados_do_salvamento.get("fase_da_rodada", {}))
 	estado_do_arquivo_de_salvamento = EstadoDoArquivoDeSalvamento.CARREGADO
+	call_deferred("_aplicar_registro_do_urso_da_cena_atual")
+
+
+func _ao_trocar_de_cena_para_restaurar_urso() -> void:
+	call_deferred("_aplicar_registro_do_urso_da_cena_atual")
 
 func _atualizar_snapshot_de_folhas_da_cena_atual() -> void:
 	if not deve_persistir_posicao_das_folhas:
@@ -192,6 +209,13 @@ func _serializar_snapshots_de_folhas_por_cena() -> Dictionary:
 		for caminho_do_no: StringName in snapshots_da_cena.keys():
 			snapshots_serializados[String(caminho_do_no)] = snapshots_da_cena[caminho_do_no]
 		dados_serializados[String(id_da_cena)] = snapshots_serializados
+	return dados_serializados
+
+
+func _serializar_registros_do_urso_por_cena() -> Dictionary:
+	var dados_serializados: Dictionary = {}
+	for id_da_cena: StringName in registros_do_urso_por_cena.keys():
+		dados_serializados[String(id_da_cena)] = registros_do_urso_por_cena[id_da_cena]
 	return dados_serializados
 
 func _otimizar_snapshot_de_folhas(snapshot_bruto: Dictionary) -> Dictionary:
@@ -295,6 +319,76 @@ func _carregar_snapshots_de_folhas_por_cena(dados_serializados: Dictionary) -> v
 				continue
 			snapshots_tipados[StringName(String(caminho_do_no_serializado))] = snapshot_do_no
 		snapshots_de_folhas_por_cena[id_da_cena] = snapshots_tipados
+
+
+func _carregar_registros_do_urso_por_cena(dados_serializados: Dictionary) -> void:
+	registros_do_urso_por_cena.clear()
+	for id_da_cena_serializado: Variant in dados_serializados.keys():
+		var id_da_cena: StringName = StringName(String(id_da_cena_serializado))
+		var registro_serializado: Dictionary = dados_serializados[id_da_cena_serializado] as Dictionary
+		if registro_serializado == null:
+			continue
+		registros_do_urso_por_cena[id_da_cena] = registro_serializado
+
+
+func _atualizar_registro_do_urso_da_cena_atual() -> void:
+	var id_da_cena_atual: StringName = _obter_id_da_cena_atual()
+	if id_da_cena_atual == StringName():
+		return
+
+	var urso_da_cena: Urso = _obter_urso_da_cena_atual()
+	if urso_da_cena == null:
+		registros_do_urso_por_cena.erase(id_da_cena_atual)
+		return
+
+	registros_do_urso_por_cena[id_da_cena_atual] = {
+		"posicao_global": _serializar_posicao_global_para_registro(urso_da_cena.global_position),
+		"rotacao_global": _serializar_posicao_global_para_registro(urso_da_cena.global_rotation)
+	}
+
+
+func _aplicar_registro_do_urso_da_cena_atual() -> void:
+	var urso_da_cena: Urso = _obter_urso_da_cena_atual()
+	if urso_da_cena == null:
+		return
+
+	urso_da_cena.resetar_para_dormindo()
+
+	var id_da_cena_atual: StringName = _obter_id_da_cena_atual()
+	if id_da_cena_atual == StringName():
+		return
+
+	if _obter_estado_do_registro_do_urso_na_cena(id_da_cena_atual) != EstadoDoRegistroDoUrso.REGISTRADO:
+		return
+
+	var registro_do_urso: Dictionary = registros_do_urso_por_cena[id_da_cena_atual] as Dictionary
+	if registro_do_urso == null:
+		return
+
+	urso_da_cena.global_position = _desserializar_posicao_global_do_registro(registro_do_urso.get("posicao_global", {}))
+	urso_da_cena.global_rotation = _desserializar_posicao_global_do_registro(registro_do_urso.get("rotacao_global", {}))
+
+
+func _obter_estado_do_registro_do_urso_na_cena(id_da_cena: StringName) -> EstadoDoRegistroDoUrso:
+	if not registros_do_urso_por_cena.has(id_da_cena):
+		return EstadoDoRegistroDoUrso.NAO_REGISTRADO
+	return EstadoDoRegistroDoUrso.REGISTRADO
+
+
+func _obter_urso_da_cena_atual() -> Urso:
+	var cena_atual: Node = get_tree().current_scene
+	if cena_atual == null:
+		return null
+
+	var urso_por_no: Urso = cena_atual.get_node_or_null("Urso") as Urso
+	if urso_por_no != null:
+		return urso_por_no
+
+	var urso_por_grupo: Node = get_tree().get_first_node_in_group("urso")
+	if urso_por_grupo is Urso and cena_atual.is_ancestor_of(urso_por_grupo):
+		return urso_por_grupo as Urso
+
+	return null
 
 
 func _desserializar_posicao_global(posicao_serializada: Dictionary) -> Vector3:
