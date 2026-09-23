@@ -17,15 +17,15 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-GlobalItensQueOJogadorCarrega="*uid://y8bi6ke2k78i"
+GlobalItensQueOJogadorCarrega="*res://codigos/global/global_itens_que_o_jogador_carrega.gd"
 GlobalGerenciadorDeSalvamento="*res://codigos/global/global_gerenciador_de_salvamento.gd"
-GlobalGerenciadorDeSinais="*uid://cl0xbech2w48c"
+GlobalGerenciadorDeSinais="*res://codigos/global/global_gerenciador_de_sinais.gd"
 GlobalEstoque="*res://codigos/global/global_estoque.gd"
 GlobalTransicaoDeCena="*res://codigos/global/global_transicao_de_cena.gd"
 GlobalGerenciadorDeBarulho="*res://codigos/global/global_gerenciador_de_barulho.gd"
-GlobalInicializacaoMapa="*uid://xul4y00s4f0e"
-GlobalGerenciadorDeQuantidadeDeFolhasNasAreas="*uid://do7uu5w1t7w70"
-GlobalGerenciadorDeFase="*uid://7d4byvspvlmj"
+GlobalInicializacaoMapa="*res://codigos/global/global_inicializacao_mapa.gd"
+GlobalGerenciadorDeQuantidadeDeFolhasNasAreas="*res://codigos/global/global_gerenciador_de_quantidade_de_folhas_nas_areas.gd"
+GlobalGerenciadorDeFase="*res://codigos/global/global_gerenciador_de_fase.gd"
 
 [display]
 
@@ -125,6 +125,7 @@ largar_itens={
 3d_physics/layer_6="estoque"
 3d_physics/layer_7="area_para_guardar_os_itens"
 3d_physics/layer_8="area_que_faz_barulho"
+3d_physics/layer_9="area_que_acorda_urso"
 
 [physics]
 

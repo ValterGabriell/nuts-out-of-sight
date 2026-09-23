@@ -48,11 +48,13 @@ jogador = NodePath("../..")
 script = ExtResource("4_qtkst")
 jogador = NodePath("../..")
 
-[node name="DEBUG" type="CanvasLayer" parent="." unique_id=2492568 node_paths=PackedStringArray("jogador", "label_velocidade", "label_barulho_total_jogador", "label_debug_estado_do_vento", "label_debug_direcao_do_vento", "label_debug_tempo_ate_pre_aviso", "label_debug_tempo_ate_rajada", "label_debug_intervalo_entre_rajadas")]
+[node name="DEBUG" type="CanvasLayer" parent="." unique_id=2492568 node_paths=PackedStringArray("jogador", "label_velocidade", "label_barulho_total_jogador", "label_estado_visibilidade_jogador", "label_estado_sono_urso", "label_debug_estado_do_vento", "label_debug_direcao_do_vento", "label_debug_tempo_ate_pre_aviso", "label_debug_tempo_ate_rajada", "label_debug_intervalo_entre_rajadas")]
 script = ExtResource("4_nkbb3")
 jogador = NodePath("..")
 label_velocidade = NodePath("PanelContainer/VBoxContainer/VelocidadeDoJogador")
 label_barulho_total_jogador = NodePath("PanelContainer/VBoxContainer/BarulhoTotalDoJogador")
+label_estado_visibilidade_jogador = NodePath("PanelContainer/VBoxContainer/EstadoVisibilidadeJogador")
+label_estado_sono_urso = NodePath("PanelContainer/VBoxContainer/SonoUrso")
 label_debug_estado_do_vento = NodePath("PanelContainer/VBoxContainer/VentoEstado")
 label_debug_direcao_do_vento = NodePath("PanelContainer/VBoxContainer/VentoDirecao")
 label_debug_tempo_ate_pre_aviso = NodePath("PanelContainer/VBoxContainer/VentoTempoAtePreAviso")
@@ -73,6 +75,9 @@ layout_mode = 2
 [node name="VelocidadeDoJogador" type="Label" parent="DEBUG/PanelContainer/VBoxContainer" unique_id=450731210]
 layout_mode = 2
 
+[node name="SonoUrso" type="Label" parent="DEBUG/PanelContainer/VBoxContainer" unique_id=1968933462]
+layout_mode = 2
+
 [node name="BarulhoTotalDoJogador" type="Label" parent="DEBUG/PanelContainer/VBoxContainer" unique_id=1728938701]
 layout_mode = 2
 
@@ -89,4 +94,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="VentoIntervaloEntreRajadas" type="Label" parent="DEBUG/PanelContainer/VBoxContainer" unique_id=1894888805]
+layout_mode = 2
+
+[node name="EstadoVisibilidadeJogador" type="Label" parent="DEBUG/PanelContainer/VBoxContainer" unique_id=1439110393]
 layout_mode = 2
