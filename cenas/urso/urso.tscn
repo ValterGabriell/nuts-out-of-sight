@@ -331,11 +331,12 @@ animations = [{
 [sub_resource type="BoxShape3D" id="BoxShape3D_wgbst"]
 size = Vector3(0.6888428, 0.6414795, 0.67453)
 
-[node name="Urso" type="CharacterBody3D" unique_id=164182681]
+[node name="Urso" type="CharacterBody3D" unique_id=164182681 node_paths=PackedStringArray("animated_sprite")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 collision_layer = 2
 collision_mask = 4
 script = ExtResource("1_c46qq")
+animated_sprite = NodePath("AnimatedSprite3D")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=207934123]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)

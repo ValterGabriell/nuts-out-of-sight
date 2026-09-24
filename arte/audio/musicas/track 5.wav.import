@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bgj0fox6ixv06"
+path="res://.godot/imported/track 5.wav-672b16f2a3969c3c7ac424979a310658.sample"
+
+[deps]
+
+source_file="res://arte/audio/musicas/track 5.wav"
+dest_files=["res://.godot/imported/track 5.wav-672b16f2a3969c3c7ac424979a310658.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
