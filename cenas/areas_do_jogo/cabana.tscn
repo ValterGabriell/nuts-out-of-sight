@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://cvqos22k487uc" path="res://cenas/entradas_portas/porta_cabana.tscn" id="7_5hle0"]
 [ext_resource type="PackedScene" uid="uid://4jnt4pnkbk5t" path="res://cenas/jogador/jogador.tscn" id="8_2n0ck"]
 [ext_resource type="PackedScene" uid="uid://dsaca221woyvn" path="res://cenas/outros/estoque.tscn" id="9_4pwu7"]
+[ext_resource type="AudioStream" uid="uid://btp4u43b8opc" path="res://arte/audio/musicas/Aventura/MusicaCabana.wav" id="10_djeqo"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_djeqo"]
 sky_top_color = Color(1, 0.7019608, 0.4745098, 1)
@@ -89,6 +90,11 @@ caminho_da_cena_para_abrir = "uid://c1ayrcp8gpmux"
 
 [node name="Jogador" parent="." unique_id=830939475 instance=ExtResource("8_2n0ck")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.378368, 0.52000004, 8.299341)
+cena_atual = 1
 
 [node name="Estoque" parent="." unique_id=1559190117 instance=ExtResource("9_4pwu7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.969273, 0.6154529, 4.173459)
+
+[node name="MusicaCabana" type="AudioStreamPlayer" parent="." unique_id=1755351914]
+stream = ExtResource("10_djeqo")
+autoplay = true

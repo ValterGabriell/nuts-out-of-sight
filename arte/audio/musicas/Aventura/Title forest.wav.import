@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bre8adk7vbyxs"
+path="res://.godot/imported/Title forest.wav-44ca3114bcda0c6a6f3b9e7b4e438909.sample"
+
+[deps]
+
+source_file="res://arte/audio/musicas/Aventura/Title forest.wav"
+dest_files=["res://.godot/imported/Title forest.wav-44ca3114bcda0c6a6f3b9e7b4e438909.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

@@ -5,6 +5,10 @@
 [ext_resource type="Script" uid="uid://ckpla0xf8gils" path="res://codigos/jogador/jogador_movimento.gd" id="3_gaiqy"]
 [ext_resource type="Script" uid="uid://vajxr8m870gc" path="res://codigos/debug/ui_jogador.gd" id="4_nkbb3"]
 [ext_resource type="Script" uid="uid://c7rmrprasua8q" path="res://codigos/jogador/largar_itens_coletado_no_inventario.gd" id="4_qtkst"]
+[ext_resource type="Script" uid="uid://x81cfquodfv" path="res://codigos/jogador/tocar_audios.gd" id="5_fn8mc"]
+[ext_resource type="AudioStream" uid="uid://bd0gj3wllbpyf" path="res://arte/audio/passos/passo_folha_of.mp3" id="6_xtf2f"]
+[ext_resource type="AudioStream" uid="uid://c0m61r8jtmspt" path="res://arte/audio/passos/Dirt/Steps_dirt-021.ogg" id="8_ms2un"]
+[ext_resource type="AudioStream" uid="uid://smqs3dk3us1v" path="res://arte/audio/passos/Wood/Steps_wood-005.ogg" id="9_1baqg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_42xuo"]
 atlas = ExtResource("1_tm1li")
@@ -47,6 +51,14 @@ jogador = NodePath("../..")
 [node name="LargarItensColetadoNoInventario" type="Node3D" parent="Codigos" unique_id=1119924619 node_paths=PackedStringArray("jogador")]
 script = ExtResource("4_qtkst")
 jogador = NodePath("../..")
+
+[node name="TocarAudios" type="Node3D" parent="Codigos" unique_id=545630849 node_paths=PackedStringArray("jogador", "audioPassosNaFolha", "audioPassosNaAreia", "audioPassosNaMadeira")]
+script = ExtResource("5_fn8mc")
+jogador = NodePath("../..")
+audioPassosNaFolha = NodePath("../../Audios/PassoNaFolha")
+audioPassosNaAreia = NodePath("../../Audios/PassoNaAreia")
+audioPassosNaMadeira = NodePath("../../Audios/PassosNaMadeira")
+intervalo_passo_folha = 0.35
 
 [node name="DEBUG" type="CanvasLayer" parent="." unique_id=2492568 node_paths=PackedStringArray("jogador", "label_velocidade", "label_barulho_total_jogador", "label_estado_visibilidade_jogador", "label_estado_sono_urso", "label_debug_estado_do_vento", "label_debug_direcao_do_vento", "label_debug_tempo_ate_pre_aviso", "label_debug_tempo_ate_rajada", "label_debug_intervalo_entre_rajadas")]
 script = ExtResource("4_nkbb3")
@@ -98,3 +110,15 @@ layout_mode = 2
 
 [node name="EstadoVisibilidadeJogador" type="Label" parent="DEBUG/PanelContainer/VBoxContainer" unique_id=1439110393]
 layout_mode = 2
+
+[node name="Audios" type="Node" parent="." unique_id=273156684]
+
+[node name="PassoNaFolha" type="AudioStreamPlayer" parent="Audios" unique_id=667450290]
+stream = ExtResource("6_xtf2f")
+
+[node name="PassoNaAreia" type="AudioStreamPlayer" parent="Audios" unique_id=823634985]
+stream = ExtResource("8_ms2un")
+
+[node name="PassosNaMadeira" type="AudioStreamPlayer" parent="Audios" unique_id=1303676957]
+stream = ExtResource("9_1baqg")
+volume_db = 15.0

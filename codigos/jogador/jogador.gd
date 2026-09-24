@@ -5,6 +5,11 @@ enum EstadoVisibilidadeJogador {
 	ESCONDIDO,
 }
 
+enum CenaAtual{
+	PRINCIPAL,
+	CABANA
+}
+
 var velocidade_atual: float = VELOCIDADE_PADRAO
 const VELOCIDADE_PADRAO: float = 2
 const JUMP_VELOCITY = 4.5
@@ -12,7 +17,7 @@ const JUMP_VELOCITY = 4.5
 @export var camera_pivot: Node3D
 @export var estado_visibilidade: EstadoVisibilidadeJogador = EstadoVisibilidadeJogador.VISIVEL
 @export var urso: Urso
-
+@export var cena_atual: CenaAtual = CenaAtual.PRINCIPAL
 
 func _ready() -> void:
 	if camera_pivot == null:
