@@ -191,11 +191,29 @@ func _atualizar_flip_horizontal_por_jogador() -> void:
 	if animated_sprite == null or jogador == null:
 		return
 
-	var posicao_jogador_local: Vector3 = to_local(jogador.global_position)
-	if abs(posicao_jogador_local.x) <= zona_morta_flip_horizontal:
+	var direcao_para_jogador: Vector3 = jogador.global_position - global_position
+	direcao_para_jogador.y = 0.0
+
+	if direcao_para_jogador.length_squared() <= 0.0001:
 		return
 
-	animated_sprite.flip_h = posicao_jogador_local.x < 0.0
+	var referencia_flip: Node3D = jogador.camera_pivot if jogador.camera_pivot != null else null
+	var eixo_direita: Vector3
+	if referencia_flip != null:
+		eixo_direita = referencia_flip.global_transform.basis.x
+	else:
+		eixo_direita = Vector3.RIGHT
+
+	eixo_direita.y = 0.0
+	if eixo_direita.length_squared() <= 0.0001:
+		eixo_direita = Vector3.RIGHT
+	eixo_direita = eixo_direita.normalized()
+
+	var componente_horizontal: float = direcao_para_jogador.normalized().dot(eixo_direita)
+	if abs(componente_horizontal) <= zona_morta_flip_horizontal:
+		return
+
+	animated_sprite.flip_h = -componente_horizontal < 0.0
 
 
 func _on_animated_sprite_animation_finished() -> void:
