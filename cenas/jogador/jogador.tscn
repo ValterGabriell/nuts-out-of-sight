@@ -347,10 +347,14 @@ shape = SubResource("SphereShape3D_31w1i")
 
 [node name="Codigos" type="Node3D" parent="." unique_id=1836952779]
 
-[node name="Movimentos" type="Node3D" parent="Codigos" unique_id=741938532 node_paths=PackedStringArray("jogador", "animatedSprite")]
+[node name="Movimentos" type="Node3D" parent="Codigos" unique_id=741938532 node_paths=PackedStringArray("jogador", "animatedSprite", "mao_jogador_direcao")]
 script = ExtResource("3_gaiqy")
 jogador = NodePath("../..")
 animatedSprite = NodePath("../../AnimatedSprite3D")
+mao_jogador_direcao = NodePath("MaoJogadorDirecao")
+
+[node name="MaoJogadorDirecao" type="Node3D" parent="Codigos/Movimentos" unique_id=1488434933]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03845215, 0.029724121)
 
 [node name="LargarItensColetadoNoInventario" type="Node3D" parent="Codigos" unique_id=1119924619 node_paths=PackedStringArray("jogador")]
 script = ExtResource("4_qtkst")
