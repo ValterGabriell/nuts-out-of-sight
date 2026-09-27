@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://by60h74njj6os"]
 
 [ext_resource type="Script" uid="uid://blwp4h6phavft" path="res://codigos/items_coletaveis/item_coletavel.gd" id="1_s68tt"]
-[ext_resource type="Texture2D" uid="uid://xxyvjlboeavl" path="res://arte/sprites_2d/tipo_nozes/noz_pesada.png" id="2_s68tt"]
+[ext_resource type="PackedScene" uid="uid://bq11d6wmh8dq8" path="res://arte/3d/noz/grandenoz.glb" id="2_s68tt"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_c6fc5"]
-size = Vector3(0.3494873, 0.47192383, 0.4193573)
+size = Vector3(0.15475464, 0.26574707, 0.4193573)
 
 [node name="Noz" type="Area3D" unique_id=2089380860 node_paths=PackedStringArray("label_acao")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
@@ -15,13 +15,11 @@ tipo_item = 112
 label_acao = NodePath("Label3D")
 percentual_reducao_velocidade = 50.0
 
-[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1456583108]
-billboard = 2
-texture_filter = 2
-texture = ExtResource("2_s68tt")
+[node name="grandenoz" parent="." unique_id=1971337290 instance=ExtResource("2_s68tt")]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1703918347]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0048217773, 0.03527832, 0.00617218)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0030975342, 0.1383667, 0.00617218)
 shape = SubResource("BoxShape3D_c6fc5")
 
 [node name="Label3D" type="Label3D" parent="." unique_id=529417692]

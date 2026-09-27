@@ -40,6 +40,10 @@ size = Vector3(22.36676, 1, 22.343529)
 [node name="WorldEnvironment" type="WorldEnvironment" parent="ConfiguracaoGlobal/Iluminacao" unique_id=1116798111]
 environment = SubResource("Environment_j2ut6")
 
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="ConfiguracaoGlobal/Iluminacao" unique_id=1166669583]
+transform = Transform3D(1, 0, 0, 0, 0.09927711, 0.99505985, 0, -0.99505985, 0.09927711, 0, 13.265167, 21.964815)
+light_energy = 1.655
+
 [node name="Camera3D" type="Camera3D" parent="ConfiguracaoGlobal" unique_id=1552525419]
 transform = Transform3D(1, 0, 0, 0, 0.9201787, 0.39149874, 0, -0.39149874, 0.9201787, 0, 6.2268505, 14.655581)
 projection = 1
@@ -128,19 +132,17 @@ debug_color = Color(0, 18.892157, 0, 1)
 script = ExtResource("10_eewb4")
 area_aparecimento_das_folhas = NodePath("..")
 
-[node name="Jogador" parent="." unique_id=830939475 node_paths=PackedStringArray("urso") instance=ExtResource("2_j2ut6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.0608673, 0.48719418, 0.52466106)
-collision_mask = 11
-urso = NodePath("../Urso")
-
 [node name="PortaCabana" parent="." unique_id=616394942 instance=ExtResource("10_wgbst")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6463099, 1.0491469, 9.758276)
 nome_da_area_pra_spawnar = 1
 caminho_da_cena_para_abrir = "uid://cndo1nr3c25nb"
 
-[node name="Urso" parent="." unique_id=164182681 node_paths=PackedStringArray("jogador", "musicaPerseguicao", "musicaDormindo") instance=ExtResource("5_ff0xt")]
+[node name="Urso" parent="." unique_id=164182681 node_paths=PackedStringArray("musicaPerseguicao", "musicaDormindo") instance=ExtResource("5_ff0xt")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0.19068182, 0.83500004, 0.63686347)
-jogador = NodePath("../Jogador")
 musicaPerseguicao = NodePath("../ConfiguracaoGlobal/MusicaPerseguicao")
 musicaDormindo = NodePath("../ConfiguracaoGlobal/MusicaGameplay")
 duracao_transicao_musica = 0.0
+
+[node name="Jogador" parent="." unique_id=830939475 node_paths=PackedStringArray("urso") instance=ExtResource("2_j2ut6")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.2810335, 0.03191924, 0.08477652)
+urso = NodePath("../Urso")

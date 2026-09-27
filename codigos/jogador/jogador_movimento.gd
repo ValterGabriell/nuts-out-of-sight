@@ -8,18 +8,28 @@ enum EstadoMovimento {
 }
 
 @export var jogador: Jogador
-@export var animatedSprite: AnimatedSprite3D
+@export var animationPlayer: AnimationPlayer
+@export var no_visual_corpo: Node3D
 @export var mao_jogador_direcao: Node3D
 @export var deslocamento_horizontal_mao_com_item: float = 0.5
 @export var deslocamento_item_na_frente_no_idle_com_item: float = 1
+@export var velocidade_rotacao_corpo: float = 12.0
+@export var multiplicador_velocidade_animacao_movimento: float = 1.2
+@export var animation_start_fps: float = 30.0
+@export var animation_start_frame: int = 1
 
 
 var estado_atual: EstadoMovimento = EstadoMovimento.IDLE
 var item_visual_na_mao: ItemColetavel
 var tipo_item_visual_na_mao: int = -1
 var posicao_local_inicial_da_mao: Vector3 = Vector3.ZERO
+var cache_nome_animacao_por_estado: Dictionary = {}
+var alvo_rotacao_corpo: Node3D
 
 func _ready() -> void:
+	garantir_animation_player()
+	resolver_no_visual_do_corpo()
+	preparar_cache_de_animacoes()
 	GlobalGerenciadorDeSinais.velocidade_do_jogador_alterada.connect(reduzir_velocidade)
 	GlobalGerenciadorDeSinais.velocidade_do_jogador_resetada.connect(resetar_velocidade)
 	if mao_jogador_direcao != null:
@@ -42,6 +52,7 @@ func _physics_process(delta: float) -> void:
 	camera_right.y = 0.0
 	camera_right = camera_right.normalized()
 	var direction := (camera_right * input_dir.x + camera_forward * input_dir.y).normalized()
+	atualizar_rotacao_do_corpo(direction, delta)
 	if direction:
 		jogador.velocity.x = direction.x * jogador.velocidade_atual
 		jogador.velocity.z = direction.z * jogador.velocidade_atual
@@ -55,7 +66,6 @@ func _physics_process(delta: float) -> void:
 	var esta_se_movendo: bool = velocidade_horizontal.length() > 0.05
 	var esta_com_item: bool = not GlobalItensQueOJogadorCarrega.itens_coletados.is_empty()
 	sincronizar_item_visual_na_mao(esta_com_item)
-	atualizar_flip_do_sprite(input_dir, reference_node)
 	atualizar_estado_e_animacao(esta_se_movendo, esta_com_item)
 	atualizar_deslocamento_da_mao(input_dir, reference_node)
 	atualizar_posicao_visual_do_item(reference_node)
@@ -82,37 +92,107 @@ func obter_estado_de_movimento(esta_se_movendo: bool, esta_com_item: bool) -> Es
 
 
 func tocar_animacao_do_estado(estado: EstadoMovimento) -> void:
-	if animatedSprite == null:
+	garantir_animation_player()
+	if animationPlayer == null:
 		return
-	var nome_da_animacao: StringName = StringName(EstadoMovimento.keys()[estado])
-	if animatedSprite.animation != nome_da_animacao or not animatedSprite.is_playing():
-		animatedSprite.play(nome_da_animacao)
+	var nome_da_animacao: StringName = obter_nome_da_animacao(estado)
+	if nome_da_animacao.is_empty():
+		return
+	if animationPlayer.current_animation != nome_da_animacao or not animationPlayer.is_playing():
+		animationPlayer.play(nome_da_animacao)
+		animationPlayer.seek(obter_tempo_inicial_da_animacao(), true)
 
 
-func atualizar_flip_do_sprite(input_dir: Vector2, reference_node: Node3D) -> void:
-	if animatedSprite == null:
+func obter_nome_da_animacao(estado: EstadoMovimento) -> StringName:
+	if cache_nome_animacao_por_estado.has(estado):
+		return cache_nome_animacao_por_estado[estado]
+
+	match estado:
+		EstadoMovimento.RUN:
+			return &"run_001"
+		EstadoMovimento.ANDA_COM_ITEM:
+			return &"run_with_get"
+		EstadoMovimento.IDLE_COM_ITEM:
+			return &"idle_with_item"
+		_:
+			return &"idle_without_item_001"
+
+
+func garantir_animation_player() -> void:
+	if animationPlayer != null:
 		return
-	if input_dir.x > 0.05:
-		animatedSprite.flip_h = true
+	animationPlayer = jogador.get_node_or_null("AnimationPlayer") if jogador != null else null
+	if animationPlayer != null:
 		return
-	if input_dir.x < -0.05:
-		animatedSprite.flip_h = false
+	animationPlayer = get_node_or_null("AnimationPlayer")
+	if animationPlayer != null:
 		return
-	var velocidade_local: Vector3 = reference_node.global_transform.basis.inverse() * jogador.velocity
-	if velocidade_local.x > 0.05:
-		animatedSprite.flip_h = true
+	animationPlayer = find_child("AnimationPlayer", true, false) as AnimationPlayer
+
+
+func preparar_cache_de_animacoes() -> void:
+	cache_nome_animacao_por_estado.clear()
+	if animationPlayer == null:
 		return
-	if velocidade_local.x < -0.05:
-		animatedSprite.flip_h = false
+	cache_nome_animacao_por_estado[EstadoMovimento.RUN] = resolver_nome_animacao(&"run_001")
+	cache_nome_animacao_por_estado[EstadoMovimento.ANDA_COM_ITEM] = resolver_nome_animacao(&"run_with_get")
+	cache_nome_animacao_por_estado[EstadoMovimento.IDLE] = resolver_nome_animacao(&"idle_without_item_001")
+	cache_nome_animacao_por_estado[EstadoMovimento.IDLE_COM_ITEM] = resolver_nome_animacao(&"idle_with_item")
+
+
+func obter_tempo_inicial_da_animacao() -> float:
+	if animation_start_fps <= 0.0:
+		return 0.0
+	return max(float(animation_start_frame), 0.0) / animation_start_fps
+
+
+func resolver_nome_animacao(nome_esperado: StringName) -> StringName:
+	if animationPlayer == null:
+		return &""
+	if animationPlayer.has_animation(nome_esperado):
+		return nome_esperado
+
+	var nome_esperado_texto: String = String(nome_esperado)
+	for nome_disponivel in animationPlayer.get_animation_list():
+		var nome_disponivel_texto: String = String(nome_disponivel)
+		if nome_disponivel_texto.ends_with(nome_esperado_texto):
+			return StringName(nome_disponivel_texto)
+
+	push_warning("Animation not found in AnimationPlayer: " + nome_esperado_texto)
+	return &""
 
 
 func atualizar_velocidade_da_animacao(estado: EstadoMovimento) -> void:
-	if animatedSprite == null:
+	garantir_animation_player()
+	if animationPlayer == null:
 		return
 	if estado == EstadoMovimento.RUN or estado == EstadoMovimento.ANDA_COM_ITEM:
-		animatedSprite.speed_scale = jogador.velocidade_atual / jogador.VELOCIDADE_PADRAO
+		var escala_base: float = jogador.velocidade_atual / jogador.VELOCIDADE_PADRAO
+		animationPlayer.speed_scale = escala_base * max(multiplicador_velocidade_animacao_movimento, 0.0)
 		return
-	animatedSprite.speed_scale = 1.0
+	animationPlayer.speed_scale = 1.0
+
+
+func atualizar_rotacao_do_corpo(direcao: Vector3, delta: float) -> void:
+	if alvo_rotacao_corpo == null:
+		resolver_no_visual_do_corpo()
+	if alvo_rotacao_corpo == null:
+		return
+	if direcao.length_squared() <= 0.0001:
+		return
+
+	var angulo_alvo: float = atan2(direcao.x, direcao.z)
+	alvo_rotacao_corpo.rotation.y = lerp_angle(alvo_rotacao_corpo.rotation.y, angulo_alvo, velocidade_rotacao_corpo * delta)
+
+
+func resolver_no_visual_do_corpo() -> void:
+	if no_visual_corpo != null:
+		alvo_rotacao_corpo = no_visual_corpo
+		return
+	if animationPlayer != null and animationPlayer.get_parent() is Node3D:
+		alvo_rotacao_corpo = animationPlayer.get_parent() as Node3D
+		return
+	alvo_rotacao_corpo = jogador
 
 
 func atualizar_deslocamento_da_mao(input_dir: Vector2, reference_node: Node3D) -> void:
@@ -143,24 +223,15 @@ func atualizar_posicao_visual_do_item(reference_node: Node3D) -> void:
 	if item_visual_na_mao == null:
 		return
 
-	if estado_atual != EstadoMovimento.IDLE_COM_ITEM:
+	if estado_atual != EstadoMovimento.IDLE_COM_ITEM and estado_atual != EstadoMovimento.ANDA_COM_ITEM:
 		item_visual_na_mao.position = Vector3.ZERO
 		return
 
 	if mao_jogador_direcao == null:
 		return
 
-	var referencia_de_camera: Node3D = jogador.camera_pivot if jogador != null and jogador.camera_pivot != null else reference_node
-	if referencia_de_camera == null:
-		item_visual_na_mao.position = Vector3.ZERO
-		return
-
-	var direcao_para_camera: Vector3 = referencia_de_camera.global_position - mao_jogador_direcao.global_position
-	if direcao_para_camera.length_squared() <= 0.0001:
-		item_visual_na_mao.position = Vector3.ZERO
-		return
-
-	item_visual_na_mao.global_position = mao_jogador_direcao.global_position + direcao_para_camera.normalized() * deslocamento_item_na_frente_no_idle_com_item
+	var origem_vertical: Vector3 = jogador.global_position if jogador != null else mao_jogador_direcao.global_position
+	item_visual_na_mao.global_position = origem_vertical + Vector3.UP * deslocamento_item_na_frente_no_idle_com_item
 
 
 func sincronizar_item_visual_na_mao(esta_com_item: bool) -> void:
