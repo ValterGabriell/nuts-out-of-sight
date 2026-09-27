@@ -10,6 +10,7 @@ var fase_atual: FasesRodada = FasesRodada.PRIMEIRA
 
 func _ready() -> void:
 	GlobalGerenciadorDeSinais.estoque_atingiu_maximo_pra_aquele_dia.connect(atualizar_fase)
+	GlobalGerenciadorDeSinais.tentativa_na_caverna_encerrada.connect(atualizar_fase)
 
 func atualizar_fase() -> void:
 	if fase_atual == FasesRodada.PRIMEIRA:

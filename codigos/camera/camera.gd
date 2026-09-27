@@ -16,12 +16,18 @@ extends Node3D
 
 @export var camera: Camera3D
 
+enum EstadoDoTremor {
+	PARADO,
+	EM_ANDAMENTO
+}
+
 var _offset_alvo: Vector3 = Vector3.ZERO
 var _offset_atual: Vector3 = Vector3.ZERO
 var _angulo_y_alvo: float = 0.0
 var _posicao_acumulada: Vector2 = Vector2.ZERO
 var _posicao_inicial_camera: Vector3 = Vector3.ZERO
 var _zoom_atual_z: float = 0.0
+var _estado_do_tremor: EstadoDoTremor = EstadoDoTremor.PARADO
 
 func _ready() -> void:
 	_posicao_inicial_camera = camera.position
@@ -87,3 +93,26 @@ func _aplicar_zoom(valor: float) -> void:
 		zoom_min,
 		zoom_max
 	)
+
+func executar_tremor(duracao_em_segundos: float, intensidade: float) -> void:
+	if camera == null:
+		return
+
+	if duracao_em_segundos <= 0.0 or intensidade <= 0.0:
+		return
+
+	_estado_do_tremor = EstadoDoTremor.EM_ANDAMENTO
+	var duracao_limitada: float = max(duracao_em_segundos, 0.01)
+	var tempo_decorrido: float = 0.0
+
+	while tempo_decorrido < duracao_limitada:
+		var progresso: float = clampf(tempo_decorrido / duracao_limitada, 0.0, 1.0)
+		var intensidade_atual: float = lerpf(intensidade, 0.0, progresso)
+		camera.h_offset = randf_range(-intensidade_atual, intensidade_atual)
+		camera.v_offset = randf_range(-intensidade_atual, intensidade_atual)
+		await get_tree().process_frame
+		tempo_decorrido += get_process_delta_time()
+
+	camera.h_offset = 0.0
+	camera.v_offset = 0.0
+	_estado_do_tremor = EstadoDoTremor.PARADO

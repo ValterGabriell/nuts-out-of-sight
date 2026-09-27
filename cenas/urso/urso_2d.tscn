@@ -23,7 +23,7 @@ scale = Vector2(1.8287324, -0.5073316)
 [node name="Cabeca" type="Bone2D" parent="Skeleton2D/Root/Hip/Coluna" unique_id=1964962584]
 position = Vector2(37.307495, 36.091682)
 rotation = -0.0049633253
-scale = Vector2(0.9999999, 0.9999999)
+scale = Vector2(0.9999998, 0.9999998)
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1933571994]
 texture_filter = 1

@@ -1,354 +1,61 @@
 [gd_scene format=3 uid="uid://tw762cwq7bpt"]
 
 [ext_resource type="Script" uid="uid://dbdtjqt0t6x47" path="res://codigos/animais/urso.gd" id="1_c46qq"]
-[ext_resource type="Texture2D" uid="uid://et2ods5xkjkv" path="res://arte/sprites_2d/urso/spritesheet9.png" id="2_kxj4b"]
-[ext_resource type="Texture2D" uid="uid://c4ukp7gxfl3a3" path="res://arte/sprites_2d/urso/sprite_000_v2.png" id="3_h1wus"]
-[ext_resource type="Texture2D" uid="uid://bsww01aqeh8x5" path="res://arte/sprites_2d/urso/sprite_008_v2.png" id="4_r176d"]
-[ext_resource type="Texture2D" uid="uid://cm36ko8awge8r" path="res://arte/sprites_2d/urso/dormindo_01.png" id="5_5x657"]
-[ext_resource type="Texture2D" uid="uid://gmgt40j7qqnp" path="res://arte/sprites_2d/urso/terminando_caçada_01.png" id="5_l7v6b"]
+[ext_resource type="PackedScene" uid="uid://dcuxiwfrvdoxt" path="res://arte/3d/urso/urso.glb" id="2_h1wus"]
 [ext_resource type="Script" uid="uid://cimp16kscg0e1" path="res://codigos/animais/Animacao/estados_animacao.gd" id="7_uwjb6"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_j7jif"]
-atlas = ExtResource("5_5x657")
-region = Rect2(0, 0, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_bilif"]
-atlas = ExtResource("5_5x657")
-region = Rect2(512, 0, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5un4b"]
-atlas = ExtResource("5_5x657")
-region = Rect2(0, 512, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vrx1l"]
-atlas = ExtResource("5_5x657")
-region = Rect2(512, 512, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gn7ci"]
-atlas = ExtResource("5_5x657")
-region = Rect2(0, 1024, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_x66a2"]
-atlas = ExtResource("5_5x657")
-region = Rect2(512, 1024, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1u2tb"]
-atlas = ExtResource("5_5x657")
-region = Rect2(0, 1536, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_6mh65"]
-atlas = ExtResource("5_l7v6b")
-region = Rect2(0, 0, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_iome3"]
-atlas = ExtResource("5_l7v6b")
-region = Rect2(512, 0, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_622au"]
-atlas = ExtResource("5_l7v6b")
-region = Rect2(1024, 0, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_b1rwi"]
-atlas = ExtResource("5_l7v6b")
-region = Rect2(1536, 0, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_lafdj"]
-atlas = ExtResource("5_l7v6b")
-region = Rect2(0, 512, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xyv7g"]
-atlas = ExtResource("5_l7v6b")
-region = Rect2(512, 512, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vvxv7"]
-atlas = ExtResource("5_l7v6b")
-region = Rect2(1024, 512, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_malr7"]
-atlas = ExtResource("5_l7v6b")
-region = Rect2(1536, 512, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4gypk"]
-atlas = ExtResource("5_l7v6b")
-region = Rect2(0, 1024, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_eg2kd"]
-atlas = ExtResource("5_l7v6b")
-region = Rect2(512, 1024, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_l6gtc"]
-atlas = ExtResource("5_l7v6b")
-region = Rect2(1024, 1024, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_81ehb"]
-atlas = ExtResource("5_l7v6b")
-region = Rect2(1536, 1024, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qo0md"]
-atlas = ExtResource("5_l7v6b")
-region = Rect2(0, 1536, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_m81p1"]
-atlas = ExtResource("5_l7v6b")
-region = Rect2(512, 1536, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_27is4"]
-atlas = ExtResource("5_l7v6b")
-region = Rect2(1024, 1536, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_dqgvu"]
-atlas = ExtResource("5_l7v6b")
-region = Rect2(1536, 1536, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4ap7v"]
-atlas = ExtResource("5_l7v6b")
-region = Rect2(0, 2048, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_3frpm"]
-atlas = ExtResource("5_l7v6b")
-region = Rect2(512, 2048, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gu778"]
-atlas = ExtResource("5_l7v6b")
-region = Rect2(1024, 2048, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ards2"]
-atlas = ExtResource("3_h1wus")
-region = Rect2(0, 0, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_r176d"]
-atlas = ExtResource("2_kxj4b")
-region = Rect2(512, 0, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_l7v6b"]
-atlas = ExtResource("2_kxj4b")
-region = Rect2(1024, 0, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5x657"]
-atlas = ExtResource("2_kxj4b")
-region = Rect2(1536, 0, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_uwjb6"]
-atlas = ExtResource("2_kxj4b")
-region = Rect2(0, 512, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_c46qq"]
-atlas = ExtResource("2_kxj4b")
-region = Rect2(512, 512, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qcc0s"]
-atlas = ExtResource("2_kxj4b")
-region = Rect2(1024, 512, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_fjtdg"]
-atlas = ExtResource("2_kxj4b")
-region = Rect2(1536, 512, 512, 512)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1mr3p"]
-atlas = ExtResource("4_r176d")
-region = Rect2(0, 0, 512, 512)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_sflf3"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_j7jif")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_bilif")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5un4b")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vrx1l")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gn7ci")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_x66a2")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1u2tb")
-}],
-"loop": 0,
-"name": &"DORMINDO",
-"speed": 15.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_6mh65")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_iome3")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_622au")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_b1rwi")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_lafdj")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xyv7g")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vvxv7")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_malr7")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4gypk")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_eg2kd")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_l6gtc")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_81ehb")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qo0md")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_m81p1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_27is4")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_dqgvu")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4ap7v")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_3frpm")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gu778")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_6mh65")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_iome3")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_622au")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_b1rwi")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_lafdj")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xyv7g")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vvxv7")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_malr7")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4gypk")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_eg2kd")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_l6gtc")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_81ehb")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qo0md")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_m81p1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_27is4")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_dqgvu")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4ap7v")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_3frpm")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gu778")
-}],
-"loop": 0,
-"name": &"EM_ALERTA",
-"speed": 20.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ards2")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_r176d")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_l7v6b")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5x657")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_uwjb6")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_c46qq")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qcc0s")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_fjtdg")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1mr3p")
-}],
-"loop": 1,
-"name": &"PERSEGUINDO",
-"speed": 12.0
-}]
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_wgbst"]
-size = Vector3(0.6888428, 0.6414795, 0.67453)
+size = Vector3(0.6888428, 0.9657898, 1.5012054)
 
-[node name="Urso" type="CharacterBody3D" unique_id=164182681 node_paths=PackedStringArray("animated_sprite")]
+[node name="Urso" type="CharacterBody3D" unique_id=164182681 node_paths=PackedStringArray("animation_player")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 collision_layer = 2
 collision_mask = 4
 script = ExtResource("1_c46qq")
-animated_sprite = NodePath("AnimatedSprite3D")
+animation_player = NodePath("urso/AnimationPlayer")
 
-[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=207934123]
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
-billboard = 2
-texture_filter = 0
-sprite_frames = SubResource("SpriteFrames_sflf3")
-animation = &"EM_ALERTA"
-frame = 27
-frame_progress = 0.10816925
+[node name="urso" parent="." unique_id=1581180874 instance=ExtResource("2_h1wus")]
+
+[node name="Skeleton3D" parent="urso/metarig" parent_id_path=PackedInt32Array(1581180874, 936664532) index="0" unique_id=656965353]
+bones/3/rotation = Quaternion(-0.3075313, 0.49108756, 0.7785201, -0.24117209)
+bones/5/rotation = Quaternion(-0.28938234, 0.07205991, -0.2315591, 0.9259836)
+bones/6/rotation = Quaternion(0.6577238, 0.00065671967, 0.0015163474, 0.75325745)
+bones/17/rotation = Quaternion(0.16614455, 0.9758905, -0.14002183, -0.020682562)
+bones/20/rotation = Quaternion(0.23155308, 0.46847254, 0.76951444, 0.36710262)
+bones/22/rotation = Quaternion(-0.19753443, 0.0065350262, 0.025017643, 0.9799549)
+bones/23/rotation = Quaternion(0.6199595, -0.011274175, -0.009454758, 0.78449583)
+bones/25/rotation = Quaternion(0.07580497, 0.97696674, -0.18715325, -0.06901679)
+bones/28/rotation = Quaternion(0.003258123, 0.9818878, -0.18943517, -0.00024939424)
+bones/31/rotation = Quaternion(0.011710872, 0.98185515, -0.18924578, -0.0030507792)
+bones/39/rotation = Quaternion(0.13092998, -0.007559824, -0.01827796, 0.99119425)
+bones/42/position = Vector3(-0.0007367072, 0.07139264, -0.016108438)
+bones/42/rotation = Quaternion(-0.11012715, 0.15688474, 0.08254595, 0.97798026)
+bones/43/rotation = Quaternion(-0.3406124, 0.06638769, -0.22726876, 0.90990376)
+bones/45/rotation = Quaternion(0.50776553, 0.015026212, -0.0006472575, 0.86136407)
+bones/47/rotation = Quaternion(-0.09753404, 0.97763187, -0.18491423, -0.023016632)
+bones/58/rotation = Quaternion(-0.1866464, 0.8866768, 0.42267507, -0.017696394)
+bones/62/rotation = Quaternion(0.5233035, -0.018907933, -0.025872385, 0.8515437)
+bones/67/rotation = Quaternion(-3.8150585e-05, 0.9816928, -0.19047111, -0.00019667926)
+bones/70/rotation = Quaternion(0.0069616414, 0.98166096, -0.19047946, -0.0032972125)
+bones/73/rotation = Quaternion(-0.20058432, 0.9615776, -0.12647086, -0.13834575)
+bones/75/rotation = Quaternion(0.14861523, -0.008361311, -0.020433418, 0.98864865)
+bones/77/rotation = Quaternion(0.23602013, -0.0011725567, -0.038602147, 0.9709804)
+bones/88/rotation = Quaternion(-0.42696097, 0.8483461, -0.17899449, -0.2568545)
+bones/89/rotation = Quaternion(-0.13226297, 0.96549785, -0.08308254, -0.20836927)
+bones/90/rotation = Quaternion(0.055276174, 0.9477376, -0.038535867, -0.3118543)
+bones/96/rotation = Quaternion(0.7982967, -0.27996293, 0.30328694, -0.43858904)
+bones/98/rotation = Quaternion(-0.46888426, -0.17120846, 0.7541558, -0.4267133)
+bones/99/rotation = Quaternion(0.19364144, 0.7468478, 0.58442265, -0.2513395)
+bones/101/rotation = Quaternion(0.7982968, 0.27996263, -0.30328727, -0.43858883)
+bones/105/rotation = Quaternion(-3.090862e-08, 0.70710665, 0.7071069, -3.090861e-08)
+bones/106/rotation = Quaternion(-3.090862e-08, 0.70710665, 0.7071069, -3.090861e-08)
+bones/120/rotation = Quaternion(-0.6682579, 0.19347183, 0.6856377, -0.2142452)
+bones/140/rotation = Quaternion(-0.17559034, -0.5934587, 0.7187638, -0.31678596)
+bones/160/rotation = Quaternion(0.9999083, 1.2159055e-05, -0.0008999178, -0.013510054)
+bones/170/rotation = Quaternion(0.94171536, -4.2342934e-05, -0.00070373894, 0.33641025)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1515970822]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0037231445, 0.002380371, 0.016555786)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0037231445, -0.059158325, 0.4298935)
 shape = SubResource("BoxShape3D_wgbst")
 debug_color = Color(7.2196127e-07, 0.6499286, 0.061304145, 0.41960785)
 
@@ -356,3 +63,5 @@ debug_color = Color(7.2196127e-07, 0.6499286, 0.061304145, 0.41960785)
 
 [node name="Estados" type="Node3D" parent="Codigos" unique_id=1106409829]
 script = ExtResource("7_uwjb6")
+
+[editable path="urso"]

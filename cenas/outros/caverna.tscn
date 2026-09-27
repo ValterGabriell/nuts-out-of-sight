@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://t8emngkvvq8y"]
+
+[ext_resource type="PackedScene" uid="uid://ddbuhegainy1p" path="res://arte/3d/caverna.glb" id="1_4l06o"]
+[ext_resource type="Script" uid="uid://bcbuq6u6mh182" path="res://codigos/outros/caverna.gd" id="1_uaoss"]
+[ext_resource type="AudioStream" uid="uid://brmst6fi7qnfx" path="res://arte/audio/sfx/urso_gritando.mp3" id="3_2sgeh"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g4v7s"]
+size = Vector3(3.2476196, 2.7315674, 2.4277344)
+
+[node name="Caverna" type="StaticBody3D" unique_id=88113294 node_paths=PackedStringArray("audio_alerta_caverna", "particulas_de_vento")]
+collision_layer = 512
+collision_mask = 260
+script = ExtResource("1_uaoss")
+audio_alerta_caverna = NodePath("AudioStreamPlayer")
+particulas_de_vento = NodePath("")
+
+[node name="caverna" parent="." unique_id=945214919 instance=ExtResource("1_4l06o")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=282926559]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5989685, 0.5812378, -0.7138672)
+shape = SubResource("BoxShape3D_g4v7s")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=2052871218]
+stream = ExtResource("3_2sgeh")

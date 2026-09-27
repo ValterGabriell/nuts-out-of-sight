@@ -94,47 +94,13 @@ func spawnar_folhas_na_area(indice_area: int) -> void:
 		return
 
 	var quantidade = max(0, area.quantidade_inicial_de_folhas)
-
-	var shape_node: CollisionShape3D = null
-	for child in area.get_children():
-		if child is CollisionShape3D and child.shape is BoxShape3D:
-			shape_node = child
-			break
-
+	var shape_node = _obter_collision_shape_da_area_spawn(indice_area)
 	if not shape_node:
 		return
-
-	var box: BoxShape3D = shape_node.shape
-	var tamanho_box = box.size 
-	var centro_box = shape_node.global_position
-	var min_x = centro_box.x - (tamanho_box.x / 2.0)
-	var max_x = centro_box.x + (tamanho_box.x / 2.0)
-	var min_z = centro_box.z - (tamanho_box.z / 2.0)
-	var max_z = centro_box.z + (tamanho_box.z / 2.0)
-	var quantidade_de_celulas = max(quantidade, 1)
-	var colunas = maxi(1, int(ceil(sqrt(float(quantidade_de_celulas)))))
-	var linhas = maxi(1, int(ceil(float(quantidade_de_celulas) / float(colunas))))
-
-	var indices_de_celulas: Array[int] = []
-	for indice_celula in range(colunas * linhas):
-		indices_de_celulas.append(indice_celula)
-	indices_de_celulas.shuffle()
+	var centro_shape = shape_node.global_position
 
 	for i in range(quantidade):
-		var indice_celula = indices_de_celulas[i % indices_de_celulas.size()]
-		var coluna = indice_celula % colunas
-		var linha = int(indice_celula / colunas)
-
-		var passo_x = (max_x - min_x) / float(colunas)
-		var passo_z = (max_z - min_z) / float(linhas)
-		var x_min_celula = min_x + (passo_x * float(coluna))
-		var x_max_celula = x_min_celula + passo_x
-		var z_min_celula = min_z + (passo_z * float(linha))
-		var z_max_celula = z_min_celula + passo_z
-
-		var x_rand = randf_range(x_min_celula, x_max_celula)
-		var z_rand = randf_range(z_min_celula, z_max_celula)
-		var pos_mundo = Vector3(x_rand, centro_box.y, z_rand)
+		var pos_mundo = _obter_posicao_aleatoria_na_area_spawn(shape_node, centro_shape)
 
 		var folha_instancia = cena_da_folha.instantiate()
 		add_child(folha_instancia)
@@ -276,30 +242,70 @@ func _direcao_para_vetor(direcao: int) -> Vector3:
 			return Vector3.ZERO
 
 func _limitar_posicao_na_area_spawn(posicao: Vector3, indice_area: int) -> Vector3:
-	var shape_node = _obter_collision_box_da_area_spawn(indice_area)
+	var shape_node = _obter_collision_shape_da_area_spawn(indice_area)
 	if not shape_node:
 		return posicao
-
-	var box: BoxShape3D = shape_node.shape
-	var metade_x = box.size.x * 0.5
-	var metade_z = box.size.z * 0.5
 	var centro = shape_node.global_position
 
-	return Vector3(
-		clamp(posicao.x, centro.x - metade_x, centro.x + metade_x),
-		posicao.y,
-		clamp(posicao.z, centro.z - metade_z, centro.z + metade_z)
-	)
+	if shape_node.shape is BoxShape3D:
+		var box: BoxShape3D = shape_node.shape
+		var metade_x = box.size.x * 0.5
+		var metade_z = box.size.z * 0.5
 
-func _obter_collision_box_da_area_spawn(indice_area: int) -> CollisionShape3D:
+		return Vector3(
+			clamp(posicao.x, centro.x - metade_x, centro.x + metade_x),
+			posicao.y,
+			clamp(posicao.z, centro.z - metade_z, centro.z + metade_z)
+		)
+
+	if shape_node.shape is CylinderShape3D:
+		var cylinder: CylinderShape3D = shape_node.shape
+		var deslocamento = Vector2(posicao.x - centro.x, posicao.z - centro.z)
+		var raio = max(cylinder.radius, 0.0)
+		if deslocamento.length() <= raio:
+			return posicao
+		if is_zero_approx(deslocamento.length()):
+			return Vector3(centro.x, posicao.y, centro.z)
+		var deslocamento_limitado = deslocamento.normalized() * raio
+		return Vector3(centro.x + deslocamento_limitado.x, posicao.y, centro.z + deslocamento_limitado.y)
+
+	return posicao
+
+func _obter_collision_shape_da_area_spawn(indice_area: int) -> CollisionShape3D:
 	var area = _obter_area_por_indice(indice_area)
 	if not area:
 		return null
 
 	for child in area.get_children():
-		if child is CollisionShape3D and child.shape is BoxShape3D:
+		if child is CollisionShape3D and (child.shape is BoxShape3D or child.shape is CylinderShape3D):
 			return child
 	return null
+
+func _obter_posicao_aleatoria_na_area_spawn(shape_node: CollisionShape3D, centro_shape: Vector3) -> Vector3:
+	if shape_node.shape is BoxShape3D:
+		var box: BoxShape3D = shape_node.shape
+		var tamanho_box = box.size
+		var min_x = centro_shape.x - (tamanho_box.x / 2.0)
+		var max_x = centro_shape.x + (tamanho_box.x / 2.0)
+		var min_z = centro_shape.z - (tamanho_box.z / 2.0)
+		var max_z = centro_shape.z + (tamanho_box.z / 2.0)
+		return Vector3(
+			randf_range(min_x, max_x),
+			centro_shape.y,
+			randf_range(min_z, max_z)
+		)
+
+	if shape_node.shape is CylinderShape3D:
+		var cilindro: CylinderShape3D = shape_node.shape
+		var angulo = randf_range(0.0, TAU)
+		var raio = sqrt(randf()) * max(cilindro.radius, 0.0)
+		return Vector3(
+			centro_shape.x + cos(angulo) * raio,
+			centro_shape.y,
+			centro_shape.z + sin(angulo) * raio
+		)
+
+	return centro_shape
 
 func _obter_area_por_indice(indice_area: int) -> ConfiguracaoAreaDeSpawnFolhas:
 	if indice_area < 0 or indice_area >= areas_de_spawn.size():

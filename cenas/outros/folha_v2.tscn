@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dltv5qryx7ijb"]
 
 [ext_resource type="Script" uid="uid://f28q3aq1fv66" path="res://codigos/item_que_faz_barulho/item_que_faz_barulho.gd" id="1_bw40s"]
-[ext_resource type="Texture2D" uid="uid://b0demlq6v8wk1" path="res://arte/sprites_2d/folhas.png" id="2_31w1i"]
 [ext_resource type="PackedScene" uid="uid://d1edh02l3xjcg" path="res://cenas/outros/onda_de_som.tscn" id="2_70ljy"]
+[ext_resource type="PackedScene" uid="uid://ceass3b06hk3c" path="res://arte/3d/folha.glb" id="3_ktjxr"]
 [ext_resource type="Script" uid="uid://duagjg7dngjnm" path="res://codigos/outros/area_que_detecta_urso_pra_acordar.gd" id="4_70ljy"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_sd3vj"]
@@ -18,26 +18,22 @@ quantidade_de_barulho_em_pixels_em_area_anelar = 0.5
 cena_onda_de_som = ExtResource("2_70ljy")
 area_de_propagacao_do_som = NodePath("AreaDePropagacaoDoSom")
 
-[node name="Folha" type="Sprite3D" parent="." unique_id=1423138900]
-transform = Transform3D(1, 0, 0, 0, 0.12851438, -0.9917077, 0, 0.9917077, 0.12851438, 0, 0.09428811, 0)
-pixel_size = 0.003
-billboard = 2
-texture_filter = 2
-texture = ExtResource("2_31w1i")
+[node name="folha" parent="." unique_id=543565209 instance=ExtResource("3_ktjxr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0111300945, 0)
 
-[node name="AreaDeContatoComOJogadorPraFazerBarulho" type="Area3D" parent="Folha" unique_id=2056931152]
-transform = Transform3D(1, 0, 0, 0, 0.12851436, 0.99170756, 0, -0.99170756, 0.12851436, 0, -0.012117377, 0.09350623)
+[node name="AreaDeContatoComOJogadorPraFazerBarulho" type="Area3D" parent="folha" unique_id=2056931152]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0111300945, 0)
 collision_layer = 128
 collision_mask = 4
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Folha/AreaDeContatoComOJogadorPraFazerBarulho" unique_id=791889074]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="folha/AreaDeContatoComOJogadorPraFazerBarulho" unique_id=791889074]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07638514, 0)
 shape = SubResource("SphereShape3D_sd3vj")
 debug_color = Color(0.4104057, 0.46540445, 1, 0.41960785)
 
 [node name="AreaDePropagacaoDoSom" type="Area3D" parent="." unique_id=1447264988]
 collision_layer = 256
-collision_mask = 2
+collision_mask = 514
 script = ExtResource("4_70ljy")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AreaDePropagacaoDoSom" unique_id=198963358]
@@ -45,7 +41,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09893325, 0)
 shape = SubResource("CylinderShape3D_31w1i")
 debug_color = Color(8.820813, 0, 16.497572, 1)
 
-[connection signal="body_entered" from="Folha/AreaDeContatoComOJogadorPraFazerBarulho" to="." method="_on_area_3d_body_entered"]
-[connection signal="body_exited" from="Folha/AreaDeContatoComOJogadorPraFazerBarulho" to="." method="_on_area_3d_body_exited"]
+[connection signal="body_entered" from="folha/AreaDeContatoComOJogadorPraFazerBarulho" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="folha/AreaDeContatoComOJogadorPraFazerBarulho" to="." method="_on_area_3d_body_exited"]
 [connection signal="body_entered" from="AreaDePropagacaoDoSom" to="AreaDePropagacaoDoSom" method="_on_body_entered"]
 [connection signal="body_exited" from="AreaDePropagacaoDoSom" to="AreaDePropagacaoDoSom" method="_on_body_exited"]

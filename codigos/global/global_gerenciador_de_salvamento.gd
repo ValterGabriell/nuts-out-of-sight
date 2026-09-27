@@ -26,6 +26,7 @@ var quantidade_maxima_de_folhas_por_area_no_snapshot: int = 60
 var casas_decimais_das_posicoes_das_folhas_no_snapshot: int = 2
 var snapshots_de_folhas_por_cena: Dictionary[StringName, Dictionary] = {}
 var registros_do_urso_por_cena: Dictionary[StringName, Dictionary] = {}
+var snapshots_da_caverna_por_cena: Dictionary[StringName, Dictionary] = {}
 
 
 func _ready() -> void:
@@ -39,6 +40,7 @@ func salvar_jogo(motivo_do_salvamento: MotivoDeSalvamento) -> void:
 	if deve_persistir_posicao_das_folhas:
 		_atualizar_snapshot_de_folhas_da_cena_atual()
 	_atualizar_registro_do_urso_da_cena_atual()
+	_atualizar_snapshot_da_caverna_da_cena_atual()
 
 	var dados_do_salvamento: Dictionary = {
 		"versao": 1,
@@ -55,6 +57,7 @@ func salvar_jogo(motivo_do_salvamento: MotivoDeSalvamento) -> void:
 		dados_do_salvamento["snapshots_de_folhas_por_cena"] = _serializar_snapshots_de_folhas_por_cena()
 
 	dados_do_salvamento["registros_do_urso_por_cena"] = _serializar_registros_do_urso_por_cena()
+	dados_do_salvamento["snapshots_da_caverna_por_cena"] = _serializar_snapshots_da_caverna_por_cena()
 
 	var arquivo_de_salvamento: FileAccess = FileAccess.open(CAMINHO_DO_ARQUIVO_DE_SALVAMENTO, FileAccess.WRITE)
 	if arquivo_de_salvamento == null:
@@ -100,15 +103,18 @@ func carregar_jogo_do_disco() -> void:
 	else:
 		snapshots_de_folhas_por_cena.clear()
 	_carregar_registros_do_urso_por_cena(dados_do_salvamento.get("registros_do_urso_por_cena", {}))
+	_carregar_snapshots_da_caverna_por_cena(dados_do_salvamento.get("snapshots_da_caverna_por_cena", {}))
 	GlobalItensQueOJogadorCarrega.carregar_snapshot_do_salvamento(dados_do_salvamento.get("inventario_do_jogador", {}))
 	GlobalEstoque.carregar_snapshot_do_salvamento(dados_do_salvamento.get("estoque", {}))
 	GlobalGerenciadorDeFase.carregar_snapshot_do_salvamento(dados_do_salvamento.get("fase_da_rodada", {}))
 	estado_do_arquivo_de_salvamento = EstadoDoArquivoDeSalvamento.CARREGADO
 	call_deferred("_aplicar_registro_do_urso_da_cena_atual")
+	call_deferred("_aplicar_snapshot_da_caverna_da_cena_atual")
 
 
 func _ao_trocar_de_cena_para_restaurar_urso() -> void:
 	call_deferred("_aplicar_registro_do_urso_da_cena_atual")
+	call_deferred("_aplicar_snapshot_da_caverna_da_cena_atual")
 
 func _atualizar_snapshot_de_folhas_da_cena_atual() -> void:
 	if not deve_persistir_posicao_das_folhas:
@@ -158,6 +164,55 @@ func obter_snapshot_de_folhas_da_cena_atual_para(areas_de_folhas: AreasDeApareci
 		return {}
 
 	var caminho_relativo = StringName(String(cena_atual.get_path_to(areas_de_folhas)))
+	if not snapshots_da_cena.has(caminho_relativo):
+		return {}
+
+	var snapshot = snapshots_da_cena[caminho_relativo] as Dictionary
+	if snapshot == null:
+		return {}
+	return snapshot
+
+func _atualizar_snapshot_da_caverna_da_cena_atual() -> void:
+	var cena_atual = get_tree().current_scene
+	if cena_atual == null:
+		return
+
+	var id_da_cena_atual = _obter_id_da_cena_atual()
+	if id_da_cena_atual == StringName():
+		return
+
+	var snapshots_da_cena: Dictionary = {}
+	for node in get_tree().get_nodes_in_group("persistencia_da_caverna"):
+		if not (node is Caverna):
+			continue
+		if not cena_atual.is_ancestor_of(node):
+			continue
+
+		var caverna = node as Caverna
+		var caminho_relativo = StringName(String(cena_atual.get_path_to(caverna)))
+		snapshots_da_cena[caminho_relativo] = caverna.obter_snapshot_para_salvamento()
+
+	snapshots_da_caverna_por_cena[id_da_cena_atual] = snapshots_da_cena
+
+func obter_snapshot_da_caverna_da_cena_atual_para(caverna: Caverna) -> Dictionary:
+	if caverna == null:
+		return {}
+
+	var cena_atual = get_tree().current_scene
+	if cena_atual == null:
+		return {}
+
+	var id_da_cena_atual = _obter_id_da_cena_atual()
+	if id_da_cena_atual == StringName():
+		return {}
+	if not snapshots_da_caverna_por_cena.has(id_da_cena_atual):
+		return {}
+
+	var snapshots_da_cena = snapshots_da_caverna_por_cena[id_da_cena_atual] as Dictionary
+	if snapshots_da_cena == null:
+		return {}
+
+	var caminho_relativo = StringName(String(cena_atual.get_path_to(caverna)))
 	if not snapshots_da_cena.has(caminho_relativo):
 		return {}
 
@@ -216,6 +271,16 @@ func _serializar_registros_do_urso_por_cena() -> Dictionary:
 	var dados_serializados: Dictionary = {}
 	for id_da_cena: StringName in registros_do_urso_por_cena.keys():
 		dados_serializados[String(id_da_cena)] = registros_do_urso_por_cena[id_da_cena]
+	return dados_serializados
+
+func _serializar_snapshots_da_caverna_por_cena() -> Dictionary:
+	var dados_serializados: Dictionary = {}
+	for id_da_cena: StringName in snapshots_da_caverna_por_cena.keys():
+		var snapshots_da_cena: Dictionary = snapshots_da_caverna_por_cena[id_da_cena]
+		var snapshots_serializados: Dictionary = {}
+		for caminho_do_no: StringName in snapshots_da_cena.keys():
+			snapshots_serializados[String(caminho_do_no)] = snapshots_da_cena[caminho_do_no]
+		dados_serializados[String(id_da_cena)] = snapshots_serializados
 	return dados_serializados
 
 func _otimizar_snapshot_de_folhas(snapshot_bruto: Dictionary) -> Dictionary:
@@ -330,6 +395,22 @@ func _carregar_registros_do_urso_por_cena(dados_serializados: Dictionary) -> voi
 			continue
 		registros_do_urso_por_cena[id_da_cena] = registro_serializado
 
+func _carregar_snapshots_da_caverna_por_cena(dados_serializados: Dictionary) -> void:
+	snapshots_da_caverna_por_cena.clear()
+	for id_da_cena_serializado: Variant in dados_serializados.keys():
+		var id_da_cena: StringName = StringName(String(id_da_cena_serializado))
+		var snapshots_da_cena_serializados: Dictionary = dados_serializados[id_da_cena_serializado] as Dictionary
+		if snapshots_da_cena_serializados == null:
+			continue
+
+		var snapshots_tipados: Dictionary = {}
+		for caminho_do_no_serializado: Variant in snapshots_da_cena_serializados.keys():
+			var snapshot_do_no: Dictionary = snapshots_da_cena_serializados[caminho_do_no_serializado] as Dictionary
+			if snapshot_do_no == null:
+				continue
+			snapshots_tipados[StringName(String(caminho_do_no_serializado))] = snapshot_do_no
+		snapshots_da_caverna_por_cena[id_da_cena] = snapshots_tipados
+
 
 func _atualizar_registro_do_urso_da_cena_atual() -> void:
 	var id_da_cena_atual: StringName = _obter_id_da_cena_atual()
@@ -367,6 +448,23 @@ func _aplicar_registro_do_urso_da_cena_atual() -> void:
 
 	urso_da_cena.global_position = _desserializar_posicao_global_do_registro(registro_do_urso.get("posicao_global", {}))
 	urso_da_cena.global_rotation = _desserializar_posicao_global_do_registro(registro_do_urso.get("rotacao_global", {}))
+
+func _aplicar_snapshot_da_caverna_da_cena_atual() -> void:
+	var cena_atual: Node = get_tree().current_scene
+	if cena_atual == null:
+		return
+
+	for node in get_tree().get_nodes_in_group("persistencia_da_caverna"):
+		if not (node is Caverna):
+			continue
+		if not cena_atual.is_ancestor_of(node):
+			continue
+
+		var caverna = node as Caverna
+		var snapshot = obter_snapshot_da_caverna_da_cena_atual_para(caverna)
+		if snapshot.is_empty():
+			continue
+		caverna.aplicar_snapshot_do_salvamento(snapshot)
 
 
 func _obter_estado_do_registro_do_urso_na_cena(id_da_cena: StringName) -> EstadoDoRegistroDoUrso:

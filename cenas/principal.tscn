@@ -6,7 +6,6 @@
 [ext_resource type="Script" uid="uid://dpn3lcrc3pky" path="res://codigos/ui/ui_hud.gd" id="3_vpl54"]
 [ext_resource type="AudioStream" uid="uid://chw0j3ptv6llo" path="res://arte/audio/musicas/Aventura/MusicaGameplay.wav" id="4_eewb4"]
 [ext_resource type="AudioStream" uid="uid://ykqyd0kwd8c6" path="res://arte/audio/musicas/Chase down.wav" id="5_bsnwm"]
-[ext_resource type="PackedScene" uid="uid://tw762cwq7bpt" path="res://cenas/urso/urso.tscn" id="5_ff0xt"]
 [ext_resource type="PackedScene" uid="uid://d0xavr5nl12q0" path="res://cenas/items/noz.tscn" id="8_djk5k"]
 [ext_resource type="Script" uid="uid://cunjiy1vtlrnt" path="res://codigos/outros/areas_de_aparecimento_das_folhas.gd" id="8_k1xmn"]
 [ext_resource type="Script" uid="uid://b7tbkmg4s3sjb" path="res://codigos/outros/configuracao_area_de_spawn_folhas.gd" id="9_cfg_area_folha"]
@@ -14,6 +13,8 @@
 [ext_resource type="PackedScene" uid="uid://by60h74njj6os" path="res://cenas/items/noz_pesada.tscn" id="9_sflf3"]
 [ext_resource type="Script" uid="uid://dcdbm4vlhnomj" path="res://codigos/item_que_faz_barulho/movimento_que_modifica_o_item_que_faz_barulho.gd" id="10_eewb4"]
 [ext_resource type="PackedScene" uid="uid://cvqos22k487uc" path="res://cenas/entradas_portas/porta_cabana.tscn" id="10_wgbst"]
+[ext_resource type="PackedScene" uid="uid://t8emngkvvq8y" path="res://cenas/outros/caverna.tscn" id="14_bsnwm"]
+[ext_resource type="Shader" uid="uid://dif15nefb0r76" path="res://shader/wind.gdshader" id="15_qcg16"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ff0xt"]
 sky_top_color = Color(1, 0.7019608, 0.4745098, 1)
@@ -28,25 +29,62 @@ sky_material = SubResource("ProceduralSkyMaterial_ff0xt")
 background_mode = 2
 sky = SubResource("Sky_sflf3")
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_g4v7s"]
-size = Vector3(22.36676, 1, 22.343529)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b42ct"]
+shader = ExtResource("15_qcg16")
+shader_parameter/wind_direction = Vector3(1, 0.1, 0)
+shader_parameter/wind_speed = 12.0
+shader_parameter/turbulence_strength = 2.5
+
+[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_qcg16"]
+size = 2.674
+sections = 2
+section_length = 0.02
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_bsnwm"]
+radius = 1.5859375
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_qcg16"]
+radius = 2.1738281
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_b42ct"]
+radius = 1.4360352
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_8nexe"]
+radius = 2.1625977
 
 [node name="Principal" type="Node3D" unique_id=830613941]
 
-[node name="ConfiguracaoGlobal" type="Node3D" parent="." unique_id=1705741046]
+[node name="TUDO" type="Node3D" parent="." unique_id=281836022]
 
-[node name="Iluminacao" type="Node3D" parent="ConfiguracaoGlobal" unique_id=1508463070]
+[node name="ConfiguracaoGlobal" type="Node3D" parent="TUDO" unique_id=1838621548]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="ConfiguracaoGlobal/Iluminacao" unique_id=1116798111]
+[node name="Iluminacao" type="Node3D" parent="TUDO/ConfiguracaoGlobal" unique_id=1801528563]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="TUDO/ConfiguracaoGlobal/Iluminacao" unique_id=818649149]
 environment = SubResource("Environment_j2ut6")
 
-[node name="Camera3D" type="Camera3D" parent="ConfiguracaoGlobal" unique_id=1552525419]
-transform = Transform3D(1, 0, 0, 0, 0.9201787, 0.39149874, 0, -0.39149874, 0.9201787, 0, 6.2268505, 14.655581)
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="TUDO/ConfiguracaoGlobal/Iluminacao" unique_id=1385581125]
+transform = Transform3D(1, 0, 0, 0, 0.09927711, 0.99505985, 0, -0.99505985, 0.09927711, 0, 13.265167, 21.964815)
+light_energy = 1.655
+
+[node name="Camera3D" type="Camera3D" parent="TUDO/ConfiguracaoGlobal" unique_id=1995318540]
+transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 0, 17, 14.656)
 projection = 1
 current = true
-size = 12.0
+size = 15.213
 
-[node name="UI" type="Control" parent="ConfiguracaoGlobal" unique_id=2139572802]
+[node name="GPUParticles3D" type="GPUParticles3D" parent="TUDO/ConfiguracaoGlobal/Camera3D" unique_id=279662913]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.727286, 0, 0)
+amount = 13
+amount_ratio = 0.095
+interp_to_end = 1.0
+process_material = SubResource("ShaderMaterial_b42ct")
+draw_passes = 3
+draw_pass_1 = SubResource("RibbonTrailMesh_qcg16")
+draw_pass_2 = null
+draw_pass_3 = null
+
+[node name="UI" type="Control" parent="TUDO/ConfiguracaoGlobal" unique_id=1889806707]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -54,93 +92,126 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="UI_Principal" type="CanvasLayer" parent="ConfiguracaoGlobal/UI" unique_id=371981228 node_paths=PackedStringArray("label_quantidade_de_itens_no_inventario")]
+[node name="UI_Principal" type="CanvasLayer" parent="TUDO/ConfiguracaoGlobal/UI" unique_id=628400133 node_paths=PackedStringArray("label_quantidade_de_itens_no_inventario")]
 script = ExtResource("3_vpl54")
 label_quantidade_de_itens_no_inventario = NodePath("MarginContainer/HBoxContainer/NumeroDeNozes")
 
-[node name="MarginContainer" type="MarginContainer" parent="ConfiguracaoGlobal/UI/UI_Principal" unique_id=203402556]
+[node name="MarginContainer" type="MarginContainer" parent="TUDO/ConfiguracaoGlobal/UI/UI_Principal" unique_id=1114972702]
 offset_right = 40.0
 offset_bottom = 40.0
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ConfiguracaoGlobal/UI/UI_Principal/MarginContainer" unique_id=1854624550]
+[node name="HBoxContainer" type="HBoxContainer" parent="TUDO/ConfiguracaoGlobal/UI/UI_Principal/MarginContainer" unique_id=1595241439]
 layout_mode = 2
 
-[node name="SpriteNoz" type="TextureRect" parent="ConfiguracaoGlobal/UI/UI_Principal/MarginContainer/HBoxContainer" unique_id=382051728]
+[node name="SpriteNoz" type="TextureRect" parent="TUDO/ConfiguracaoGlobal/UI/UI_Principal/MarginContainer/HBoxContainer" unique_id=2045882328]
 texture_filter = 1
 layout_mode = 2
 texture = ExtResource("3_0cijk")
 
-[node name="NumeroDeNozes" type="Label" parent="ConfiguracaoGlobal/UI/UI_Principal/MarginContainer/HBoxContainer" unique_id=1583185320]
+[node name="NumeroDeNozes" type="Label" parent="TUDO/ConfiguracaoGlobal/UI/UI_Principal/MarginContainer/HBoxContainer" unique_id=3802231]
 texture_filter = 1
 layout_mode = 2
 text = "0"
 
-[node name="Chao" parent="ConfiguracaoGlobal" unique_id=1707402539 instance=ExtResource("1_ym8g7")]
+[node name="Chao" parent="TUDO/ConfiguracaoGlobal" unique_id=1707402539 instance=ExtResource("1_ym8g7")]
 
-[node name="MusicaGameplay" type="AudioStreamPlayer" parent="ConfiguracaoGlobal" unique_id=827803337]
+[node name="MusicaGameplay" type="AudioStreamPlayer" parent="TUDO/ConfiguracaoGlobal" unique_id=903849656]
 stream = ExtResource("4_eewb4")
 
-[node name="MusicaPerseguicao" type="AudioStreamPlayer" parent="ConfiguracaoGlobal" unique_id=63216488]
+[node name="MusicaPerseguicao" type="AudioStreamPlayer" parent="TUDO/ConfiguracaoGlobal" unique_id=1706356121]
 stream = ExtResource("5_bsnwm")
 
-[node name="ItensColetaveis" type="Node3D" parent="." unique_id=241571282]
+[node name="PontosDeSpawn" type="Node3D" parent="TUDO" unique_id=786995392]
 
-[node name="Noz" type="Node3D" parent="ItensColetaveis" unique_id=2067606103]
-
-[node name="Noz" parent="ItensColetaveis/Noz" unique_id=2089380860 instance=ExtResource("8_djk5k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6343756, 0.20596546, 4.4335995)
-id_unico_do_item_no_mapa = &"principal_noz_1"
-
-[node name="Noz4" parent="ItensColetaveis/Noz" unique_id=1552887845 instance=ExtResource("8_djk5k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1792607, 0.20596546, 6.0994906)
-id_unico_do_item_no_mapa = &"principal_noz_4"
-
-[node name="Noz2" parent="ItensColetaveis/Noz" unique_id=1160903897 instance=ExtResource("9_sflf3")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -3.98499, 0.46267164, 3.258787)
-id_unico_do_item_no_mapa = &"principal_noz_2"
-
-[node name="Noz3" parent="ItensColetaveis/Noz" unique_id=1915219264 instance=ExtResource("9_sflf3")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -1.8311064, 0.46267164, 1.9542334)
-id_unico_do_item_no_mapa = &"principal_noz_3"
-
-[node name="PontosDeSpawn" type="Node3D" parent="." unique_id=53468549]
-
-[node name="PRINCIPAL" type="Node3D" parent="PontosDeSpawn" unique_id=522324275]
+[node name="PRINCIPAL" type="Node3D" parent="TUDO/PontosDeSpawn" unique_id=1742138887]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88340425, 6.603328)
 
-[node name="AreasDeAparecimentoDasFolhas" type="Node3D" parent="." unique_id=892277124 node_paths=PackedStringArray("areas_de_spawn")]
+[node name="Arcores" type="Node3D" parent="TUDO" unique_id=1597569747]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0548005, 0, 0.18327951)
+
+[node name="ItensColetaveis" type="Node3D" parent="TUDO/Arcores" unique_id=262331997]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.114479, 0, -4.46729)
+
+[node name="Noz" type="Node3D" parent="TUDO/Arcores/ItensColetaveis" unique_id=999117848]
+
+[node name="Noz" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=2089380860 instance=ExtResource("8_djk5k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1393671, 0.20596546, 2.9458761)
+id_unico_do_item_no_mapa = &"principal_noz_1"
+
+[node name="Noz4" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=772981281 instance=ExtResource("8_djk5k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3185163, 0.20596546, 6.0994906)
+id_unico_do_item_no_mapa = &"principal_noz_4"
+
+[node name="Noz2" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=1788909391 instance=ExtResource("9_sflf3")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -1.3945584, 0.46267164, 6.6498995)
+id_unico_do_item_no_mapa = &"principal_noz_2"
+
+[node name="Noz3" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=1824542932 instance=ExtResource("9_sflf3")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5.178157, 0.46267164, 1.9542334)
+id_unico_do_item_no_mapa = &"principal_noz_3"
+
+[node name="AreasDeAparecimentoDasFolhas" type="Node3D" parent="TUDO/Arcores" unique_id=49043212 node_paths=PackedStringArray("areas_de_spawn")]
 script = ExtResource("8_k1xmn")
-areas_de_spawn = [NodePath("AreaParaSpawnarOItem")]
+areas_de_spawn = [NodePath("AreaParaSpawnarOItem"), NodePath("AreaParaSpawnarOItem2"), NodePath("AreaParaSpawnarOItem3"), NodePath("AreaParaSpawnarOItem4")]
 cena_da_folha = ExtResource("9_eewb4")
 
-[node name="AreaParaSpawnarOItem" type="Area3D" parent="AreasDeAparecimentoDasFolhas" unique_id=138727865]
+[node name="AreaParaSpawnarOItem" type="Area3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas" unique_id=1273190360]
 script = ExtResource("9_cfg_area_folha")
-quantidade_inicial_de_folhas = 500
+quantidade_inicial_de_folhas = 25
+deslocamento_base_rajada_em_metros = 0.2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem" unique_id=1808956602]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.059173584, 0, -0.16656399)
-shape = SubResource("BoxShape3D_g4v7s")
-debug_color = Color(0, 18.892157, 0, 1)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem" unique_id=861790661]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9072342, 0.39982176, -1.7939065)
+shape = SubResource("CylinderShape3D_bsnwm")
+debug_color = Color(0, 17.84424, 12.122338, 1)
 
-[node name="MovimentoDoVento" type="Node3D" parent="AreasDeAparecimentoDasFolhas" unique_id=1558576058 node_paths=PackedStringArray("area_aparecimento_das_folhas")]
+[node name="AreaParaSpawnarOItem2" type="Area3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas" unique_id=203367934]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.436944, 0, 4.8143196)
+script = ExtResource("9_cfg_area_folha")
+quantidade_inicial_de_folhas = 30
+deslocamento_base_rajada_em_metros = 0.2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem2" unique_id=1704221220]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5479331, 0.39982176, -1.7939065)
+shape = SubResource("CylinderShape3D_qcg16")
+debug_color = Color(0, 17.84424, 12.122338, 1)
+
+[node name="AreaParaSpawnarOItem3" type="Area3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas" unique_id=521907719]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.326045, 0, -1.027539)
+script = ExtResource("9_cfg_area_folha")
+quantidade_inicial_de_folhas = 15
+deslocamento_base_rajada_em_metros = 0.2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem3" unique_id=1096264430]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3384986, 0.39982176, -1.3742943)
+shape = SubResource("CylinderShape3D_b42ct")
+debug_color = Color(0, 17.84424, 12.122338, 1)
+
+[node name="AreaParaSpawnarOItem4" type="Area3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas" unique_id=805195242]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.74398756, 0, 4.37678)
+script = ExtResource("9_cfg_area_folha")
+quantidade_inicial_de_folhas = 26
+deslocamento_base_rajada_em_metros = 0.2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem4" unique_id=455321383]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.15063, 0.39982176, -1.2262373)
+shape = SubResource("CylinderShape3D_8nexe")
+debug_color = Color(0, 17.84424, 12.122338, 1)
+
+[node name="MovimentoDoVento" type="Node3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas" unique_id=576326624 node_paths=PackedStringArray("area_aparecimento_das_folhas")]
 script = ExtResource("10_eewb4")
 area_aparecimento_das_folhas = NodePath("..")
 
-[node name="Jogador" parent="." unique_id=830939475 node_paths=PackedStringArray("urso") instance=ExtResource("2_j2ut6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.0608673, 0.48719418, 0.52466106)
-collision_mask = 11
-urso = NodePath("../Urso")
-
-[node name="PortaCabana" parent="." unique_id=616394942 instance=ExtResource("10_wgbst")]
+[node name="PortaCabana" parent="TUDO" unique_id=616394942 instance=ExtResource("10_wgbst")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6463099, 1.0491469, 9.758276)
 nome_da_area_pra_spawnar = 1
 caminho_da_cena_para_abrir = "uid://cndo1nr3c25nb"
 
-[node name="Urso" parent="." unique_id=164182681 node_paths=PackedStringArray("jogador", "musicaPerseguicao", "musicaDormindo") instance=ExtResource("5_ff0xt")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0.19068182, 0.83500004, 0.63686347)
-jogador = NodePath("../Jogador")
-musicaPerseguicao = NodePath("../ConfiguracaoGlobal/MusicaPerseguicao")
-musicaDormindo = NodePath("../ConfiguracaoGlobal/MusicaGameplay")
-duracao_transicao_musica = 0.0
+[node name="Jogador" parent="TUDO" unique_id=830939475 instance=ExtResource("2_j2ut6")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -9.749653, 1.1233442, 0.08477652)
+
+[node name="Caverna" parent="TUDO" unique_id=88113294 node_paths=PackedStringArray("particulas_de_vento") instance=ExtResource("14_bsnwm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1636677, 0.45177513, 0.9729748)
+particulas_de_vento = NodePath("../ConfiguracaoGlobal/Camera3D/GPUParticles3D")
