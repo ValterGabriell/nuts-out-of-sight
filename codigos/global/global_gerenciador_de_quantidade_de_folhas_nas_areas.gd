@@ -11,6 +11,7 @@ var quantidade_de_folhas_por_area : Dictionary[AreasDeFolhas, int] = {
 
 func _ready() -> void:
 	GlobalGerenciadorDeSinais.estoque_atingiu_maximo_pra_aquele_dia.connect(atualizar_folhas)
+	GlobalGerenciadorDeSinais.tentativa_na_caverna_encerrada.connect(atualizar_folhas)
 
 func atualizar_folhas() -> void:
 	aumentar_quantidade_de_folhas(AreasDeFolhas.PRINCIPAL, 75)

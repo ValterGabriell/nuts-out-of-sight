@@ -1,8 +1,6 @@
 [gd_scene format=3 uid="uid://cndo1nr3c25nb"]
 
-[ext_resource type="Script" uid="uid://cgttcoxqju26t" path="res://codigos/camera/camera.gd" id="1_cla5y"]
 [ext_resource type="Script" uid="uid://c6660pdwjipjj" path="res://codigos/portas/entrada_da_cena.gd" id="1_mt1rg"]
-[ext_resource type="Script" uid="uid://bgy7exkq20vxo" path="res://codigos/camera/seguir_jogador.gd" id="2_mt1rg"]
 [ext_resource type="Script" uid="uid://dpn3lcrc3pky" path="res://codigos/ui/ui_hud.gd" id="3_5hle0"]
 [ext_resource type="Texture2D" uid="uid://dtl2cy7wj17oe" path="res://arte/sprites_2d/noz.png" id="4_2n0ck"]
 [ext_resource type="PackedScene" uid="uid://d28jweqoh7w5x" path="res://cenas/chao/chao_cabana.tscn" id="5_cla5y"]
@@ -24,20 +22,6 @@ sky = SubResource("Sky_42xuo")
 
 [node name="Cabana" type="Node3D" unique_id=1076139326]
 script = ExtResource("1_mt1rg")
-
-[node name="Camera" type="Node3D" parent="." unique_id=366459874 node_paths=PackedStringArray("camera")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9.295964)
-script = ExtResource("1_cla5y")
-camera = NodePath("Camera3D")
-
-[node name="Camera3D" type="Camera3D" parent="Camera" unique_id=138320752]
-transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 4.1463437, 1.9498682)
-size = 50.999
-
-[node name="SeguirJogador" type="Node3D" parent="Camera" unique_id=1390643850 node_paths=PackedStringArray("jogador", "camera_pivot")]
-script = ExtResource("2_mt1rg")
-jogador = NodePath("../../Jogador")
-camera_pivot = NodePath("..")
 
 [node name="ConfiguracaoGlobal" type="Node3D" parent="." unique_id=1524966652]
 
@@ -98,3 +82,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.969273, 0.6154529, 4.17345
 [node name="MusicaCabana" type="AudioStreamPlayer" parent="." unique_id=1755351914]
 stream = ExtResource("10_djeqo")
 autoplay = true
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1049622838]
+transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, -4.545, 12.615, 14.656)
+projection = 1
+current = true
+size = 6.779
