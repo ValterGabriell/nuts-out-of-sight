@@ -6,7 +6,6 @@
 [ext_resource type="Script" uid="uid://dpn3lcrc3pky" path="res://codigos/ui/ui_hud.gd" id="3_vpl54"]
 [ext_resource type="AudioStream" uid="uid://chw0j3ptv6llo" path="res://arte/audio/musicas/Aventura/MusicaGameplay.wav" id="4_eewb4"]
 [ext_resource type="AudioStream" uid="uid://ykqyd0kwd8c6" path="res://arte/audio/musicas/Chase down.wav" id="5_bsnwm"]
-[ext_resource type="PackedScene" uid="uid://tw762cwq7bpt" path="res://cenas/urso/urso.tscn" id="5_ff0xt"]
 [ext_resource type="PackedScene" uid="uid://d0xavr5nl12q0" path="res://cenas/items/noz.tscn" id="8_djk5k"]
 [ext_resource type="Script" uid="uid://cunjiy1vtlrnt" path="res://codigos/outros/areas_de_aparecimento_das_folhas.gd" id="8_k1xmn"]
 [ext_resource type="Script" uid="uid://b7tbkmg4s3sjb" path="res://codigos/outros/configuracao_area_de_spawn_folhas.gd" id="9_cfg_area_folha"]
@@ -14,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://by60h74njj6os" path="res://cenas/items/noz_pesada.tscn" id="9_sflf3"]
 [ext_resource type="Script" uid="uid://dcdbm4vlhnomj" path="res://codigos/item_que_faz_barulho/movimento_que_modifica_o_item_que_faz_barulho.gd" id="10_eewb4"]
 [ext_resource type="PackedScene" uid="uid://cvqos22k487uc" path="res://cenas/entradas_portas/porta_cabana.tscn" id="10_wgbst"]
+[ext_resource type="PackedScene" uid="uid://t8emngkvvq8y" path="res://cenas/outros/caverna.tscn" id="14_bsnwm"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ff0xt"]
 sky_top_color = Color(1, 0.7019608, 0.4745098, 1)
@@ -29,7 +29,7 @@ background_mode = 2
 sky = SubResource("Sky_sflf3")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_g4v7s"]
-size = Vector3(22.36676, 1, 22.343529)
+size = Vector3(5.091934, 1, 9.30567)
 
 [node name="Principal" type="Node3D" unique_id=830613941]
 
@@ -124,7 +124,7 @@ script = ExtResource("9_cfg_area_folha")
 quantidade_inicial_de_folhas = 500
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem" unique_id=1808956602]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.059173584, 0, -0.16656399)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.954262, 0, -0.3378315)
 shape = SubResource("BoxShape3D_g4v7s")
 debug_color = Color(0, 18.892157, 0, 1)
 
@@ -137,12 +137,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6463099, 1.0491469, 9.75827
 nome_da_area_pra_spawnar = 1
 caminho_da_cena_para_abrir = "uid://cndo1nr3c25nb"
 
-[node name="Urso" parent="." unique_id=164182681 node_paths=PackedStringArray("musicaPerseguicao", "musicaDormindo") instance=ExtResource("5_ff0xt")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0.19068182, 0.83500004, 0.63686347)
-musicaPerseguicao = NodePath("../ConfiguracaoGlobal/MusicaPerseguicao")
-musicaDormindo = NodePath("../ConfiguracaoGlobal/MusicaGameplay")
-duracao_transicao_musica = 0.0
-
-[node name="Jogador" parent="." unique_id=830939475 node_paths=PackedStringArray("urso") instance=ExtResource("2_j2ut6")]
+[node name="Jogador" parent="." unique_id=830939475 instance=ExtResource("2_j2ut6")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.2810335, 0.03191924, 0.08477652)
-urso = NodePath("../Urso")
+
+[node name="Caverna" parent="." unique_id=88113294 instance=ExtResource("14_bsnwm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1636677, 0.45177513, 0.9729748)

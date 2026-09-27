@@ -25,15 +25,5 @@ func desativar_rastreamento() -> void:
 
 
 func _on_body_entered(body: Node3D) -> void:
-	if estado_rastreamento_atual != EstadoRastreamento.ATIVADO:
-		return
-	if body is Urso and body.has_method("registrar_disparo_de_barulho_detectado"):
-		if body.estado_atual == Urso.EstadoUrso.PERSEGUINDO:
-			desativar_rastreamento()
-			return
+	if body is Caverna and body.has_method("registrar_disparo_de_barulho_detectado"):
 		body.registrar_disparo_de_barulho_detectado()
-		urso = body
-
-
-
-

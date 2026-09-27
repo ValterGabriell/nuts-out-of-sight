@@ -2,7 +2,7 @@ class_name Urso
 extends CharacterBody3D
 
 @export var jogador: Jogador
-@export var animated_sprite: AnimatedSprite3D
+@export var animation_player: AnimationPlayer
 @export var velocidade_perseguicao: float = 1.4
 @export var velocidade_rotacao: float = 8.0
 @export var distancia_minima_do_jogador: float = 0.4
@@ -56,11 +56,13 @@ const CAMINHO_AUDIO_GRITO_PERSEGUICAO: String = "res://arte/audio/sfx/urso_grita
 
 
 func _ready() -> void:
-	if animated_sprite == null:
-		animated_sprite = get_node_or_null("AnimatedSprite3D") as AnimatedSprite3D
+	if animation_player == null:
+		animation_player = get_node_or_null("AnimationPlayer") as AnimationPlayer
+	if animation_player == null:
+		animation_player = find_child("AnimationPlayer", true, false) as AnimationPlayer
 
-	if animated_sprite != null and not animated_sprite.animation_finished.is_connected(_on_animated_sprite_animation_finished):
-		animated_sprite.animation_finished.connect(_on_animated_sprite_animation_finished)
+	if animation_player != null and not animation_player.animation_finished.is_connected(_on_animation_player_animation_finished):
+		animation_player.animation_finished.connect(_on_animation_player_animation_finished)
 
 	add_to_group("urso")
 	_inicializar_estado_das_musicas()
@@ -110,11 +112,13 @@ func _entrar_em_alerta_com_transicao(acao: AcaoDeTransicaoEmAlerta) -> void:
 	if acao == AcaoDeTransicaoEmAlerta.IR_PARA_PERSEGUINDO:
 		_tocar_grito_perseguicao()
 
+	_tocar_animacao_do_estado_atual()
+
 	if estado_atual == EstadoUrso.EM_ALERTA and acao == AcaoDeTransicaoEmAlerta.IR_PARA_DORMINDO:
 		_finalizar_transicao_em_alerta()
 		return
 
-	if animated_sprite == null:
+	if animation_player == null:
 		_finalizar_transicao_em_alerta()
 
 
@@ -170,7 +174,6 @@ func _perseguir_jogador(delta: float) -> void:
 
 	var direcao_normalizada: Vector3 = direcao_ate_jogador.normalized()
 	_rotacionar_para_direcao(direcao_normalizada, delta)
-	_atualizar_flip_horizontal_por_jogador()
 
 	velocity.x = direcao_normalizada.x * velocidade_perseguicao
 	velocity.z = direcao_normalizada.z * velocidade_perseguicao
@@ -187,52 +190,58 @@ func _obter_estado_visibilidade_do_jogador() -> Jogador.EstadoVisibilidadeJogado
 	return jogador.estado_visibilidade
 
 
-func _atualizar_flip_horizontal_por_jogador() -> void:
-	if animated_sprite == null or jogador == null:
-		return
-
-	var direcao_para_jogador: Vector3 = jogador.global_position - global_position
-	direcao_para_jogador.y = 0.0
-
-	if direcao_para_jogador.length_squared() <= 0.0001:
-		return
-
-	var referencia_flip: Node3D = jogador.camera_pivot if jogador.camera_pivot != null else null
-	var eixo_direita: Vector3
-	if referencia_flip != null:
-		eixo_direita = referencia_flip.global_transform.basis.x
-	else:
-		eixo_direita = Vector3.RIGHT
-
-	eixo_direita.y = 0.0
-	if eixo_direita.length_squared() <= 0.0001:
-		eixo_direita = Vector3.RIGHT
-	eixo_direita = eixo_direita.normalized()
-
-	var componente_horizontal: float = direcao_para_jogador.normalized().dot(eixo_direita)
-	if abs(componente_horizontal) <= zona_morta_flip_horizontal:
-		return
-
-	animated_sprite.flip_h = -componente_horizontal < 0.0
-
-
-func _on_animated_sprite_animation_finished() -> void:
-	if animated_sprite == null:
+func _on_animation_player_animation_finished(nome_animacao: StringName) -> void:
+	if animation_player == null:
 		return
 
 	if estado_atual != EstadoUrso.EM_ALERTA:
 		return
 
 	var nome_animacao_em_alerta: StringName = _obter_nome_animacao_por_estado(EstadoUrso.EM_ALERTA)
-	if animated_sprite.animation != nome_animacao_em_alerta:
+	if nome_animacao != nome_animacao_em_alerta:
 		return
 
 	_finalizar_transicao_em_alerta()
 
 
 func _obter_nome_animacao_por_estado(estado: EstadoUrso) -> StringName:
-	var chaves_do_enum: PackedStringArray = EstadoUrso.keys()
-	return StringName(chaves_do_enum[estado])
+	match estado:
+		EstadoUrso.DORMINDO:
+			return _resolver_nome_animacao(PackedStringArray(["deitando"]))
+		EstadoUrso.EM_ALERTA:
+			return _resolver_nome_animacao(PackedStringArray(["terminando_caçada", "terminando_cacada"]))
+		EstadoUrso.PERSEGUINDO:
+			return _resolver_nome_animacao(PackedStringArray(["cacando", "caçando"]))
+		_:
+			return _resolver_nome_animacao(PackedStringArray(["deitando"]))
+
+
+func _resolver_nome_animacao(candidatos: PackedStringArray) -> StringName:
+	if candidatos.is_empty():
+		return &""
+
+	if animation_player != null:
+		for candidato in candidatos:
+			var nome_candidato: StringName = StringName(candidato)
+			if animation_player.has_animation(nome_candidato):
+				return nome_candidato
+
+	return StringName(candidatos[0])
+
+
+func _tocar_animacao_do_estado_atual() -> void:
+	if animation_player == null:
+		return
+
+	var nome_animacao: StringName = _obter_nome_animacao_por_estado(estado_atual)
+	if nome_animacao.is_empty():
+		return
+
+	if not animation_player.has_animation(nome_animacao):
+		return
+
+	if animation_player.current_animation != nome_animacao or not animation_player.is_playing():
+		animation_player.play(nome_animacao)
 
 
 func _definir_percentual_de_barulho_atual(percentual: float) -> void:
@@ -273,6 +282,7 @@ func _definir_estado(novo_estado: EstadoUrso) -> void:
 		return
 
 	estado_atual = novo_estado
+	_tocar_animacao_do_estado_atual()
 	estado_alterado.emit(estado_atual)
 	_sincronizar_musica_com_estado(ModoTransicaoMusica.SUAVE)
 

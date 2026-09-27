@@ -126,6 +126,7 @@ largar_itens={
 3d_physics/layer_7="area_para_guardar_os_itens"
 3d_physics/layer_8="area_que_faz_barulho"
 3d_physics/layer_9="area_que_acorda_urso"
+3d_physics/layer_10="caverna"
 
 [physics]
 
