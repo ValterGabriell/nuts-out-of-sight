@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://mwk4iw3jok1s" path="res://codigos/jogador/jogador.gd" id="1_ismvl"]
 [ext_resource type="PackedScene" uid="uid://s486efpneld7" path="res://arte/3d/personagem/personagem_04.glb" id="2_1baqg"]
 [ext_resource type="Script" uid="uid://ckpla0xf8gils" path="res://codigos/jogador/jogador_movimento.gd" id="3_gaiqy"]
-[ext_resource type="Script" uid="uid://vajxr8m870gc" path="res://codigos/debug/ui_jogador.gd" id="4_nkbb3"]
 [ext_resource type="Script" uid="uid://c7rmrprasua8q" path="res://codigos/jogador/largar_itens_coletado_no_inventario.gd" id="4_qtkst"]
 [ext_resource type="Script" uid="uid://x81cfquodfv" path="res://codigos/jogador/tocar_audios.gd" id="5_fn8mc"]
 [ext_resource type="AudioStream" uid="uid://bd0gj3wllbpyf" path="res://arte/audio/passos/passo_folha_of.mp3" id="6_xtf2f"]
@@ -49,57 +48,6 @@ audioPassosNaFolha = NodePath("../../Audios/PassoNaFolha")
 audioPassosNaAreia = NodePath("../../Audios/PassoNaAreia")
 audioPassosNaMadeira = NodePath("../../Audios/PassosNaMadeira")
 intervalo_passo_folha = 0.35
-
-[node name="DEBUG" type="CanvasLayer" parent="." unique_id=2492568 node_paths=PackedStringArray("jogador", "label_velocidade", "label_barulho_total_jogador", "label_estado_visibilidade_jogador", "label_estado_sono_urso", "label_debug_estado_do_vento", "label_debug_direcao_do_vento", "label_debug_tempo_ate_pre_aviso", "label_debug_tempo_ate_rajada", "label_debug_intervalo_entre_rajadas")]
-script = ExtResource("4_nkbb3")
-jogador = NodePath("..")
-label_velocidade = NodePath("PanelContainer/VBoxContainer/VelocidadeDoJogador")
-label_barulho_total_jogador = NodePath("PanelContainer/VBoxContainer/BarulhoTotalDoJogador")
-label_estado_visibilidade_jogador = NodePath("PanelContainer/VBoxContainer/EstadoVisibilidadeJogador")
-label_estado_sono_urso = NodePath("PanelContainer/VBoxContainer/SonoUrso")
-label_debug_estado_do_vento = NodePath("PanelContainer/VBoxContainer/VentoEstado")
-label_debug_direcao_do_vento = NodePath("PanelContainer/VBoxContainer/VentoDirecao")
-label_debug_tempo_ate_pre_aviso = NodePath("PanelContainer/VBoxContainer/VentoTempoAtePreAviso")
-label_debug_tempo_ate_rajada = NodePath("PanelContainer/VBoxContainer/VentoTempoAteRajada")
-label_debug_intervalo_entre_rajadas = NodePath("PanelContainer/VBoxContainer/VentoIntervaloEntreRajadas")
-
-[node name="PanelContainer" type="PanelContainer" parent="DEBUG" unique_id=99229869]
-custom_minimum_size = Vector2(250, 250)
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -250.0
-grow_horizontal = 0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="DEBUG/PanelContainer" unique_id=9525517]
-layout_mode = 2
-
-[node name="VelocidadeDoJogador" type="Label" parent="DEBUG/PanelContainer/VBoxContainer" unique_id=450731210]
-layout_mode = 2
-
-[node name="SonoUrso" type="Label" parent="DEBUG/PanelContainer/VBoxContainer" unique_id=1968933462]
-layout_mode = 2
-
-[node name="BarulhoTotalDoJogador" type="Label" parent="DEBUG/PanelContainer/VBoxContainer" unique_id=1728938701]
-layout_mode = 2
-
-[node name="VentoEstado" type="Label" parent="DEBUG/PanelContainer/VBoxContainer" unique_id=765102341]
-layout_mode = 2
-
-[node name="VentoDirecao" type="Label" parent="DEBUG/PanelContainer/VBoxContainer" unique_id=1167308910]
-layout_mode = 2
-
-[node name="VentoTempoAtePreAviso" type="Label" parent="DEBUG/PanelContainer/VBoxContainer" unique_id=523186773]
-layout_mode = 2
-
-[node name="VentoTempoAteRajada" type="Label" parent="DEBUG/PanelContainer/VBoxContainer" unique_id=1669137898]
-layout_mode = 2
-
-[node name="VentoIntervaloEntreRajadas" type="Label" parent="DEBUG/PanelContainer/VBoxContainer" unique_id=1894888805]
-layout_mode = 2
-
-[node name="EstadoVisibilidadeJogador" type="Label" parent="DEBUG/PanelContainer/VBoxContainer" unique_id=1439110393]
-layout_mode = 2
 
 [node name="Audios" type="Node" parent="." unique_id=273156684]
 

@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://c1ayrcp8gpmux"]
 
+[ext_resource type="Shader" uid="uid://c7a4tfvg0xl1g" path="res://shader/edge_detection.gdshader" id="1_qcg16"]
 [ext_resource type="PackedScene" uid="uid://d0rjtb85kkdpn" path="res://cenas/chao/chao.tscn" id="1_ym8g7"]
 [ext_resource type="PackedScene" uid="uid://4jnt4pnkbk5t" path="res://cenas/jogador/jogador.tscn" id="2_j2ut6"]
 [ext_resource type="Texture2D" uid="uid://dtl2cy7wj17oe" path="res://arte/sprites_2d/noz.png" id="3_0cijk"]
@@ -28,29 +29,59 @@ sky_material = SubResource("ProceduralSkyMaterial_ff0xt")
 background_mode = 2
 sky = SubResource("Sky_sflf3")
 
+[sub_resource type="QuadMesh" id="QuadMesh_yf5fn"]
+flip_faces = true
+size = Vector2(2, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bsnwm"]
+render_priority = 0
+shader = ExtResource("1_qcg16")
+shader_parameter/line_dark = 0.5
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_g4v7s"]
-size = Vector3(5.091934, 1, 9.30567)
+size = Vector3(6.287693, 1, 6.1510625)
 
 [node name="Principal" type="Node3D" unique_id=830613941]
 
-[node name="ConfiguracaoGlobal" type="Node3D" parent="." unique_id=1705741046]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=534835371]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+stretch_shrink = 2
 
-[node name="Iluminacao" type="Node3D" parent="ConfiguracaoGlobal" unique_id=1508463070]
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=561511134]
+handle_input_locally = false
+size = Vector2i(800, 450)
+render_target_update_mode = 4
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="ConfiguracaoGlobal/Iluminacao" unique_id=1116798111]
+[node name="TUDO" type="Node3D" parent="SubViewportContainer/SubViewport" unique_id=182750775]
+
+[node name="ConfiguracaoGlobal" type="Node3D" parent="SubViewportContainer/SubViewport/TUDO" unique_id=1705741046]
+
+[node name="Iluminacao" type="Node3D" parent="SubViewportContainer/SubViewport/TUDO/ConfiguracaoGlobal" unique_id=1508463070]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/TUDO/ConfiguracaoGlobal/Iluminacao" unique_id=1116798111]
 environment = SubResource("Environment_j2ut6")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="ConfiguracaoGlobal/Iluminacao" unique_id=1166669583]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport/TUDO/ConfiguracaoGlobal/Iluminacao" unique_id=1166669583]
 transform = Transform3D(1, 0, 0, 0, 0.09927711, 0.99505985, 0, -0.99505985, 0.09927711, 0, 13.265167, 21.964815)
 light_energy = 1.655
 
-[node name="Camera3D" type="Camera3D" parent="ConfiguracaoGlobal" unique_id=1552525419]
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport/TUDO/ConfiguracaoGlobal" unique_id=1552525419]
 transform = Transform3D(1, 0, 0, 0, 0.9201787, 0.39149874, 0, -0.39149874, 0.9201787, 0, 6.2268505, 14.655581)
 projection = 1
 current = true
 size = 12.0
 
-[node name="UI" type="Control" parent="ConfiguracaoGlobal" unique_id=2139572802]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/TUDO/ConfiguracaoGlobal/Camera3D" unique_id=1446841311]
+mesh = SubResource("QuadMesh_yf5fn")
+surface_material_override/0 = SubResource("ShaderMaterial_bsnwm")
+
+[node name="UI" type="Control" parent="SubViewportContainer/SubViewport/TUDO/ConfiguracaoGlobal" unique_id=2139572802]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -58,87 +89,87 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="UI_Principal" type="CanvasLayer" parent="ConfiguracaoGlobal/UI" unique_id=371981228 node_paths=PackedStringArray("label_quantidade_de_itens_no_inventario")]
+[node name="UI_Principal" type="CanvasLayer" parent="SubViewportContainer/SubViewport/TUDO/ConfiguracaoGlobal/UI" unique_id=371981228 node_paths=PackedStringArray("label_quantidade_de_itens_no_inventario")]
 script = ExtResource("3_vpl54")
 label_quantidade_de_itens_no_inventario = NodePath("MarginContainer/HBoxContainer/NumeroDeNozes")
 
-[node name="MarginContainer" type="MarginContainer" parent="ConfiguracaoGlobal/UI/UI_Principal" unique_id=203402556]
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/TUDO/ConfiguracaoGlobal/UI/UI_Principal" unique_id=203402556]
 offset_right = 40.0
 offset_bottom = 40.0
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ConfiguracaoGlobal/UI/UI_Principal/MarginContainer" unique_id=1854624550]
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer/SubViewport/TUDO/ConfiguracaoGlobal/UI/UI_Principal/MarginContainer" unique_id=1854624550]
 layout_mode = 2
 
-[node name="SpriteNoz" type="TextureRect" parent="ConfiguracaoGlobal/UI/UI_Principal/MarginContainer/HBoxContainer" unique_id=382051728]
+[node name="SpriteNoz" type="TextureRect" parent="SubViewportContainer/SubViewport/TUDO/ConfiguracaoGlobal/UI/UI_Principal/MarginContainer/HBoxContainer" unique_id=382051728]
 texture_filter = 1
 layout_mode = 2
 texture = ExtResource("3_0cijk")
 
-[node name="NumeroDeNozes" type="Label" parent="ConfiguracaoGlobal/UI/UI_Principal/MarginContainer/HBoxContainer" unique_id=1583185320]
+[node name="NumeroDeNozes" type="Label" parent="SubViewportContainer/SubViewport/TUDO/ConfiguracaoGlobal/UI/UI_Principal/MarginContainer/HBoxContainer" unique_id=1583185320]
 texture_filter = 1
 layout_mode = 2
 text = "0"
 
-[node name="Chao" parent="ConfiguracaoGlobal" unique_id=1707402539 instance=ExtResource("1_ym8g7")]
+[node name="Chao" parent="SubViewportContainer/SubViewport/TUDO/ConfiguracaoGlobal" unique_id=1707402539 instance=ExtResource("1_ym8g7")]
 
-[node name="MusicaGameplay" type="AudioStreamPlayer" parent="ConfiguracaoGlobal" unique_id=827803337]
+[node name="MusicaGameplay" type="AudioStreamPlayer" parent="SubViewportContainer/SubViewport/TUDO/ConfiguracaoGlobal" unique_id=827803337]
 stream = ExtResource("4_eewb4")
 
-[node name="MusicaPerseguicao" type="AudioStreamPlayer" parent="ConfiguracaoGlobal" unique_id=63216488]
+[node name="MusicaPerseguicao" type="AudioStreamPlayer" parent="SubViewportContainer/SubViewport/TUDO/ConfiguracaoGlobal" unique_id=63216488]
 stream = ExtResource("5_bsnwm")
 
-[node name="ItensColetaveis" type="Node3D" parent="." unique_id=241571282]
+[node name="ItensColetaveis" type="Node3D" parent="SubViewportContainer/SubViewport/TUDO" unique_id=241571282]
 
-[node name="Noz" type="Node3D" parent="ItensColetaveis" unique_id=2067606103]
+[node name="Noz" type="Node3D" parent="SubViewportContainer/SubViewport/TUDO/ItensColetaveis" unique_id=2067606103]
 
-[node name="Noz" parent="ItensColetaveis/Noz" unique_id=2089380860 instance=ExtResource("8_djk5k")]
+[node name="Noz" parent="SubViewportContainer/SubViewport/TUDO/ItensColetaveis/Noz" unique_id=2089380860 instance=ExtResource("8_djk5k")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6343756, 0.20596546, 4.4335995)
 id_unico_do_item_no_mapa = &"principal_noz_1"
 
-[node name="Noz4" parent="ItensColetaveis/Noz" unique_id=1552887845 instance=ExtResource("8_djk5k")]
+[node name="Noz4" parent="SubViewportContainer/SubViewport/TUDO/ItensColetaveis/Noz" unique_id=1552887845 instance=ExtResource("8_djk5k")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1792607, 0.20596546, 6.0994906)
 id_unico_do_item_no_mapa = &"principal_noz_4"
 
-[node name="Noz2" parent="ItensColetaveis/Noz" unique_id=1160903897 instance=ExtResource("9_sflf3")]
+[node name="Noz2" parent="SubViewportContainer/SubViewport/TUDO/ItensColetaveis/Noz" unique_id=1160903897 instance=ExtResource("9_sflf3")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -3.98499, 0.46267164, 3.258787)
 id_unico_do_item_no_mapa = &"principal_noz_2"
 
-[node name="Noz3" parent="ItensColetaveis/Noz" unique_id=1915219264 instance=ExtResource("9_sflf3")]
+[node name="Noz3" parent="SubViewportContainer/SubViewport/TUDO/ItensColetaveis/Noz" unique_id=1915219264 instance=ExtResource("9_sflf3")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -1.8311064, 0.46267164, 1.9542334)
 id_unico_do_item_no_mapa = &"principal_noz_3"
 
-[node name="PontosDeSpawn" type="Node3D" parent="." unique_id=53468549]
+[node name="PontosDeSpawn" type="Node3D" parent="SubViewportContainer/SubViewport/TUDO" unique_id=53468549]
 
-[node name="PRINCIPAL" type="Node3D" parent="PontosDeSpawn" unique_id=522324275]
+[node name="PRINCIPAL" type="Node3D" parent="SubViewportContainer/SubViewport/TUDO/PontosDeSpawn" unique_id=522324275]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88340425, 6.603328)
 
-[node name="AreasDeAparecimentoDasFolhas" type="Node3D" parent="." unique_id=892277124 node_paths=PackedStringArray("areas_de_spawn")]
+[node name="AreasDeAparecimentoDasFolhas" type="Node3D" parent="SubViewportContainer/SubViewport/TUDO" unique_id=892277124 node_paths=PackedStringArray("areas_de_spawn")]
 script = ExtResource("8_k1xmn")
 areas_de_spawn = [NodePath("AreaParaSpawnarOItem")]
 cena_da_folha = ExtResource("9_eewb4")
 
-[node name="AreaParaSpawnarOItem" type="Area3D" parent="AreasDeAparecimentoDasFolhas" unique_id=138727865]
+[node name="AreaParaSpawnarOItem" type="Area3D" parent="SubViewportContainer/SubViewport/TUDO/AreasDeAparecimentoDasFolhas" unique_id=138727865]
 script = ExtResource("9_cfg_area_folha")
 quantidade_inicial_de_folhas = 500
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem" unique_id=1808956602]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.954262, 0, -0.3378315)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/TUDO/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem" unique_id=1808956602]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.3563824, 0.39982176, -0.09884715)
 shape = SubResource("BoxShape3D_g4v7s")
-debug_color = Color(0, 18.892157, 0, 1)
+debug_color = Color(0, 17.84424, 12.122338, 1)
 
-[node name="MovimentoDoVento" type="Node3D" parent="AreasDeAparecimentoDasFolhas" unique_id=1558576058 node_paths=PackedStringArray("area_aparecimento_das_folhas")]
+[node name="MovimentoDoVento" type="Node3D" parent="SubViewportContainer/SubViewport/TUDO/AreasDeAparecimentoDasFolhas" unique_id=1558576058 node_paths=PackedStringArray("area_aparecimento_das_folhas")]
 script = ExtResource("10_eewb4")
 area_aparecimento_das_folhas = NodePath("..")
 
-[node name="PortaCabana" parent="." unique_id=616394942 instance=ExtResource("10_wgbst")]
+[node name="PortaCabana" parent="SubViewportContainer/SubViewport/TUDO" unique_id=616394942 instance=ExtResource("10_wgbst")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6463099, 1.0491469, 9.758276)
 nome_da_area_pra_spawnar = 1
 caminho_da_cena_para_abrir = "uid://cndo1nr3c25nb"
 
-[node name="Jogador" parent="." unique_id=830939475 instance=ExtResource("2_j2ut6")]
+[node name="Jogador" parent="SubViewportContainer/SubViewport/TUDO" unique_id=830939475 instance=ExtResource("2_j2ut6")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.2810335, 0.03191924, 0.08477652)
 
-[node name="Caverna" parent="." unique_id=88113294 instance=ExtResource("14_bsnwm")]
+[node name="Caverna" parent="SubViewportContainer/SubViewport/TUDO" unique_id=88113294 instance=ExtResource("14_bsnwm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1636677, 0.45177513, 0.9729748)
