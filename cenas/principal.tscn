@@ -1,10 +1,12 @@
 [gd_scene format=3 uid="uid://c1ayrcp8gpmux"]
 
 [ext_resource type="PackedScene" uid="uid://4jnt4pnkbk5t" path="res://cenas/jogador/jogador.tscn" id="2_j2ut6"]
+[ext_resource type="Script" uid="uid://tc4hgo4rjv41" path="res://codigos/utilidades/camera_3D_Pivot_TopDown.gd" id="2_nprih"]
 [ext_resource type="Texture2D" uid="uid://dtl2cy7wj17oe" path="res://arte/sprites_2d/noz.png" id="3_0cijk"]
 [ext_resource type="Script" uid="uid://dpn3lcrc3pky" path="res://codigos/ui/ui_hud.gd" id="3_vpl54"]
 [ext_resource type="AudioStream" uid="uid://chw0j3ptv6llo" path="res://arte/audio/musicas/Aventura/MusicaGameplay.wav" id="4_eewb4"]
 [ext_resource type="AudioStream" uid="uid://ykqyd0kwd8c6" path="res://arte/audio/musicas/Chase down.wav" id="5_bsnwm"]
+[ext_resource type="PackedScene" uid="uid://dsaca221woyvn" path="res://cenas/outros/estoque.tscn" id="6_8nexe"]
 [ext_resource type="MeshLibrary" uid="uid://bmjcwtwm6d4pr" path="res://mesh_tiles.meshlib" id="6_qcg16"]
 [ext_resource type="PackedScene" uid="uid://hh2qxe0w0swe" path="res://cenas/arvore/arovre1.tscn" id="7_b42ct"]
 [ext_resource type="PackedScene" uid="uid://jrli5nudch0o" path="res://cenas/arvore/arvore2.tscn" id="8_8nexe"]
@@ -14,24 +16,37 @@
 [ext_resource type="PackedScene" uid="uid://dltv5qryx7ijb" path="res://cenas/outros/folha_v2.tscn" id="9_eewb4"]
 [ext_resource type="PackedScene" uid="uid://by60h74njj6os" path="res://cenas/items/noz_pesada.tscn" id="9_sflf3"]
 [ext_resource type="Script" uid="uid://dcdbm4vlhnomj" path="res://codigos/item_que_faz_barulho/movimento_que_modifica_o_item_que_faz_barulho.gd" id="10_eewb4"]
-[ext_resource type="PackedScene" uid="uid://cvqos22k487uc" path="res://cenas/entradas_portas/porta_cabana.tscn" id="10_wgbst"]
 [ext_resource type="PackedScene" uid="uid://t8emngkvvq8y" path="res://cenas/outros/caverna.tscn" id="14_bsnwm"]
+[ext_resource type="Script" uid="uid://cr3yy3klu8o52" path="res://codigos/utilidades/area_que_altera_o_movimento_da_camera.gd" id="18_auskn"]
+[ext_resource type="Script" uid="uid://bjkbmevb7bmws" path="res://codigos/utilidades/recursos/area_que_altera_o_movimento_camera_recurso.gd" id="20_quko3"]
+[ext_resource type="AudioStream" uid="uid://da3a446tgf27n" path="res://arte/audio/musicas/Aventura/Iceyyy.wav" id="20_vum4w"]
+[ext_resource type="AudioStream" uid="uid://bre8adk7vbyxs" path="res://arte/audio/musicas/Aventura/Title forest.wav" id="21_vum4w"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ff0xt"]
-sky_top_color = Color(1, 0.7019608, 0.4745098, 1)
-sky_horizon_color = Color(0.5921569, 0.25490198, 0.2, 1)
-sky_curve = 4.3259945
-sky_energy_multiplier = 0.38
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_nprih"]
 
 [sub_resource type="Sky" id="Sky_sflf3"]
-sky_material = SubResource("ProceduralSkyMaterial_ff0xt")
+sky_material = SubResource("PhysicalSkyMaterial_nprih")
 
 [sub_resource type="Environment" id="Environment_j2ut6"]
 background_mode = 2
 sky = SubResource("Sky_sflf3")
+ssao_enabled = true
+ssil_enabled = true
+sdfgi_enabled = true
+glow_enabled = true
+glow_intensity = 0.5
+glow_bloom = 0.15
+fog_enabled = true
+fog_light_color = Color(0.8392157, 0.4627451, 0.32941177, 1)
+fog_light_energy = 0.5
+volumetric_fog_density = 1.0
+volumetric_fog_albedo = Color(0.8392157, 0.4627451, 0.32941177, 1)
+volumetric_fog_emission = Color(0.75686276, 0, 0.44705883, 1)
+volumetric_fog_emission_energy = 1007.1
+volumetric_fog_length = 307.61
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_g4v7s"]
-size = Vector3(39.444336, 1, 26.329163)
+size = Vector3(39.444336, 1, 71.76822)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_bsnwm"]
 radius = 1.5859375
@@ -45,9 +60,20 @@ radius = 1.4360352
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_8nexe"]
 radius = 2.1625977
 
+[sub_resource type="Resource" id="Resource_auskn"]
+script = ExtResource("20_quko3")
+tempo_de_transicao = 6.0
+metadata/_custom_type_script = "uid://bjkbmevb7bmws"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yf5fn"]
+size = Vector3(4.077881, 1, 9.2734375)
+
 [node name="Principal" type="Node3D" unique_id=830613941]
 
 [node name="TUDO" type="Node3D" parent="." unique_id=281836022]
+
+[node name="Estoque" parent="TUDO" unique_id=1559190117 instance=ExtResource("6_8nexe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.246403, 2.580751, 29.510536)
 
 [node name="ConfiguracaoGlobal" type="Node3D" parent="TUDO" unique_id=1838621548]
 
@@ -57,11 +83,16 @@ radius = 2.1625977
 environment = SubResource("Environment_j2ut6")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="TUDO/ConfiguracaoGlobal/Iluminacao" unique_id=1385581125]
-transform = Transform3D(1, 0, 0, 0, 0.09927711, 0.99505985, 0, -0.99505985, 0.09927711, 0, 13.265167, 21.964815)
-light_energy = 1.655
+transform = Transform3D(-0.02340942, 0.99478716, -0.09924989, 0.37484062, 0.100768454, 0.92159647, 0.9267936, -0.015628846, -0.3752455, 16.529865, 13.265167, -15.93918)
+light_energy = 4.195
+light_volumetric_fog_energy = 7.64
+shadow_enabled = true
 
-[node name="Camera3D" type="Camera3D" parent="TUDO/ConfiguracaoGlobal" unique_id=1995318540]
-transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 20.677668, 17, 12.183823)
+[node name="CameraPivot" type="Node3D" parent="TUDO/ConfiguracaoGlobal" unique_id=836837572]
+transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 20.678, 17, 12.184)
+script = ExtResource("2_nprih")
+
+[node name="Camera3D" type="Camera3D" parent="TUDO/ConfiguracaoGlobal/CameraPivot" unique_id=1995318540]
 projection = 1
 current = true
 size = 15.213
@@ -107,7 +138,7 @@ stream = ExtResource("5_bsnwm")
 mesh_library = ExtResource("6_qcg16")
 cell_octant_size = 7
 data = {
-"cells": PackedInt32Array(5, 65531, 3, 5, 65532, 3, 5, 65533, 3, 5, 65534, 3, 5, 65535, 3, 5, 0, 3, 5, 1, 3, 5, 2, 3, 5, 3, 3, 5, 4, 3, 6, 65531, 3, 7, 65531, 3, 8, 65531, 3, 9, 65531, 3, 10, 65531, 3, 11, 65531, 3, 12, 65531, 3, 13, 65531, 3, 6, 4, 3, 7, 4, 3, 8, 4, 1, 9, 4, 1, 10, 4, 3, 11, 4, 3, 12, 4, 3, 13, 4, 3, 14, 4, 3, 14, 65531, 3, 14, 65532, 3, 14, 65533, 3, 14, 65534, 3, 14, 65535, 3, 14, 0, 3, 14, 1, 3, 14, 2, 3, 14, 3, 3, 6, 65532, 1, 6, 65533, 1, 6, 65534, 1, 6, 65535, 1, 6, 0, 3, 6, 1, 1, 6, 2, 1, 6, 3, 1, 7, 3, 1, 8, 3, 1, 9, 3, 1, 10, 3, 1, 11, 3, 1, 12, 3, 1, 13, 3, 3, 13, 2, 1, 13, 1, 1, 13, 0, 1, 13, 65535, 1, 13, 65534, 1, 13, 65533, 1, 13, 65532, 1, 12, 65532, 1, 11, 65532, 1, 10, 65532, 1, 9, 65532, 1, 8, 65532, 1, 7, 65532, 3, 7, 65533, 1, 7, 65534, 1, 7, 65535, 1, 7, 0, 1, 7, 1, 1, 7, 2, 1, 8, 2, 1, 9, 2, 1, 10, 2, 1, 11, 2, 1, 12, 2, 1, 12, 1, 1, 12, 0, 1, 12, 65535, 1, 12, 65534, 1, 12, 65533, 1, 11, 65533, 1, 10, 65533, 1, 9, 65533, 1, 9, 65534, 1, 8, 65534, 1, 8, 65535, 1, 8, 0, 1, 9, 0, 1, 10, 1, 1, 11, 1, 1, 11, 0, 1, 11, 65535, 1, 11, 65534, 1, 10, 65534, 1, 10, 65535, 1, 10, 0, 1, 9, 1, 1, 8, 1, 1, 9, 65535, 1, 8, 65533, 1)
+"cells": PackedInt32Array(5, 65531, 3, 5, 65532, 3, 5, 65533, 3, 5, 65534, 3, 5, 65535, 3, 5, 0, 3, 5, 1, 3, 5, 2, 3, 5, 3, 3, 5, 4, 3, 6, 65531, 3, 7, 65531, 3, 8, 65531, 3, 9, 65531, 3, 10, 65531, 3, 11, 65531, 3, 12, 65531, 3, 13, 65531, 3, 6, 4, 3, 7, 4, 3, 8, 4, 1, 9, 4, 1, 10, 4, 3, 11, 4, 3, 12, 4, 3, 13, 4, 3, 14, 4, 3, 14, 65531, 3, 14, 65532, 3, 14, 65533, 3, 14, 65534, 3, 14, 65535, 3, 14, 0, 3, 14, 1, 3, 14, 2, 3, 14, 3, 3, 6, 65532, 1, 6, 65533, 1, 6, 65534, 1, 6, 65535, 1, 6, 0, 3, 6, 1, 1, 6, 2, 1, 6, 3, 1, 7, 3, 1, 8, 3, 1, 9, 3, 1, 10, 3, 1, 11, 3, 1, 12, 3, 1, 13, 3, 3, 13, 2, 1, 13, 1, 1, 13, 0, 1, 13, 65535, 1, 13, 65534, 1, 13, 65533, 1, 13, 65532, 1, 12, 65532, 1, 11, 65532, 1, 10, 65532, 1, 9, 65532, 1, 8, 65532, 1, 7, 65532, 3, 7, 65533, 1, 7, 65534, 1, 7, 65535, 1, 7, 0, 1, 7, 1, 1, 7, 2, 1, 8, 2, 1, 9, 2, 1, 10, 2, 1, 11, 2, 1, 12, 2, 1, 12, 1, 1, 12, 0, 1, 12, 65535, 1, 12, 65534, 1, 12, 65533, 1, 11, 65533, 1, 10, 65533, 1, 9, 65533, 1, 9, 65534, 1, 8, 65534, 1, 8, 65535, 1, 8, 0, 1, 9, 0, 1, 10, 1, 1, 11, 1, 1, 11, 0, 1, 11, 65535, 1, 11, 65534, 1, 10, 65534, 1, 10, 65535, 1, 10, 0, 1, 9, 1, 1, 8, 1, 1, 9, 65535, 1, 8, 65533, 1, 8, 5, 1, 9, 5, 1, 8, 6, 1, 9, 6, 1, 9, 7, 3, 8, 7, 3, 8, 8, 3, 9, 8, 3, 5, 9, 1, 5, 10, 1, 5, 11, 1, 5, 12, 1, 5, 13, 1, 5, 14, 1, 5, 15, 1, 5, 16, 1, 6, 9, 1, 6, 10, 1, 6, 11, 1, 6, 12, 1, 6, 13, 1, 6, 14, 1, 6, 15, 1, 6, 16, 1, 7, 9, 1, 7, 10, 1, 7, 11, 1, 7, 12, 1, 7, 13, 1, 7, 14, 1, 7, 15, 1, 7, 16, 1, 8, 9, 1, 8, 10, 1, 8, 11, 1, 8, 12, 1, 8, 13, 1, 8, 14, 1, 8, 15, 1, 8, 16, 1, 9, 9, 1, 9, 10, 1, 9, 11, 1, 9, 12, 1, 9, 13, 1, 9, 14, 1, 9, 15, 1, 9, 16, 1, 10, 9, 1, 10, 10, 1, 10, 11, 1, 10, 12, 1, 10, 13, 1, 10, 14, 1, 10, 15, 1, 10, 16, 1, 11, 9, 1, 11, 10, 1, 11, 11, 1, 11, 12, 1, 11, 13, 1, 11, 14, 1, 11, 15, 1, 11, 16, 1)
 }
 
 [node name="Arvores" type="Node3D" parent="TUDO/ConfiguracaoGlobal" unique_id=1974128430]
@@ -238,12 +269,23 @@ transform = Transform3D(0.99944943, 0.033177923, 0, -0.033177923, 0.99944943, 0,
 [node name="Arovre7" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=1111080350 instance=ExtResource("7_b42ct")]
 transform = Transform3D(0.99944943, 0.033177923, 0, -0.033177923, 0.99944943, 0, 0, 0, 1, 13.129042, 1.9978034, -2.4135904)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="TUDO/ConfiguracaoGlobal" unique_id=1568735328]
+[node name="CHAO" type="StaticBody3D" parent="TUDO/ConfiguracaoGlobal" unique_id=1568735328]
 collision_mask = 4
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/ConfiguracaoGlobal/StaticBody3D" unique_id=1840504301]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.222168, 1.514019, 1.1080627)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/ConfiguracaoGlobal/CHAO" unique_id=1840504301]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.222168, 1.514019, 23.82759)
 shape = SubResource("BoxShape3D_g4v7s")
+
+[node name="PosicoesCameraPivot" type="Node3D" parent="TUDO/ConfiguracaoGlobal" unique_id=1474081026]
+
+[node name="Caminho" type="Node3D" parent="TUDO/ConfiguracaoGlobal/PosicoesCameraPivot" unique_id=122458148]
+transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 20.678, 17, 36.82905)
+
+[node name="Estoque" type="Node3D" parent="TUDO/ConfiguracaoGlobal/PosicoesCameraPivot" unique_id=582992377]
+transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 20.678, 17, 50.270493)
+
+[node name="Principal" type="Node3D" parent="TUDO/ConfiguracaoGlobal/PosicoesCameraPivot" unique_id=159524136]
+transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 20.678, 17, 12.184)
 
 [node name="PontosDeSpawn" type="Node3D" parent="TUDO" unique_id=786995392]
 
@@ -359,13 +401,38 @@ debug_color = Color(0, 17.84424, 12.122338, 1)
 script = ExtResource("10_eewb4")
 area_aparecimento_das_folhas = NodePath("..")
 
-[node name="PortaCabana" parent="TUDO" unique_id=616394942 instance=ExtResource("10_wgbst")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.827526, 3.0036511, 9.657562)
-nome_da_area_pra_spawnar = 1
-caminho_da_cena_para_abrir = "uid://cndo1nr3c25nb"
-
-[node name="Jogador" parent="TUDO" unique_id=830939475 instance=ExtResource("2_j2ut6")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 17.77298, 3.8208873, 6.7894397)
+[node name="Jogador" parent="TUDO" unique_id=830939475 groups=["Jogador"] instance=ExtResource("2_j2ut6")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 17.77298, 2.1404524, 6.7894397)
 
 [node name="Caverna" parent="TUDO" unique_id=88113294 instance=ExtResource("14_bsnwm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.11225, 2.0763779, 0.9729748)
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="TUDO/Caverna" unique_id=482810584]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18744469, 16.695341, 5.711213)
+stream = ExtResource("20_vum4w")
+volume_db = 80.0
+autoplay = true
+max_distance = 15.87
+
+[node name="AreaQueAlteraOMovimentoDaCamera" type="Area3D" parent="TUDO" unique_id=1229593805 node_paths=PackedStringArray("nova_posicao_pivot_camera", "camera_pivot")]
+collision_layer = 16
+collision_mask = 4
+script = ExtResource("18_auskn")
+id_area = "Principal_Caminho"
+configuracao = SubResource("Resource_auskn")
+nova_posicao_pivot_camera = NodePath("../ConfiguracaoGlobal/PosicoesCameraPivot/Caminho")
+camera_pivot = NodePath("../ConfiguracaoGlobal/CameraPivot")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/AreaQueAlteraOMovimentoDaCamera" unique_id=700133874]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.865543, 2.4745984, 13.64515)
+shape = SubResource("BoxShape3D_yf5fn")
+debug_color = Color(17.835724, 0, 0, 0.41960785)
+
+[node name="Audios" type="Node3D" parent="TUDO" unique_id=312291490]
+
+[node name="MusicaCabana" type="AudioStreamPlayer3D" parent="TUDO/Audios" unique_id=1773678620]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.800837, 3.852623, 43.96976)
+stream = ExtResource("21_vum4w")
+volume_db = 30.0
+autoplay = true
+max_distance = 30.0
