@@ -1,11 +1,13 @@
 [gd_scene format=3 uid="uid://c1ayrcp8gpmux"]
 
-[ext_resource type="PackedScene" uid="uid://d0rjtb85kkdpn" path="res://cenas/chao/chao.tscn" id="1_ym8g7"]
 [ext_resource type="PackedScene" uid="uid://4jnt4pnkbk5t" path="res://cenas/jogador/jogador.tscn" id="2_j2ut6"]
 [ext_resource type="Texture2D" uid="uid://dtl2cy7wj17oe" path="res://arte/sprites_2d/noz.png" id="3_0cijk"]
 [ext_resource type="Script" uid="uid://dpn3lcrc3pky" path="res://codigos/ui/ui_hud.gd" id="3_vpl54"]
 [ext_resource type="AudioStream" uid="uid://chw0j3ptv6llo" path="res://arte/audio/musicas/Aventura/MusicaGameplay.wav" id="4_eewb4"]
 [ext_resource type="AudioStream" uid="uid://ykqyd0kwd8c6" path="res://arte/audio/musicas/Chase down.wav" id="5_bsnwm"]
+[ext_resource type="MeshLibrary" uid="uid://bmjcwtwm6d4pr" path="res://mesh_tiles.meshlib" id="6_qcg16"]
+[ext_resource type="PackedScene" uid="uid://hh2qxe0w0swe" path="res://cenas/arvore/arovre1.tscn" id="7_b42ct"]
+[ext_resource type="PackedScene" uid="uid://jrli5nudch0o" path="res://cenas/arvore/arvore2.tscn" id="8_8nexe"]
 [ext_resource type="PackedScene" uid="uid://d0xavr5nl12q0" path="res://cenas/items/noz.tscn" id="8_djk5k"]
 [ext_resource type="Script" uid="uid://cunjiy1vtlrnt" path="res://codigos/outros/areas_de_aparecimento_das_folhas.gd" id="8_k1xmn"]
 [ext_resource type="Script" uid="uid://b7tbkmg4s3sjb" path="res://codigos/outros/configuracao_area_de_spawn_folhas.gd" id="9_cfg_area_folha"]
@@ -14,7 +16,6 @@
 [ext_resource type="Script" uid="uid://dcdbm4vlhnomj" path="res://codigos/item_que_faz_barulho/movimento_que_modifica_o_item_que_faz_barulho.gd" id="10_eewb4"]
 [ext_resource type="PackedScene" uid="uid://cvqos22k487uc" path="res://cenas/entradas_portas/porta_cabana.tscn" id="10_wgbst"]
 [ext_resource type="PackedScene" uid="uid://t8emngkvvq8y" path="res://cenas/outros/caverna.tscn" id="14_bsnwm"]
-[ext_resource type="Shader" uid="uid://dif15nefb0r76" path="res://shader/wind.gdshader" id="15_qcg16"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ff0xt"]
 sky_top_color = Color(1, 0.7019608, 0.4745098, 1)
@@ -29,16 +30,8 @@ sky_material = SubResource("ProceduralSkyMaterial_ff0xt")
 background_mode = 2
 sky = SubResource("Sky_sflf3")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_b42ct"]
-shader = ExtResource("15_qcg16")
-shader_parameter/wind_direction = Vector3(1, 0.1, 0)
-shader_parameter/wind_speed = 12.0
-shader_parameter/turbulence_strength = 2.5
-
-[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_qcg16"]
-size = 2.674
-sections = 2
-section_length = 0.02
+[sub_resource type="BoxShape3D" id="BoxShape3D_g4v7s"]
+size = Vector3(39.444336, 1, 26.329163)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_bsnwm"]
 radius = 1.5859375
@@ -68,21 +61,10 @@ transform = Transform3D(1, 0, 0, 0, 0.09927711, 0.99505985, 0, -0.99505985, 0.09
 light_energy = 1.655
 
 [node name="Camera3D" type="Camera3D" parent="TUDO/ConfiguracaoGlobal" unique_id=1995318540]
-transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 0, 17, 14.656)
+transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 20.677668, 17, 12.183823)
 projection = 1
 current = true
 size = 15.213
-
-[node name="GPUParticles3D" type="GPUParticles3D" parent="TUDO/ConfiguracaoGlobal/Camera3D" unique_id=279662913]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.727286, 0, 0)
-amount = 13
-amount_ratio = 0.095
-interp_to_end = 1.0
-process_material = SubResource("ShaderMaterial_b42ct")
-draw_passes = 3
-draw_pass_1 = SubResource("RibbonTrailMesh_qcg16")
-draw_pass_2 = null
-draw_pass_3 = null
 
 [node name="UI" type="Control" parent="TUDO/ConfiguracaoGlobal" unique_id=1889806707]
 layout_mode = 3
@@ -115,13 +97,153 @@ texture_filter = 1
 layout_mode = 2
 text = "0"
 
-[node name="Chao" parent="TUDO/ConfiguracaoGlobal" unique_id=1707402539 instance=ExtResource("1_ym8g7")]
-
 [node name="MusicaGameplay" type="AudioStreamPlayer" parent="TUDO/ConfiguracaoGlobal" unique_id=903849656]
 stream = ExtResource("4_eewb4")
 
 [node name="MusicaPerseguicao" type="AudioStreamPlayer" parent="TUDO/ConfiguracaoGlobal" unique_id=1706356121]
 stream = ExtResource("5_bsnwm")
+
+[node name="GridMap" type="GridMap" parent="TUDO/ConfiguracaoGlobal" unique_id=315389087]
+mesh_library = ExtResource("6_qcg16")
+cell_octant_size = 7
+data = {
+"cells": PackedInt32Array(5, 65531, 3, 5, 65532, 3, 5, 65533, 3, 5, 65534, 3, 5, 65535, 3, 5, 0, 3, 5, 1, 3, 5, 2, 3, 5, 3, 3, 5, 4, 3, 6, 65531, 3, 7, 65531, 3, 8, 65531, 3, 9, 65531, 3, 10, 65531, 3, 11, 65531, 3, 12, 65531, 3, 13, 65531, 3, 6, 4, 3, 7, 4, 3, 8, 4, 1, 9, 4, 1, 10, 4, 3, 11, 4, 3, 12, 4, 3, 13, 4, 3, 14, 4, 3, 14, 65531, 3, 14, 65532, 3, 14, 65533, 3, 14, 65534, 3, 14, 65535, 3, 14, 0, 3, 14, 1, 3, 14, 2, 3, 14, 3, 3, 6, 65532, 1, 6, 65533, 1, 6, 65534, 1, 6, 65535, 1, 6, 0, 3, 6, 1, 1, 6, 2, 1, 6, 3, 1, 7, 3, 1, 8, 3, 1, 9, 3, 1, 10, 3, 1, 11, 3, 1, 12, 3, 1, 13, 3, 3, 13, 2, 1, 13, 1, 1, 13, 0, 1, 13, 65535, 1, 13, 65534, 1, 13, 65533, 1, 13, 65532, 1, 12, 65532, 1, 11, 65532, 1, 10, 65532, 1, 9, 65532, 1, 8, 65532, 1, 7, 65532, 3, 7, 65533, 1, 7, 65534, 1, 7, 65535, 1, 7, 0, 1, 7, 1, 1, 7, 2, 1, 8, 2, 1, 9, 2, 1, 10, 2, 1, 11, 2, 1, 12, 2, 1, 12, 1, 1, 12, 0, 1, 12, 65535, 1, 12, 65534, 1, 12, 65533, 1, 11, 65533, 1, 10, 65533, 1, 9, 65533, 1, 9, 65534, 1, 8, 65534, 1, 8, 65535, 1, 8, 0, 1, 9, 0, 1, 10, 1, 1, 11, 1, 1, 11, 0, 1, 11, 65535, 1, 11, 65534, 1, 10, 65534, 1, 10, 65535, 1, 10, 0, 1, 9, 1, 1, 8, 1, 1, 9, 65535, 1, 8, 65533, 1)
+}
+
+[node name="Arvores" type="Node3D" parent="TUDO/ConfiguracaoGlobal" unique_id=1974128430]
+
+[node name="Arvore2" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=1283573148 instance=ExtResource("8_8nexe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.133177, 1.8153777, 2.369041)
+
+[node name="Arvore13" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=1857451820 instance=ExtResource("8_8nexe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.146211, 1.8153777, 2.369041)
+
+[node name="Arvore14" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=302670715 instance=ExtResource("8_8nexe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.508053, 1.8153777, 2.369041)
+
+[node name="Arvore15" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=399682150 instance=ExtResource("8_8nexe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.971649, 1.8153777, 2.369041)
+
+[node name="Arvore18" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=845548524 instance=ExtResource("8_8nexe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.236607, 1.8153777, 2.369041)
+
+[node name="Arvore19" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=351866907 instance=ExtResource("8_8nexe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.011217, 1.8153777, 2.369041)
+
+[node name="Arvore20" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=1338466965 instance=ExtResource("8_8nexe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.113157, 1.8153777, 2.369041)
+
+[node name="Arvore30" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=1348748179 instance=ExtResource("8_8nexe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.113157, 1.8153777, -15.803553)
+
+[node name="Arvore31" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=669230479 instance=ExtResource("8_8nexe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.467651, 1.8153777, -15.803553)
+
+[node name="Arvore32" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=1902973024 instance=ExtResource("8_8nexe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.667189, 1.8153777, -15.803553)
+
+[node name="Arvore33" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=875046568 instance=ExtResource("8_8nexe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.636738, 1.8153777, -15.803553)
+
+[node name="Arvore34" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=1248281592 instance=ExtResource("8_8nexe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.902704, 1.8153777, -15.803553)
+
+[node name="Arvore35" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=691190177 instance=ExtResource("8_8nexe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.017218, 1.8153777, -15.803553)
+
+[node name="Arvore36" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=978310677 instance=ExtResource("8_8nexe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.826265, 1.8153777, -15.803553)
+
+[node name="Arvore37" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=1188290698 instance=ExtResource("8_8nexe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.800571, 1.8153777, -15.803553)
+
+[node name="Arvore38" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=1540429641 instance=ExtResource("8_8nexe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.577097, 1.8153777, -15.803553)
+
+[node name="Arvore21" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=450907909 instance=ExtResource("8_8nexe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.040442, 1.8153777, 2.369041)
+
+[node name="Arvore3" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=89531477 instance=ExtResource("8_8nexe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 17.54541, 1.8153777, -1.2242637)
+
+[node name="Arvore4" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=2076436077 instance=ExtResource("8_8nexe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 17.54541, 1.8153777, -3.0002537)
+
+[node name="Arvore5" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=483553365 instance=ExtResource("8_8nexe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 17.54541, 1.8153777, -4.776056)
+
+[node name="Arvore6" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=857880703 instance=ExtResource("8_8nexe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 17.54541, 1.8153777, 0.71280813)
+
+[node name="Arvore7" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=1189233173 instance=ExtResource("8_8nexe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 17.54541, 1.8153777, 2.678124)
+
+[node name="Arvore8" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=1567047779 instance=ExtResource("8_8nexe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 17.54541, 1.8153777, 4.9105105)
+
+[node name="Arvore9" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=1806993890 instance=ExtResource("8_8nexe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 17.54541, 1.8153777, 7.007093)
+
+[node name="Arvore10" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=863238911 instance=ExtResource("8_8nexe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 17.54541, 1.8153777, 7.007093)
+
+[node name="Arvore12" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=878745702 instance=ExtResource("8_8nexe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 17.54541, 1.8153777, 9.198015)
+
+[node name="Arvore22" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=1028621563 instance=ExtResource("8_8nexe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 35.904964, 1.8153777, -3.1322088)
+
+[node name="Arvore29" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=1973333075 instance=ExtResource("8_8nexe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 35.904964, 1.8153777, -1.5599971)
+
+[node name="Arvore23" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=576779384 instance=ExtResource("8_8nexe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 35.904964, 1.8153777, -4.908011)
+
+[node name="Arvore39" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=406762652 instance=ExtResource("8_8nexe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 35.904964, 1.8153777, -6.944631)
+
+[node name="Arvore40" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=937909538 instance=ExtResource("8_8nexe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 35.904964, 1.8153777, -8.952339)
+
+[node name="Arvore24" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=275781666 instance=ExtResource("8_8nexe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 35.904964, 1.8153777, 0.580853)
+
+[node name="Arvore25" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=271520670 instance=ExtResource("8_8nexe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 35.904964, 1.8153777, 2.5461688)
+
+[node name="Arvore26" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=220596408 instance=ExtResource("8_8nexe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 35.904964, 1.8153777, 4.7785554)
+
+[node name="Arvore27" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=1865856750 instance=ExtResource("8_8nexe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 35.904964, 1.8153777, 6.875138)
+
+[node name="Arvore28" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=1707374015 instance=ExtResource("8_8nexe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 35.904964, 1.8153777, 9.06606)
+
+[node name="Arvore11" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=957872538 instance=ExtResource("8_8nexe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 17.54541, 1.8153777, 8.007093)
+
+[node name="Arovre1" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=1678240173 instance=ExtResource("7_b42ct")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.925473, 1.9978034, 3.5122318)
+
+[node name="Arovre4" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=2101755289 instance=ExtResource("7_b42ct")]
+transform = Transform3D(0.99973035, 0.023221627, 0, -0.023221627, 0.99973035, 0, 0, 0, 1, 15.161623, 1.9978034, -6.5348854)
+
+[node name="Arovre5" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=1289369463 instance=ExtResource("7_b42ct")]
+transform = Transform3D(0.99944943, 0.033177923, 0, -0.033177923, 0.99944943, 0, 0, 0, 1, 24.978283, 1.9978034, -0.4903698)
+
+[node name="Arovre6" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=728964301 instance=ExtResource("7_b42ct")]
+transform = Transform3D(0.99944943, 0.033177923, 0, -0.033177923, 0.99944943, 0, 0, 0, 1, 24.978283, 1.9978034, -9.7127495)
+
+[node name="Arovre7" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=1111080350 instance=ExtResource("7_b42ct")]
+transform = Transform3D(0.99944943, 0.033177923, 0, -0.033177923, 0.99944943, 0, 0, 0, 1, 13.129042, 1.9978034, -2.4135904)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="TUDO/ConfiguracaoGlobal" unique_id=1568735328]
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/ConfiguracaoGlobal/StaticBody3D" unique_id=1840504301]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.222168, 1.514019, 1.1080627)
+shape = SubResource("BoxShape3D_g4v7s")
 
 [node name="PontosDeSpawn" type="Node3D" parent="TUDO" unique_id=786995392]
 
@@ -137,27 +259,49 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.114479, 0, -4.46729)
 [node name="Noz" type="Node3D" parent="TUDO/Arcores/ItensColetaveis" unique_id=999117848]
 
 [node name="Noz" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=2089380860 instance=ExtResource("8_djk5k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1393671, 0.20596546, 2.9458761)
+transform = Transform3D(2, 0, 0, 0, 1.6036208, 1.195157, 0, -1.195157, 1.6036208, 16.43335, 2.2405007, 7.3781605)
 id_unico_do_item_no_mapa = &"principal_noz_1"
 
-[node name="Noz4" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=772981281 instance=ExtResource("8_djk5k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3185163, 0.20596546, 6.0994906)
-id_unico_do_item_no_mapa = &"principal_noz_4"
+[node name="Noz2" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=532814948 instance=ExtResource("8_djk5k")]
+transform = Transform3D(2, 0, 0, 0, 1.6036208, 1.195157, 0, -1.195157, 1.6036208, 14.186106, 2.2405007, 7.3781605)
+id_unico_do_item_no_mapa = &"principal_noz_1"
 
-[node name="Noz2" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=1788909391 instance=ExtResource("9_sflf3")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -1.3945584, 0.46267164, 6.6498995)
-id_unico_do_item_no_mapa = &"principal_noz_2"
+[node name="Noz4" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=811081087 instance=ExtResource("8_djk5k")]
+transform = Transform3D(2, 0, 0, 0, 1.6036208, 1.195157, 0, -1.195157, 1.6036208, 16.63896, 2.2405007, 5.451943)
+id_unico_do_item_no_mapa = &"principal_noz_1"
+
+[node name="Noz5" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=1014856503 instance=ExtResource("8_djk5k")]
+transform = Transform3D(2, 0, 0, 0, 1.6036208, 1.195157, 0, -1.195157, 1.6036208, 26.931902, 2.2405007, 6.220858)
+id_unico_do_item_no_mapa = &"principal_noz_1"
+
+[node name="Noz6" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=888947884 instance=ExtResource("8_djk5k")]
+transform = Transform3D(2, 0, 0, 0, 1.6036208, 1.195157, 0, -1.195157, 1.6036208, 25.464441, 2.2405007, 8.401944)
+id_unico_do_item_no_mapa = &"principal_noz_1"
 
 [node name="Noz3" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=1824542932 instance=ExtResource("9_sflf3")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5.178157, 0.46267164, 1.9542334)
+transform = Transform3D(4, 0, 0, 0, 1.1861145, 3.8200958, 0, -3.8200958, 1.1861145, 18.271017, 2.1885672, 3.0193722)
+id_unico_do_item_no_mapa = &"principal_noz_3"
+
+[node name="Noz7" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=1506976320 instance=ExtResource("9_sflf3")]
+transform = Transform3D(4, 0, 0, 0, 1.1861145, 3.8200958, 0, -3.8200958, 1.1861145, 26.957865, 2.1885672, 0.18483686)
+id_unico_do_item_no_mapa = &"principal_noz_3"
+
+[node name="Noz8" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=1631108602 instance=ExtResource("9_sflf3")]
+transform = Transform3D(4, 0, 0, 0, 1.1861145, 3.8200958, 0, -3.8200958, 1.1861145, 26.957865, 2.1885672, 9.515787)
+id_unico_do_item_no_mapa = &"principal_noz_3"
+
+[node name="Noz9" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=1960880083 instance=ExtResource("9_sflf3")]
+transform = Transform3D(4, 0, 0, 0, 1.1861145, 3.8200958, 0, -3.8200958, 1.1861145, 15.417013, 2.1885672, 10.54051)
 id_unico_do_item_no_mapa = &"principal_noz_3"
 
 [node name="AreasDeAparecimentoDasFolhas" type="Node3D" parent="TUDO/Arcores" unique_id=49043212 node_paths=PackedStringArray("areas_de_spawn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.178925, 2.6106129, 0)
 script = ExtResource("8_k1xmn")
 areas_de_spawn = [NodePath("AreaParaSpawnarOItem"), NodePath("AreaParaSpawnarOItem2"), NodePath("AreaParaSpawnarOItem3"), NodePath("AreaParaSpawnarOItem4")]
 cena_da_folha = ExtResource("9_eewb4")
 
 [node name="AreaParaSpawnarOItem" type="Area3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas" unique_id=1273190360]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0827179, -1.6197176, -0.86178946)
 script = ExtResource("9_cfg_area_folha")
 quantidade_inicial_de_folhas = 25
 deslocamento_base_rajada_em_metros = 0.2
@@ -168,7 +312,7 @@ shape = SubResource("CylinderShape3D_bsnwm")
 debug_color = Color(0, 17.84424, 12.122338, 1)
 
 [node name="AreaParaSpawnarOItem2" type="Area3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas" unique_id=203367934]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.436944, 0, 4.8143196)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.177401, -1.3031564, 4.8143196)
 script = ExtResource("9_cfg_area_folha")
 quantidade_inicial_de_folhas = 30
 deslocamento_base_rajada_em_metros = 0.2
@@ -179,7 +323,7 @@ shape = SubResource("CylinderShape3D_qcg16")
 debug_color = Color(0, 17.84424, 12.122338, 1)
 
 [node name="AreaParaSpawnarOItem3" type="Area3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas" unique_id=521907719]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.326045, 0, -1.027539)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.667967, -1.4858251, -3.736943)
 script = ExtResource("9_cfg_area_folha")
 quantidade_inicial_de_folhas = 15
 deslocamento_base_rajada_em_metros = 0.2
@@ -189,8 +333,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3384986, 0.39982176, -1.37
 shape = SubResource("CylinderShape3D_b42ct")
 debug_color = Color(0, 17.84424, 12.122338, 1)
 
+[node name="AreaParaSpawnarOItem5" type="Area3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas" unique_id=1272823165]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0898552, -1.4858251, 7.9179406)
+script = ExtResource("9_cfg_area_folha")
+quantidade_inicial_de_folhas = 15
+deslocamento_base_rajada_em_metros = 0.2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem5" unique_id=61695690]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3384986, 0.39982176, -1.3742943)
+shape = SubResource("CylinderShape3D_b42ct")
+debug_color = Color(0, 17.84424, 12.122338, 1)
+
 [node name="AreaParaSpawnarOItem4" type="Area3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas" unique_id=805195242]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.74398756, 0, 4.37678)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9285603, -1.2610779, 2.9755206)
 script = ExtResource("9_cfg_area_folha")
 quantidade_inicial_de_folhas = 26
 deslocamento_base_rajada_em_metros = 0.2
@@ -205,13 +360,12 @@ script = ExtResource("10_eewb4")
 area_aparecimento_das_folhas = NodePath("..")
 
 [node name="PortaCabana" parent="TUDO" unique_id=616394942 instance=ExtResource("10_wgbst")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6463099, 1.0491469, 9.758276)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.827526, 3.0036511, 9.657562)
 nome_da_area_pra_spawnar = 1
 caminho_da_cena_para_abrir = "uid://cndo1nr3c25nb"
 
 [node name="Jogador" parent="TUDO" unique_id=830939475 instance=ExtResource("2_j2ut6")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -9.749653, 1.1233442, 0.08477652)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 17.77298, 3.8208873, 6.7894397)
 
-[node name="Caverna" parent="TUDO" unique_id=88113294 node_paths=PackedStringArray("particulas_de_vento") instance=ExtResource("14_bsnwm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1636677, 0.45177513, 0.9729748)
-particulas_de_vento = NodePath("../ConfiguracaoGlobal/Camera3D/GPUParticles3D")
+[node name="Caverna" parent="TUDO" unique_id=88113294 instance=ExtResource("14_bsnwm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.11225, 2.0763779, 0.9729748)

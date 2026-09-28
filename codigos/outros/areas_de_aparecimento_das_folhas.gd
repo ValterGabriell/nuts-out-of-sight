@@ -3,6 +3,7 @@ extends Node3D
 
 @export var areas_de_spawn: Array[ConfiguracaoAreaDeSpawnFolhas] = []
 @export var cena_da_folha: PackedScene 
+@export var offset_vertical_spawn_em_metros: float = 0.5
 @export var duracao_minima_por_estagio_pre_aviso_em_segundos: float = 1.0
 @export var duracao_rajada_em_segundos: float = 1
 @export var quantidade_de_estagios_pre_aviso: int = 4
@@ -282,6 +283,8 @@ func _obter_collision_shape_da_area_spawn(indice_area: int) -> CollisionShape3D:
 	return null
 
 func _obter_posicao_aleatoria_na_area_spawn(shape_node: CollisionShape3D, centro_shape: Vector3) -> Vector3:
+	var altura_spawn = centro_shape.y + offset_vertical_spawn_em_metros
+
 	if shape_node.shape is BoxShape3D:
 		var box: BoxShape3D = shape_node.shape
 		var tamanho_box = box.size
@@ -291,7 +294,7 @@ func _obter_posicao_aleatoria_na_area_spawn(shape_node: CollisionShape3D, centro
 		var max_z = centro_shape.z + (tamanho_box.z / 2.0)
 		return Vector3(
 			randf_range(min_x, max_x),
-			centro_shape.y,
+			altura_spawn,
 			randf_range(min_z, max_z)
 		)
 
@@ -301,11 +304,11 @@ func _obter_posicao_aleatoria_na_area_spawn(shape_node: CollisionShape3D, centro
 		var raio = sqrt(randf()) * max(cilindro.radius, 0.0)
 		return Vector3(
 			centro_shape.x + cos(angulo) * raio,
-			centro_shape.y,
+			altura_spawn,
 			centro_shape.z + sin(angulo) * raio
 		)
 
-	return centro_shape
+	return Vector3(centro_shape.x, altura_spawn, centro_shape.z)
 
 func _obter_area_por_indice(indice_area: int) -> ConfiguracaoAreaDeSpawnFolhas:
 	if indice_area < 0 or indice_area >= areas_de_spawn.size():

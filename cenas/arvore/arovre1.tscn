@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://hh2qxe0w0swe"]
+
+[ext_resource type="PackedScene" uid="uid://2x78befgjxrl" path="res://arte/3d/arvore2.glb" id="1_fdnps"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xq1sh"]
+size = Vector3(0.62405014, 2.0141602, 1.060379)
+
+[node name="Arovre1" type="Node3D" unique_id=1678240173]
+
+[node name="Arvore" type="StaticBody3D" parent="." unique_id=821403714]
+collision_mask = 4
+
+[node name="arvore2" parent="Arvore" unique_id=5067551 instance=ExtResource("1_fdnps")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.6808004)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arvore" unique_id=568359602]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0088272095, 1.2640656, 3.8296804)
+shape = SubResource("BoxShape3D_xq1sh")

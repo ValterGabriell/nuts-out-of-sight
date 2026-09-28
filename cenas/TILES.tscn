@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://ceku7s72cgrnw"]
+
+[ext_resource type="PackedScene" uid="uid://d1f57xypayyox" path="res://arte/3d/tiles/01.glb" id="1_gqhe7"]
+[ext_resource type="PackedScene" uid="uid://dydxc78eaoou4" path="res://arte/3d/tiles/02.glb" id="2_5xvah"]
+[ext_resource type="PackedScene" uid="uid://biowwrarhjybp" path="res://arte/3d/tiles/03.glb" id="3_6rq1s"]
+[ext_resource type="PackedScene" uid="uid://gt8cv1uknsun" path="res://arte/3d/tiles/04.glb" id="4_id03m"]
+[ext_resource type="PackedScene" uid="uid://2x78befgjxrl" path="res://arte/3d/arvore2.glb" id="5_6rq1s"]
+[ext_resource type="PackedScene" uid="uid://61pr0w3dqsww" path="res://arte/3d/arvore.glb" id="6_id03m"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g4v7s"]
+size = Vector3(0.62405014, 2.0141602, 1.060379)
+
+[node name="Tiles" type="Node3D" unique_id=1941737795]
+
+[node name="Chao1" type="StaticBody3D" parent="." unique_id=1455186886]
+collision_mask = 4
+
+[node name="01" parent="Chao1" unique_id=594745750 instance=ExtResource("1_gqhe7")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Chao1" unique_id=1472989630]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0088272095, -0.013427734, -0.032368183)
+shape = SubResource("BoxShape3D_g4v7s")
+
+[node name="Chao2" type="StaticBody3D" parent="." unique_id=1550647362]
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Chao2" unique_id=1747373037]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0088272095, -0.013427734, -0.032368183)
+shape = SubResource("BoxShape3D_g4v7s")
+
+[node name="02" parent="Chao2" unique_id=454529043 instance=ExtResource("2_5xvah")]
+
+[node name="Chao3" type="StaticBody3D" parent="." unique_id=1964426144]
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Chao3" unique_id=808270443]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0088272095, -0.013427734, -0.032368183)
+shape = SubResource("BoxShape3D_g4v7s")
+
+[node name="03" parent="Chao3" unique_id=1473366378 instance=ExtResource("3_6rq1s")]
+
+[node name="Chao4" type="StaticBody3D" parent="." unique_id=193204653]
+collision_mask = 4
+
+[node name="04" parent="Chao4" unique_id=1593155044 instance=ExtResource("4_id03m")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Chao4" unique_id=911138337]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0088272095, -0.013427734, -0.032368183)
+shape = SubResource("BoxShape3D_g4v7s")
+
+[node name="Arvore" type="StaticBody3D" parent="." unique_id=1717975413]
+collision_mask = 4
+
+[node name="arvore2" parent="Arvore" unique_id=5067551 instance=ExtResource("5_6rq1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.6808004)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arvore" unique_id=1040620356]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0088272095, 1.2640656, 3.8296804)
+shape = SubResource("BoxShape3D_g4v7s")
+
+[node name="Arvore3" type="StaticBody3D" parent="." unique_id=100710785]
+collision_mask = 4
+
+[node name="arvore" parent="Arvore3" unique_id=8973488 instance=ExtResource("6_id03m")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 6.9158463)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arvore3" unique_id=1071119187]
+transform = Transform3D(0.99474025, -0.102429524, 0, 0.102429524, 0.99474025, 0, 0, 0, 1, -0.022974014, 1.0648092, 6.8678374)
+shape = SubResource("BoxShape3D_g4v7s")

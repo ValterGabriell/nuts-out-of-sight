@@ -1,20 +1,14 @@
 [gd_scene format=3 uid="uid://cvqos22k487uc"]
 
-[ext_resource type="Texture2D" uid="uid://bxnxkos8woyfv" path="res://arte/sprites_2d/porta_cabana.png" id="1_ecsam"]
 [ext_resource type="Script" uid="uid://cdqvb0fff6ib0" path="res://codigos/portas/porta.gd" id="1_n586t"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_g4v7s"]
+radius = 0.9863281
 
 [node name="PortaCabana" type="Area3D" unique_id=616394942]
 collision_layer = 16
 collision_mask = 4
 script = ExtResource("1_n586t")
-
-[node name="Sprite3D" type="Sprite3D" parent="." unique_id=750904417]
-transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
-billboard = 2
-texture_filter = 2
-texture = ExtResource("1_ecsam")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1699130366]
 shape = SubResource("CapsuleShape3D_g4v7s")
