@@ -3,7 +3,6 @@ extends StaticBody3D
 
 const LIMITE_DE_BARULHO :float = 100.0
 const CAMINHO_AUDIO_ALERTA_CAVERNA: String = "res://arte/audio/sfx/urso_gritando.mp3"
-const CENA_TRANSICAO_GAMEOVER: PackedScene = preload("res://cenas/TRANSICAO_ENTRE_GAMEOVER_E_PRINCIPAL.tscn")
 
 enum EstadoDaSequenciaDeRugido {
 	OCIOSO,
@@ -90,12 +89,6 @@ func _iniciar_sequencia_de_rugido_da_caverna() -> void:
 	if atraso_antes_da_transicao_em_segundos > 0.0:
 		await get_tree().create_timer(atraso_antes_da_transicao_em_segundos).timeout
 
-	if GlobalTransicaoDeCena != null and CENA_TRANSICAO_GAMEOVER != null:
-		GlobalTransicaoDeCena.trocar_cena_com_fade(CENA_TRANSICAO_GAMEOVER, "")
-		return
-
-	if CENA_TRANSICAO_GAMEOVER != null:
-		get_tree().change_scene_to_packed(CENA_TRANSICAO_GAMEOVER)
 
 func _ativar_efeitos_visuais_da_caverna() -> void:
 	if olhos_luminosos != null:

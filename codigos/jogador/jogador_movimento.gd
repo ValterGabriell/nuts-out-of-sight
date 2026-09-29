@@ -12,12 +12,14 @@ enum EstadoMovimento {
 @export var no_visual_corpo: Node3D
 @export var mao_jogador_direcao: Node3D
 @export var deslocamento_horizontal_mao_com_item: float = 0.5
-@export var deslocamento_item_na_frente_no_idle_com_item: float = 1
+@export var deslocamento_item_na_frente_no_idle_com_item: float = 1.0
 @export var velocidade_rotacao_corpo: float = 12.0
 @export var multiplicador_velocidade_animacao_movimento: float = 1.2
 @export var animation_start_fps: float = 30.0
 @export var animation_start_frame: int = 1
 
+## Ative no AnimationPlayer da Cutscene para desativar o controle e a lógica do jogador
+@export var em_cutscene: bool = false
 
 var estado_atual: EstadoMovimento = EstadoMovimento.IDLE
 var item_visual_na_mao: ItemColetavel
@@ -36,6 +38,10 @@ func _ready() -> void:
 		posicao_local_inicial_da_mao = mao_jogador_direcao.position
 
 func _physics_process(delta: float) -> void:
+	# SE ESTIVER EM CUTSCENE: Não aplica física, não lê inputs e não força animações do jogador
+	if em_cutscene:
+		return
+
 	if not jogador.is_on_floor():
 		jogador.velocity += jogador.get_gravity() * delta
 
@@ -51,7 +57,10 @@ func _physics_process(delta: float) -> void:
 	var camera_right := basis.x
 	camera_right.y = 0.0
 	camera_right = camera_right.normalized()
-	var direction := (camera_right * input_dir.x + camera_forward * input_dir.y).normalized()
+	# Input axes are inverted in this setup, so flip both components before applying movement.
+	var corrected_input_dir: Vector2 = -input_dir
+	var direction := (camera_right * corrected_input_dir.x + camera_forward * corrected_input_dir.y).normalized()
+	
 	atualizar_rotacao_do_corpo(direction, delta)
 	if direction:
 		jogador.velocity.x = direction.x * jogador.velocidade_atual
@@ -70,16 +79,13 @@ func _physics_process(delta: float) -> void:
 	atualizar_deslocamento_da_mao(input_dir, reference_node)
 	atualizar_posicao_visual_do_item(reference_node)
 
-
 func _exit_tree() -> void:
 	remover_item_visual_na_mao()
-
 
 func atualizar_estado_e_animacao(esta_se_movendo: bool, esta_com_item: bool) -> void:
 	estado_atual = obter_estado_de_movimento(esta_se_movendo, esta_com_item)
 	tocar_animacao_do_estado(estado_atual)
 	atualizar_velocidade_da_animacao(estado_atual)
-
 
 func obter_estado_de_movimento(esta_se_movendo: bool, esta_com_item: bool) -> EstadoMovimento:
 	if esta_se_movendo and esta_com_item:
@@ -89,7 +95,6 @@ func obter_estado_de_movimento(esta_se_movendo: bool, esta_com_item: bool) -> Es
 	if esta_com_item:
 		return EstadoMovimento.IDLE_COM_ITEM
 	return EstadoMovimento.IDLE
-
 
 func tocar_animacao_do_estado(estado: EstadoMovimento) -> void:
 	garantir_animation_player()
@@ -101,7 +106,6 @@ func tocar_animacao_do_estado(estado: EstadoMovimento) -> void:
 	if animationPlayer.current_animation != nome_da_animacao or not animationPlayer.is_playing():
 		animationPlayer.play(nome_da_animacao)
 		animationPlayer.seek(obter_tempo_inicial_da_animacao(), true)
-
 
 func obter_nome_da_animacao(estado: EstadoMovimento) -> StringName:
 	if cache_nome_animacao_por_estado.has(estado):
@@ -117,7 +121,6 @@ func obter_nome_da_animacao(estado: EstadoMovimento) -> StringName:
 		_:
 			return &"idle_without_item_001"
 
-
 func garantir_animation_player() -> void:
 	if animationPlayer != null:
 		return
@@ -129,7 +132,6 @@ func garantir_animation_player() -> void:
 		return
 	animationPlayer = find_child("AnimationPlayer", true, false) as AnimationPlayer
 
-
 func preparar_cache_de_animacoes() -> void:
 	cache_nome_animacao_por_estado.clear()
 	if animationPlayer == null:
@@ -139,12 +141,10 @@ func preparar_cache_de_animacoes() -> void:
 	cache_nome_animacao_por_estado[EstadoMovimento.IDLE] = resolver_nome_animacao(&"idle_without_item_001")
 	cache_nome_animacao_por_estado[EstadoMovimento.IDLE_COM_ITEM] = resolver_nome_animacao(&"idle_with_item")
 
-
 func obter_tempo_inicial_da_animacao() -> float:
 	if animation_start_fps <= 0.0:
 		return 0.0
 	return max(float(animation_start_frame), 0.0) / animation_start_fps
-
 
 func resolver_nome_animacao(nome_esperado: StringName) -> StringName:
 	if animationPlayer == null:
@@ -161,7 +161,6 @@ func resolver_nome_animacao(nome_esperado: StringName) -> StringName:
 	push_warning("Animation not found in AnimationPlayer: " + nome_esperado_texto)
 	return &""
 
-
 func atualizar_velocidade_da_animacao(estado: EstadoMovimento) -> void:
 	garantir_animation_player()
 	if animationPlayer == null:
@@ -172,7 +171,6 @@ func atualizar_velocidade_da_animacao(estado: EstadoMovimento) -> void:
 		return
 	animationPlayer.speed_scale = 1.0
 
-
 func atualizar_rotacao_do_corpo(direcao: Vector3, delta: float) -> void:
 	if alvo_rotacao_corpo == null:
 		resolver_no_visual_do_corpo()
@@ -181,9 +179,9 @@ func atualizar_rotacao_do_corpo(direcao: Vector3, delta: float) -> void:
 	if direcao.length_squared() <= 0.0001:
 		return
 
-	var angulo_alvo: float = atan2(direcao.x, direcao.z)
+	# The visual model forward is flipped relative to movement, so apply a 180-degree yaw offset.
+	var angulo_alvo: float = atan2(direcao.x, direcao.z) + PI
 	alvo_rotacao_corpo.rotation.y = lerp_angle(alvo_rotacao_corpo.rotation.y, angulo_alvo, velocidade_rotacao_corpo * delta)
-
 
 func resolver_no_visual_do_corpo() -> void:
 	if no_visual_corpo != null:
@@ -193,7 +191,6 @@ func resolver_no_visual_do_corpo() -> void:
 		alvo_rotacao_corpo = animationPlayer.get_parent() as Node3D
 		return
 	alvo_rotacao_corpo = jogador
-
 
 func atualizar_deslocamento_da_mao(input_dir: Vector2, reference_node: Node3D) -> void:
 	if mao_jogador_direcao == null:
@@ -218,7 +215,6 @@ func atualizar_deslocamento_da_mao(input_dir: Vector2, reference_node: Node3D) -
 		posicao_local_inicial_da_mao.z
 	)
 
-
 func atualizar_posicao_visual_do_item(reference_node: Node3D) -> void:
 	if item_visual_na_mao == null:
 		return
@@ -232,7 +228,6 @@ func atualizar_posicao_visual_do_item(reference_node: Node3D) -> void:
 
 	var origem_vertical: Vector3 = jogador.global_position if jogador != null else mao_jogador_direcao.global_position
 	item_visual_na_mao.global_position = origem_vertical + Vector3.UP * deslocamento_item_na_frente_no_idle_com_item
-
 
 func sincronizar_item_visual_na_mao(esta_com_item: bool) -> void:
 	if not esta_com_item:
@@ -248,7 +243,6 @@ func sincronizar_item_visual_na_mao(esta_com_item: bool) -> void:
 		return
 
 	criar_item_visual_na_mao(tipo_item_atual)
-
 
 func criar_item_visual_na_mao(tipo_item: int) -> void:
 	remover_item_visual_na_mao()
@@ -275,13 +269,11 @@ func criar_item_visual_na_mao(tipo_item: int) -> void:
 	item_visual_na_mao = novo_item_visual
 	tipo_item_visual_na_mao = tipo_item
 
-
 func remover_item_visual_na_mao() -> void:
 	if item_visual_na_mao != null:
 		item_visual_na_mao.queue_free()
 		item_visual_na_mao = null
 	tipo_item_visual_na_mao = -1
-
 
 func reduzir_velocidade(percentual: float) -> void:
 	jogador.velocidade_atual *= (1.0 - percentual / 100.0)

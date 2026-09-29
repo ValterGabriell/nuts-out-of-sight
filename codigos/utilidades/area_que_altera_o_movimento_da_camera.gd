@@ -21,27 +21,34 @@ var estado_atual: EstadoArea = EstadoArea.NAO_PASSOU
 
 # Guarda o transform anterior especificamente para esta área
 var transform_pivot_anterior: Transform3D
+var has_previous_pivot_transform: bool = false
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
+	body_exited.connect(_on_body_exited)
+	await get_tree().physics_frame
+	for overlapping_body in get_overlapping_bodies():
+		_on_body_entered(overlapping_body)
 
 func _on_body_entered(body: Node3D) -> void:
 	if not body.is_in_group("Jogador") or camera_pivot == null or nova_posicao_pivot_camera == null:
 		return
+	if estado_atual == EstadoArea.PASSOU_PRA_OUTRA_AREA:
+		return
 
-	match estado_atual:
-		EstadoArea.NAO_PASSOU:
-			# Registra a posição/rotação atual do pivot antes de mudar
-			transform_pivot_anterior = camera_pivot.global_transform
-			
-			# Envia a transição para a câmera informando o ID desta área
-			camera_pivot.aplicar_novo_pivot(id_area, nova_posicao_pivot_camera.global_transform, configuracao)
-			
-			estado_atual = EstadoArea.PASSOU_PRA_OUTRA_AREA
+	# Cache current pivot transform before entering this area.
+	transform_pivot_anterior = camera_pivot.global_transform
+	has_previous_pivot_transform = true
+	camera_pivot.aplicar_novo_pivot(id_area, nova_posicao_pivot_camera.global_transform, configuracao)
+	estado_atual = EstadoArea.PASSOU_PRA_OUTRA_AREA
 
-		EstadoArea.PASSOU_PRA_OUTRA_AREA:
-			# Retorna a câmera ao pivot anterior
-			if transform_pivot_anterior != null:
-				camera_pivot.aplicar_novo_pivot(id_area, transform_pivot_anterior, configuracao)
-			
-			estado_atual = EstadoArea.NAO_PASSOU
+func _on_body_exited(body: Node3D) -> void:
+	if not body.is_in_group("Jogador") or camera_pivot == null:
+		return
+	if estado_atual != EstadoArea.PASSOU_PRA_OUTRA_AREA:
+		return
+	if not has_previous_pivot_transform:
+		return
+
+	camera_pivot.aplicar_novo_pivot(id_area, transform_pivot_anterior, configuracao)
+	estado_atual = EstadoArea.NAO_PASSOU

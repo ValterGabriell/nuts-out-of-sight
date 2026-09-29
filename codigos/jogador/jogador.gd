@@ -11,7 +11,7 @@ enum CenaAtual{
 }
 
 var velocidade_atual: float = VELOCIDADE_PADRAO
-const VELOCIDADE_PADRAO: float = 2
+const VELOCIDADE_PADRAO: float = 4
 const JUMP_VELOCITY = 4.5
 
 @export var camera_pivot: Node3D

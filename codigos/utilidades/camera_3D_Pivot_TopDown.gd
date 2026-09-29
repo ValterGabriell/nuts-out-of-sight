@@ -1,9 +1,16 @@
 extends Node3D
 
+@export var jogador_movimento: JogadorMovimento
+
 var area_ativa_id: String = ""
 var tween_ativo: Tween
 
 func aplicar_novo_pivot(id_area: String, novo_transform: Transform3D, res: AreaQueAlteraOMovimentoCameraRecurso) -> void:
+	# Se o jogador estiver em cutscene, cancela a alteração de câmera da área
+	if jogador_movimento != null and jogador_movimento.em_cutscene:
+		print("Alteração de câmera cancelada devido a cutscene.")
+		return
+
 	area_ativa_id = id_area
 	
 	if tween_ativo and tween_ativo.is_running():

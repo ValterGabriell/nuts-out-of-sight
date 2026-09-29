@@ -25,6 +25,31 @@ shape = SubResource("BoxShape3D_bsnwm")
 [node name="personagem_04" parent="." unique_id=1526473314 instance=ExtResource("2_1baqg")]
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
 
+[node name="Skeleton3D" parent="personagem_04/metarig" parent_id_path=PackedInt32Array(1526473314, 341546681) index="0" unique_id=524994294]
+bones/0/position = Vector3(-0.7017397, 1.7241518, 0.29813194)
+bones/0/rotation = Quaternion(0.06121721, 0.97138226, 0.22843848, -0.022020442)
+bones/1/rotation = Quaternion(0.010365173, -0.030903611, 0.062197126, 0.99753153)
+bones/2/rotation = Quaternion(0.003910501, 0.032691482, 0.0035176883, 0.9994517)
+bones/2/scale = Vector3(0.9999999, 1.0000001, 0.99999994)
+bones/5/position = Vector3(0.034017444, 1.0099, -0.05519998)
+bones/5/rotation = Quaternion(0.12581962, 1.1826194e-07, 1.499887e-08, 0.99205315)
+bones/9/rotation = Quaternion(-0.07746415, 1.2521754e-15, -1.846889e-08, 0.99699515)
+bones/10/rotation = Quaternion(0.0016271502, -1.1920915e-07, 1.9397137e-10, 0.9999987)
+bones/11/rotation = Quaternion(-3.1346886e-08, 0.6969362, 0.7171332, -3.0464044e-08)
+bones/12/rotation = Quaternion(-3.1346886e-08, 0.6969362, 0.7171332, -3.0464044e-08)
+bones/14/position = Vector3(0.019958317, 0.3087148, -0.05401017)
+bones/14/rotation = Quaternion(0.114524655, -0.38001835, -0.5611868, 0.7263192)
+bones/15/rotation = Quaternion(0.21287456, -0.11010288, -0.07885104, 0.9676489)
+bones/16/rotation = Quaternion(0.2134595, 0.0005245576, -0.034799617, 0.9763319)
+bones/17/rotation = Quaternion(-0.022489412, 0.0056558107, -0.16566876, 0.98590887)
+bones/28/rotation = Quaternion(0.9740619, 0.15625311, -0.02592333, 0.1616056)
+bones/29/rotation = Quaternion(0.08643608, 0.013865448, 0.15778099, 0.98358613)
+bones/32/rotation = Quaternion(-1.1064205e-07, 0.9612488, -0.27568233, -3.017518e-07)
+bones/33/rotation = Quaternion(0.97361326, -0.15902454, 0.026383298, 0.1615311)
+bones/34/rotation = Quaternion(0.08639621, -0.014111365, -0.16057947, 0.9831332)
+bones/38/position = Vector3(-0.59443086, 1.5022792, 0.10679833)
+bones/38/rotation = Quaternion(0.03872168, 0.82104266, 0.37773436, 0.42627043)
+
 [node name="Codigos" type="Node3D" parent="." unique_id=1836952779]
 
 [node name="Movimentos" type="Node3D" parent="Codigos" unique_id=741938532 node_paths=PackedStringArray("jogador", "animationPlayer", "mao_jogador_direcao")]

@@ -17,7 +17,7 @@ area_que_os_itens_guardados_spawnam = NodePath("AreaParaGuardarOsItens")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=213039905]
 transform = Transform3D(3.58, 0, 0, 0, 3.58, 0, 0, 0, 3.58, 0, 0, 0)
-billboard = 2
+billboard = 1
 texture_filter = 2
 texture = ExtResource("1_j6kwq")
 

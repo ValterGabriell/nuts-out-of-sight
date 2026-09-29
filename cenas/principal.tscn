@@ -1,9 +1,6 @@
 [gd_scene format=3 uid="uid://c1ayrcp8gpmux"]
 
-[ext_resource type="PackedScene" uid="uid://4jnt4pnkbk5t" path="res://cenas/jogador/jogador.tscn" id="2_j2ut6"]
 [ext_resource type="Script" uid="uid://tc4hgo4rjv41" path="res://codigos/utilidades/camera_3D_Pivot_TopDown.gd" id="2_nprih"]
-[ext_resource type="Texture2D" uid="uid://dtl2cy7wj17oe" path="res://arte/sprites_2d/noz.png" id="3_0cijk"]
-[ext_resource type="Script" uid="uid://dpn3lcrc3pky" path="res://codigos/ui/ui_hud.gd" id="3_vpl54"]
 [ext_resource type="AudioStream" uid="uid://chw0j3ptv6llo" path="res://arte/audio/musicas/Aventura/MusicaGameplay.wav" id="4_eewb4"]
 [ext_resource type="AudioStream" uid="uid://ykqyd0kwd8c6" path="res://arte/audio/musicas/Chase down.wav" id="5_bsnwm"]
 [ext_resource type="PackedScene" uid="uid://dsaca221woyvn" path="res://cenas/outros/estoque.tscn" id="6_8nexe"]
@@ -17,10 +14,19 @@
 [ext_resource type="PackedScene" uid="uid://by60h74njj6os" path="res://cenas/items/noz_pesada.tscn" id="9_sflf3"]
 [ext_resource type="Script" uid="uid://dcdbm4vlhnomj" path="res://codigos/item_que_faz_barulho/movimento_que_modifica_o_item_que_faz_barulho.gd" id="10_eewb4"]
 [ext_resource type="PackedScene" uid="uid://t8emngkvvq8y" path="res://cenas/outros/caverna.tscn" id="14_bsnwm"]
+[ext_resource type="Script" uid="uid://mwk4iw3jok1s" path="res://codigos/jogador/jogador.gd" id="15_7qhmh"]
+[ext_resource type="PackedScene" uid="uid://s486efpneld7" path="res://arte/3d/personagem/personagem_04.glb" id="16_ql7ju"]
+[ext_resource type="Script" uid="uid://ckpla0xf8gils" path="res://codigos/jogador/jogador_movimento.gd" id="17_qfbtr"]
+[ext_resource type="Script" uid="uid://c7rmrprasua8q" path="res://codigos/jogador/largar_itens_coletado_no_inventario.gd" id="18_0swyp"]
 [ext_resource type="Script" uid="uid://cr3yy3klu8o52" path="res://codigos/utilidades/area_que_altera_o_movimento_da_camera.gd" id="18_auskn"]
+[ext_resource type="Script" uid="uid://x81cfquodfv" path="res://codigos/jogador/tocar_audios.gd" id="19_3e1yu"]
+[ext_resource type="AudioStream" uid="uid://bd0gj3wllbpyf" path="res://arte/audio/passos/passo_folha_of.mp3" id="20_j1ylr"]
 [ext_resource type="Script" uid="uid://bjkbmevb7bmws" path="res://codigos/utilidades/recursos/area_que_altera_o_movimento_camera_recurso.gd" id="20_quko3"]
 [ext_resource type="AudioStream" uid="uid://da3a446tgf27n" path="res://arte/audio/musicas/Aventura/Iceyyy.wav" id="20_vum4w"]
+[ext_resource type="AudioStream" uid="uid://c0m61r8jtmspt" path="res://arte/audio/passos/Dirt/Steps_dirt-021.ogg" id="21_lbghw"]
 [ext_resource type="AudioStream" uid="uid://bre8adk7vbyxs" path="res://arte/audio/musicas/Aventura/Title forest.wav" id="21_vum4w"]
+[ext_resource type="AudioStream" uid="uid://smqs3dk3us1v" path="res://arte/audio/passos/Wood/Steps_wood-005.ogg" id="22_80olr"]
+[ext_resource type="Script" uid="uid://lovrdqjqtjck" path="res://cenas/gerenciador_de_cutscene.gd" id="29_ql7ju"]
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_nprih"]
 
@@ -49,16 +55,19 @@ volumetric_fog_length = 307.61
 size = Vector3(39.444336, 1, 71.76822)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_bsnwm"]
-radius = 1.5859375
+radius = 3.8930664
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_qcg16"]
-radius = 2.1738281
+radius = 2.8706055
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_b42ct"]
-radius = 1.4360352
+radius = 4.6088867
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_8nexe"]
-radius = 2.1625977
+radius = 4.986328
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bsnwm"]
+size = Vector3(0.12719727, 0.10986328, 0.10620117)
 
 [sub_resource type="Resource" id="Resource_auskn"]
 script = ExtResource("20_quko3")
@@ -66,14 +75,212 @@ tempo_de_transicao = 6.0
 metadata/_custom_type_script = "uid://bjkbmevb7bmws"
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yf5fn"]
-size = Vector3(4.077881, 1, 9.2734375)
+size = Vector3(16.168762, 1, 19.874935)
+
+[sub_resource type="Animation" id="Animation_xyee1"]
+length = 3.3000000000000003
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TUDO/ItensDeGameplay/Jogador:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.76666665, 3.2750716),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(17.77298, 2.1404524, 15.267807), Vector3(17.77298, 2.1404524, 15.267807), Vector3(17.77298, 2.1404524, 3.3676548)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TUDO/ItensDeGameplay/Jogador:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.76666665, 3.2750716),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, -3.0962088, 0), Vector3(0, -3.0962088, 0), Vector3(0, -3.0962088, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("TUDO/ItensDeGameplay/Jogador/Codigos/Movimentos:em_cutscene")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("TUDO/GerenciadorDeCutsceneInicial/CameraCutScene:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 2.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(14.179951, 3.1442432, 4.2426796), Vector3(19, 13, 5.5)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("TUDO/GerenciadorDeCutsceneInicial/CameraCutScene:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 2.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-1.3089969, 0, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("TUDO/ConfiguracaoGlobal/CameraPivot/CAMERA_PRINCIPAL:current")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 3.2666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("TUDO/GerenciadorDeCutsceneInicial/CameraCutScene:current")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 3.2666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/7/type = "animation"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("TUDO/ItensDeGameplay/Jogador/personagem_04/AnimationPlayer")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"clips": PackedStringArray("run_001", "run_001"),
+"times": PackedFloat32Array(0.9, 2.1)
+}
+
+[sub_resource type="Animation" id="Animation_vum4w"]
+resource_name = "intro"
+length = 8.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TUDO/ItensDeGameplay/Jogador:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3.4937558, 8.417232),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(17.77298, 2.1404524, 15.267807), Vector3(17.77298, 2.1404524, 15.267807), Vector3(17.77298, 2.0841093, 3.8066778)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TUDO/ItensDeGameplay/Jogador:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 3.4937558, 8.417232),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, -3.0962088, 0), Vector3(0, -3.0962088, 0), Vector3(0, -3.0962088, 0)]
+}
+tracks/2/type = "animation"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("TUDO/ItensDeGameplay/Jogador/personagem_04/AnimationPlayer")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"clips": PackedStringArray("run_001", "run_001", "run_001", "run_001"),
+"times": PackedFloat32Array(3.4333334, 4.633333, 5.8333335, 7.195111)
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("TUDO/ItensDeGameplay/Jogador/Codigos/Movimentos:em_cutscene")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 8.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("TUDO/GerenciadorDeCutsceneInicial/CameraCutScene:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 2.0175147, 3.553787),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(14.179951, 3.1442432, 4.2426796), Vector3(14.179951, 8.560099, 8.061451), Vector3(19, 13, 5.5)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("TUDO/GerenciadorDeCutsceneInicial/CameraCutScene:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 3.5167682),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-1.3089969, 0, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("TUDO/ConfiguracaoGlobal/CameraPivot/CAMERA_PRINCIPAL:current")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 8.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("TUDO/GerenciadorDeCutsceneInicial/CameraCutScene:current")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 8.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xyee1"]
+_data = {
+&"RESET": SubResource("Animation_xyee1"),
+&"intro": SubResource("Animation_vum4w")
+}
 
 [node name="Principal" type="Node3D" unique_id=830613941]
 
 [node name="TUDO" type="Node3D" parent="." unique_id=281836022]
-
-[node name="Estoque" parent="TUDO" unique_id=1559190117 instance=ExtResource("6_8nexe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.246403, 2.580751, 29.510536)
 
 [node name="ConfiguracaoGlobal" type="Node3D" parent="TUDO" unique_id=1838621548]
 
@@ -88,45 +295,14 @@ light_energy = 4.195
 light_volumetric_fog_energy = 7.64
 shadow_enabled = true
 
-[node name="CameraPivot" type="Node3D" parent="TUDO/ConfiguracaoGlobal" unique_id=836837572]
-transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 20.678, 17, 12.184)
+[node name="CameraPivot" type="Node3D" parent="TUDO/ConfiguracaoGlobal" unique_id=836837572 node_paths=PackedStringArray("jogador_movimento")]
+transform = Transform3D(1, 0, 0, 0, 0.25881904, 0.96592575, 0, -0.96592575, 0.25881904, 19, 13, 5.5)
 script = ExtResource("2_nprih")
+jogador_movimento = NodePath("../../ItensDeGameplay/Jogador/Codigos/Movimentos")
 
-[node name="Camera3D" type="Camera3D" parent="TUDO/ConfiguracaoGlobal/CameraPivot" unique_id=1995318540]
-projection = 1
-current = true
-size = 15.213
-
-[node name="UI" type="Control" parent="TUDO/ConfiguracaoGlobal" unique_id=1889806707]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="UI_Principal" type="CanvasLayer" parent="TUDO/ConfiguracaoGlobal/UI" unique_id=628400133 node_paths=PackedStringArray("label_quantidade_de_itens_no_inventario")]
-script = ExtResource("3_vpl54")
-label_quantidade_de_itens_no_inventario = NodePath("MarginContainer/HBoxContainer/NumeroDeNozes")
-
-[node name="MarginContainer" type="MarginContainer" parent="TUDO/ConfiguracaoGlobal/UI/UI_Principal" unique_id=1114972702]
-offset_right = 40.0
-offset_bottom = 40.0
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
-
-[node name="HBoxContainer" type="HBoxContainer" parent="TUDO/ConfiguracaoGlobal/UI/UI_Principal/MarginContainer" unique_id=1595241439]
-layout_mode = 2
-
-[node name="SpriteNoz" type="TextureRect" parent="TUDO/ConfiguracaoGlobal/UI/UI_Principal/MarginContainer/HBoxContainer" unique_id=2045882328]
-texture_filter = 1
-layout_mode = 2
-texture = ExtResource("3_0cijk")
-
-[node name="NumeroDeNozes" type="Label" parent="TUDO/ConfiguracaoGlobal/UI/UI_Principal/MarginContainer/HBoxContainer" unique_id=3802231]
-texture_filter = 1
-layout_mode = 2
-text = "0"
+[node name="CAMERA_PRINCIPAL" type="Camera3D" parent="TUDO/ConfiguracaoGlobal/CameraPivot" unique_id=1995318540]
+transform = Transform3D(1, 0, 0, 0, 1.0000002, 0, 0, 0, 1.0000002, 0, 0, 5.5)
+size = 0.984
 
 [node name="MusicaGameplay" type="AudioStreamPlayer" parent="TUDO/ConfiguracaoGlobal" unique_id=903849656]
 stream = ExtResource("4_eewb4")
@@ -269,6 +445,9 @@ transform = Transform3D(0.99944943, 0.033177923, 0, -0.033177923, 0.99944943, 0,
 [node name="Arovre7" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=1111080350 instance=ExtResource("7_b42ct")]
 transform = Transform3D(0.99944943, 0.033177923, 0, -0.033177923, 0.99944943, 0, 0, 0, 1, 13.129042, 1.9978034, -2.4135904)
 
+[node name="Arovre8" parent="TUDO/ConfiguracaoGlobal/Arvores" unique_id=510221508 instance=ExtResource("7_b42ct")]
+transform = Transform3D(0.99944943, 0.033177923, 0, -0.033177923, 0.99944943, 0, 0, 0, 1, 21.963837, 1.9978034, 1.5864096)
+
 [node name="CHAO" type="StaticBody3D" parent="TUDO/ConfiguracaoGlobal" unique_id=1568735328]
 collision_mask = 4
 
@@ -278,161 +457,266 @@ shape = SubResource("BoxShape3D_g4v7s")
 
 [node name="PosicoesCameraPivot" type="Node3D" parent="TUDO/ConfiguracaoGlobal" unique_id=1474081026]
 
-[node name="Caminho" type="Node3D" parent="TUDO/ConfiguracaoGlobal/PosicoesCameraPivot" unique_id=122458148]
-transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 20.678, 17, 36.82905)
+[node name="Principal2" type="Node3D" parent="TUDO/ConfiguracaoGlobal/PosicoesCameraPivot" unique_id=1868714029 node_paths=PackedStringArray("jogador_movimento")]
+transform = Transform3D(1, 0, 0, 0, 0.25881904, 0.96592575, 0, -0.96592575, 0.25881904, 18, 13, 10)
+script = ExtResource("2_nprih")
+jogador_movimento = NodePath("../../../ItensDeGameplay/Jogador/Codigos/Movimentos")
 
-[node name="Estoque" type="Node3D" parent="TUDO/ConfiguracaoGlobal/PosicoesCameraPivot" unique_id=582992377]
-transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 20.678, 17, 50.270493)
+[node name="Estoque2" type="Node3D" parent="TUDO/ConfiguracaoGlobal/PosicoesCameraPivot" unique_id=1436276319 node_paths=PackedStringArray("jogador_movimento")]
+transform = Transform3D(1, 0, 0, 0, 0.25881904, 0.96592575, 0, -0.96592575, 0.25881904, 18, 13, 28.980011)
+script = ExtResource("2_nprih")
+jogador_movimento = NodePath("../../../ItensDeGameplay/Jogador/Codigos/Movimentos")
 
-[node name="Principal" type="Node3D" parent="TUDO/ConfiguracaoGlobal/PosicoesCameraPivot" unique_id=159524136]
-transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 20.678, 17, 12.184)
+[node name="ItensDeGameplay" type="Node3D" parent="TUDO" unique_id=619330658]
 
-[node name="PontosDeSpawn" type="Node3D" parent="TUDO" unique_id=786995392]
+[node name="PontosDeSpawn" type="Node3D" parent="TUDO/ItensDeGameplay" unique_id=786995392]
 
-[node name="PRINCIPAL" type="Node3D" parent="TUDO/PontosDeSpawn" unique_id=1742138887]
+[node name="PRINCIPAL" type="Node3D" parent="TUDO/ItensDeGameplay/PontosDeSpawn" unique_id=1742138887]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88340425, 6.603328)
 
-[node name="Arcores" type="Node3D" parent="TUDO" unique_id=1597569747]
+[node name="Areas" type="Node3D" parent="TUDO/ItensDeGameplay" unique_id=1597569747]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0548005, 0, 0.18327951)
 
-[node name="ItensColetaveis" type="Node3D" parent="TUDO/Arcores" unique_id=262331997]
+[node name="ItensColetaveis" type="Node3D" parent="TUDO/ItensDeGameplay/Areas" unique_id=262331997]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.114479, 0, -4.46729)
 
-[node name="Noz" type="Node3D" parent="TUDO/Arcores/ItensColetaveis" unique_id=999117848]
+[node name="Noz" type="Node3D" parent="TUDO/ItensDeGameplay/Areas/ItensColetaveis" unique_id=999117848]
 
-[node name="Noz" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=2089380860 instance=ExtResource("8_djk5k")]
+[node name="Noz" parent="TUDO/ItensDeGameplay/Areas/ItensColetaveis/Noz" unique_id=2089380860 instance=ExtResource("8_djk5k")]
 transform = Transform3D(2, 0, 0, 0, 1.6036208, 1.195157, 0, -1.195157, 1.6036208, 16.43335, 2.2405007, 7.3781605)
 id_unico_do_item_no_mapa = &"principal_noz_1"
 
-[node name="Noz2" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=532814948 instance=ExtResource("8_djk5k")]
+[node name="Noz2" parent="TUDO/ItensDeGameplay/Areas/ItensColetaveis/Noz" unique_id=532814948 instance=ExtResource("8_djk5k")]
 transform = Transform3D(2, 0, 0, 0, 1.6036208, 1.195157, 0, -1.195157, 1.6036208, 14.186106, 2.2405007, 7.3781605)
 id_unico_do_item_no_mapa = &"principal_noz_1"
 
-[node name="Noz4" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=811081087 instance=ExtResource("8_djk5k")]
+[node name="Noz4" parent="TUDO/ItensDeGameplay/Areas/ItensColetaveis/Noz" unique_id=811081087 instance=ExtResource("8_djk5k")]
 transform = Transform3D(2, 0, 0, 0, 1.6036208, 1.195157, 0, -1.195157, 1.6036208, 16.63896, 2.2405007, 5.451943)
 id_unico_do_item_no_mapa = &"principal_noz_1"
 
-[node name="Noz5" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=1014856503 instance=ExtResource("8_djk5k")]
+[node name="Noz5" parent="TUDO/ItensDeGameplay/Areas/ItensColetaveis/Noz" unique_id=1014856503 instance=ExtResource("8_djk5k")]
 transform = Transform3D(2, 0, 0, 0, 1.6036208, 1.195157, 0, -1.195157, 1.6036208, 26.931902, 2.2405007, 6.220858)
 id_unico_do_item_no_mapa = &"principal_noz_1"
 
-[node name="Noz6" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=888947884 instance=ExtResource("8_djk5k")]
+[node name="Noz6" parent="TUDO/ItensDeGameplay/Areas/ItensColetaveis/Noz" unique_id=888947884 instance=ExtResource("8_djk5k")]
 transform = Transform3D(2, 0, 0, 0, 1.6036208, 1.195157, 0, -1.195157, 1.6036208, 25.464441, 2.2405007, 8.401944)
 id_unico_do_item_no_mapa = &"principal_noz_1"
 
-[node name="Noz3" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=1824542932 instance=ExtResource("9_sflf3")]
+[node name="Noz3" parent="TUDO/ItensDeGameplay/Areas/ItensColetaveis/Noz" unique_id=1824542932 instance=ExtResource("9_sflf3")]
 transform = Transform3D(4, 0, 0, 0, 1.1861145, 3.8200958, 0, -3.8200958, 1.1861145, 18.271017, 2.1885672, 3.0193722)
 id_unico_do_item_no_mapa = &"principal_noz_3"
 
-[node name="Noz7" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=1506976320 instance=ExtResource("9_sflf3")]
+[node name="Noz7" parent="TUDO/ItensDeGameplay/Areas/ItensColetaveis/Noz" unique_id=1506976320 instance=ExtResource("9_sflf3")]
 transform = Transform3D(4, 0, 0, 0, 1.1861145, 3.8200958, 0, -3.8200958, 1.1861145, 26.957865, 2.1885672, 0.18483686)
 id_unico_do_item_no_mapa = &"principal_noz_3"
 
-[node name="Noz8" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=1631108602 instance=ExtResource("9_sflf3")]
+[node name="Noz8" parent="TUDO/ItensDeGameplay/Areas/ItensColetaveis/Noz" unique_id=1631108602 instance=ExtResource("9_sflf3")]
 transform = Transform3D(4, 0, 0, 0, 1.1861145, 3.8200958, 0, -3.8200958, 1.1861145, 26.957865, 2.1885672, 9.515787)
 id_unico_do_item_no_mapa = &"principal_noz_3"
 
-[node name="Noz9" parent="TUDO/Arcores/ItensColetaveis/Noz" unique_id=1960880083 instance=ExtResource("9_sflf3")]
+[node name="Noz9" parent="TUDO/ItensDeGameplay/Areas/ItensColetaveis/Noz" unique_id=1960880083 instance=ExtResource("9_sflf3")]
 transform = Transform3D(4, 0, 0, 0, 1.1861145, 3.8200958, 0, -3.8200958, 1.1861145, 15.417013, 2.1885672, 10.54051)
 id_unico_do_item_no_mapa = &"principal_noz_3"
 
-[node name="AreasDeAparecimentoDasFolhas" type="Node3D" parent="TUDO/Arcores" unique_id=49043212 node_paths=PackedStringArray("areas_de_spawn")]
+[node name="AreasDeAparecimentoDasFolhas" type="Node3D" parent="TUDO/ItensDeGameplay/Areas" unique_id=49043212 node_paths=PackedStringArray("areas_de_spawn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.178925, 2.6106129, 0)
 script = ExtResource("8_k1xmn")
 areas_de_spawn = [NodePath("AreaParaSpawnarOItem"), NodePath("AreaParaSpawnarOItem2"), NodePath("AreaParaSpawnarOItem3"), NodePath("AreaParaSpawnarOItem4")]
 cena_da_folha = ExtResource("9_eewb4")
+offset_vertical_spawn_em_metros = 0.35
 
-[node name="AreaParaSpawnarOItem" type="Area3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas" unique_id=1273190360]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0827179, -1.6197176, -0.86178946)
+[node name="AreaParaSpawnarOItem" type="Area3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas" unique_id=1273190360]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0827179, -1.3, -0.86178946)
 script = ExtResource("9_cfg_area_folha")
 quantidade_inicial_de_folhas = 25
 deslocamento_base_rajada_em_metros = 0.2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem" unique_id=861790661]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem" unique_id=861790661]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9072342, 0.39982176, -1.7939065)
 shape = SubResource("CylinderShape3D_bsnwm")
 debug_color = Color(0, 17.84424, 12.122338, 1)
 
-[node name="AreaParaSpawnarOItem2" type="Area3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas" unique_id=203367934]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.177401, -1.3031564, 4.8143196)
+[node name="AreaParaSpawnarOItem2" type="Area3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas" unique_id=203367934]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.177401, -1.3, 4.8143196)
 script = ExtResource("9_cfg_area_folha")
 quantidade_inicial_de_folhas = 30
 deslocamento_base_rajada_em_metros = 0.2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem2" unique_id=1704221220]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5479331, 0.39982176, -1.7939065)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem2" unique_id=1704221220]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5479336, 0.39982176, -1.7939065)
 shape = SubResource("CylinderShape3D_qcg16")
 debug_color = Color(0, 17.84424, 12.122338, 1)
 
-[node name="AreaParaSpawnarOItem3" type="Area3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas" unique_id=521907719]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.667967, -1.4858251, -3.736943)
+[node name="AreaParaSpawnarOItem3" type="Area3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas" unique_id=521907719]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.667967, -1.3, -3.736943)
 script = ExtResource("9_cfg_area_folha")
 quantidade_inicial_de_folhas = 15
 deslocamento_base_rajada_em_metros = 0.2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem3" unique_id=1096264430]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3384986, 0.39982176, -1.3742943)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem3" unique_id=1096264430]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.338499, 0.39982176, -1.374294)
 shape = SubResource("CylinderShape3D_b42ct")
 debug_color = Color(0, 17.84424, 12.122338, 1)
 
-[node name="AreaParaSpawnarOItem5" type="Area3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas" unique_id=1272823165]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0898552, -1.4858251, 7.9179406)
+[node name="AreaParaSpawnarOItem5" type="Area3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas" unique_id=1272823165]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0898552, -1.3, 7.9179406)
 script = ExtResource("9_cfg_area_folha")
 quantidade_inicial_de_folhas = 15
 deslocamento_base_rajada_em_metros = 0.2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem5" unique_id=61695690]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3384986, 0.39982176, -1.3742943)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem5" unique_id=61695690]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.338499, 0.39982176, -1.3742943)
 shape = SubResource("CylinderShape3D_b42ct")
 debug_color = Color(0, 17.84424, 12.122338, 1)
 
-[node name="AreaParaSpawnarOItem4" type="Area3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas" unique_id=805195242]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9285603, -1.2610779, 2.9755206)
+[node name="AreaParaSpawnarOItem4" type="Area3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas" unique_id=805195242]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.929, -1.3, 2.976)
 script = ExtResource("9_cfg_area_folha")
 quantidade_inicial_de_folhas = 26
 deslocamento_base_rajada_em_metros = 0.2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem4" unique_id=455321383]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem4" unique_id=455321383]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.15063, 0.39982176, -1.2262373)
 shape = SubResource("CylinderShape3D_8nexe")
 debug_color = Color(0, 17.84424, 12.122338, 1)
 
-[node name="MovimentoDoVento" type="Node3D" parent="TUDO/Arcores/AreasDeAparecimentoDasFolhas" unique_id=576326624 node_paths=PackedStringArray("area_aparecimento_das_folhas")]
+[node name="AreaParaSpawnarOItem6" type="Area3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas" unique_id=1183880556]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9516354, -1.3, 6.5803094)
+script = ExtResource("9_cfg_area_folha")
+quantidade_inicial_de_folhas = 26
+deslocamento_base_rajada_em_metros = 0.2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem6" unique_id=698453269]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.150631, 0.39982176, -1.2262373)
+shape = SubResource("CylinderShape3D_8nexe")
+debug_color = Color(0, 17.84424, 12.122338, 1)
+
+[node name="MovimentoDoVento" type="Node3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas" unique_id=576326624 node_paths=PackedStringArray("area_aparecimento_das_folhas")]
 script = ExtResource("10_eewb4")
 area_aparecimento_das_folhas = NodePath("..")
 
-[node name="Jogador" parent="TUDO" unique_id=830939475 groups=["Jogador"] instance=ExtResource("2_j2ut6")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 17.77298, 2.1404524, 6.7894397)
+[node name="Jogador" type="CharacterBody3D" parent="TUDO/ItensDeGameplay" unique_id=830939475 groups=["Jogador"]]
+transform = Transform3D(-1.9979407, 0, -0.09073653, 0, 2, 0, 0.09073653, 0, -1.9979407, 17.77298, 2.1404524, 15.267807)
+collision_layer = 4
+collision_mask = 145
+script = ExtResource("15_7qhmh")
 
-[node name="Caverna" parent="TUDO" unique_id=88113294 instance=ExtResource("14_bsnwm")]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/ItensDeGameplay/Jogador" unique_id=445834647]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008605957, 0.04553923, -0.036942333)
+shape = SubResource("BoxShape3D_bsnwm")
+
+[node name="personagem_04" parent="TUDO/ItensDeGameplay/Jogador" unique_id=1526473314 instance=ExtResource("16_ql7ju")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+
+[node name="Skeleton3D" parent="TUDO/ItensDeGameplay/Jogador/personagem_04/metarig" parent_id_path=PackedInt32Array(1526473314, 341546681) index="0" unique_id=524994294]
+bones/0/position = Vector3(-0.43683335, 1.4637077, 0.077664346)
+bones/0/rotation = Quaternion(0.06341631, 0.15351596, 0.9860054, 0.014302371)
+bones/1/rotation = Quaternion(0.21345955, -0.0005245819, 0.03479958, 0.9763319)
+bones/2/rotation = Quaternion(0.2564308, 0.07074575, -0.03926213, 0.96317023)
+bones/2/scale = Vector3(0.98112553, 0.9811254, 0.98112553)
+bones/5/position = Vector3(0.034017444, 0.96621686, -0.05520004)
+bones/5/rotation = Quaternion(0.32386822, 1.1278417e-07, 3.8608086e-08, 0.9461022)
+bones/9/rotation = Quaternion(-0.06521276, 6.4813e-10, -7.206301e-09, 0.99787146)
+bones/10/rotation = Quaternion(0.016809981, -1.1919247e-07, 2.0039066e-09, 0.9998588)
+bones/11/rotation = Quaternion(-3.1346886e-08, 0.6969362, 0.7171332, -3.0464044e-08)
+bones/12/rotation = Quaternion(-3.1346886e-08, 0.6969362, 0.7171332, -3.0464044e-08)
+bones/14/position = Vector3(0.020302024, 0.19245107, -0.002638896)
+bones/14/rotation = Quaternion(-0.035634097, 0.92997986, -0.22752938, 0.28652766)
+bones/15/rotation = Quaternion(0.17176785, -0.010636658, -0.21713467, 0.9608513)
+bones/16/rotation = Quaternion(0.21345955, 0.0005245634, -0.03479959, 0.9763319)
+bones/17/rotation = Quaternion(0.45848212, -0.025333574, 0.0688842, 0.8856678)
+bones/28/rotation = Quaternion(0.8107108, 0.13004944, -0.090411134, 0.5636142)
+bones/29/rotation = Quaternion(0.38721946, 0.062114917, 0.1457012, 0.9082808)
+bones/33/rotation = Quaternion(0.9056973, -0.1479318, 0.064040035, 0.39208108)
+bones/34/rotation = Quaternion(0.5695637, -0.09302915, -0.13164537, 0.8059853)
+bones/38/position = Vector3(-0.15944397, 1.4995276, 0.11724743)
+bones/38/rotation = Quaternion(-0.30568096, 0.18087618, 0.7333277, 0.5797184)
+
+[node name="Codigos" type="Node3D" parent="TUDO/ItensDeGameplay/Jogador" unique_id=1836952779]
+
+[node name="Movimentos" type="Node3D" parent="TUDO/ItensDeGameplay/Jogador/Codigos" unique_id=741938532 node_paths=PackedStringArray("jogador", "animationPlayer", "mao_jogador_direcao")]
+script = ExtResource("17_qfbtr")
+jogador = NodePath("../..")
+animationPlayer = NodePath("../../personagem_04/AnimationPlayer")
+mao_jogador_direcao = NodePath("MaoJogadorDirecao")
+multiplicador_velocidade_animacao_movimento = 2.0
+em_cutscene = true
+
+[node name="MaoJogadorDirecao" type="Node3D" parent="TUDO/ItensDeGameplay/Jogador/Codigos/Movimentos" unique_id=1488434933]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03845215, 0.029724121)
+
+[node name="LargarItensColetadoNoInventario" type="Node3D" parent="TUDO/ItensDeGameplay/Jogador/Codigos" unique_id=1119924619 node_paths=PackedStringArray("jogador")]
+script = ExtResource("18_0swyp")
+jogador = NodePath("../..")
+
+[node name="TocarAudios" type="Node3D" parent="TUDO/ItensDeGameplay/Jogador/Codigos" unique_id=545630849 node_paths=PackedStringArray("jogador", "audioPassosNaFolha", "audioPassosNaAreia", "audioPassosNaMadeira")]
+script = ExtResource("19_3e1yu")
+jogador = NodePath("../..")
+audioPassosNaFolha = NodePath("../../Audios/PassoNaFolha")
+audioPassosNaAreia = NodePath("../../Audios/PassoNaAreia")
+audioPassosNaMadeira = NodePath("../../Audios/PassosNaMadeira")
+intervalo_passo_folha = 0.35
+
+[node name="Audios" type="Node" parent="TUDO/ItensDeGameplay/Jogador" unique_id=273156684]
+
+[node name="PassoNaFolha" type="AudioStreamPlayer" parent="TUDO/ItensDeGameplay/Jogador/Audios" unique_id=667450290]
+stream = ExtResource("20_j1ylr")
+
+[node name="PassoNaAreia" type="AudioStreamPlayer" parent="TUDO/ItensDeGameplay/Jogador/Audios" unique_id=823634985]
+stream = ExtResource("21_lbghw")
+
+[node name="PassosNaMadeira" type="AudioStreamPlayer" parent="TUDO/ItensDeGameplay/Jogador/Audios" unique_id=1303676957]
+stream = ExtResource("22_80olr")
+volume_db = 15.0
+
+[node name="Caverna" parent="TUDO/ItensDeGameplay" unique_id=88113294 instance=ExtResource("14_bsnwm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.11225, 2.0763779, 0.9729748)
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="TUDO/Caverna" unique_id=482810584]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="TUDO/ItensDeGameplay/Caverna" unique_id=482810584]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18744469, 16.695341, 5.711213)
 stream = ExtResource("20_vum4w")
 volume_db = 80.0
 autoplay = true
 max_distance = 15.87
 
-[node name="AreaQueAlteraOMovimentoDaCamera" type="Area3D" parent="TUDO" unique_id=1229593805 node_paths=PackedStringArray("nova_posicao_pivot_camera", "camera_pivot")]
+[node name="Estoque" parent="TUDO/ItensDeGameplay" unique_id=1559190117 instance=ExtResource("6_8nexe")]
+transform = Transform3D(-0.99997693, 0, -0.0067956797, 0, 1, 0, 0.0067956797, 0, -0.99997693, 16.856663, 2.580751, 26.482578)
+
+[node name="AreaQueAlteraOMovimentoDaCamera" type="Area3D" parent="TUDO/ItensDeGameplay" unique_id=1229593805 node_paths=PackedStringArray("nova_posicao_pivot_camera", "camera_pivot")]
 collision_layer = 16
 collision_mask = 4
 script = ExtResource("18_auskn")
 id_area = "Principal_Caminho"
 configuracao = SubResource("Resource_auskn")
-nova_posicao_pivot_camera = NodePath("../ConfiguracaoGlobal/PosicoesCameraPivot/Caminho")
-camera_pivot = NodePath("../ConfiguracaoGlobal/CameraPivot")
+nova_posicao_pivot_camera = NodePath("../../ConfiguracaoGlobal/PosicoesCameraPivot/Estoque2")
+camera_pivot = NodePath("../../ConfiguracaoGlobal/CameraPivot")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/AreaQueAlteraOMovimentoDaCamera" unique_id=700133874]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.865543, 2.4745984, 13.64515)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/ItensDeGameplay/AreaQueAlteraOMovimentoDaCamera" unique_id=700133874]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.602757, 2.4745984, 24.03612)
 shape = SubResource("BoxShape3D_yf5fn")
 debug_color = Color(17.835724, 0, 0, 0.41960785)
 
-[node name="Audios" type="Node3D" parent="TUDO" unique_id=312291490]
+[node name="Audios" type="Node3D" parent="TUDO/ItensDeGameplay" unique_id=312291490]
 
-[node name="MusicaCabana" type="AudioStreamPlayer3D" parent="TUDO/Audios" unique_id=1773678620]
+[node name="MusicaCabana" type="AudioStreamPlayer3D" parent="TUDO/ItensDeGameplay/Audios" unique_id=1773678620]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.800837, 3.852623, 43.96976)
 stream = ExtResource("21_vum4w")
 volume_db = 30.0
 autoplay = true
 max_distance = 30.0
+
+[node name="GerenciadorDeCutsceneInicial" type="Node3D" parent="TUDO" unique_id=944375742 node_paths=PackedStringArray("cutscene_animation_player", "jogador_movimento")]
+script = ExtResource("29_ql7ju")
+cutscene_animation_player = NodePath("CutsceneInicial")
+jogador_movimento = NodePath("../ItensDeGameplay/Jogador/Codigos/Movimentos")
+
+[node name="CutsceneInicial" type="AnimationPlayer" parent="TUDO/GerenciadorDeCutsceneInicial" unique_id=2101898311]
+root_node = NodePath("../../..")
+libraries/ = SubResource("AnimationLibrary_xyee1")
+autoplay = &"intro"
+
+[node name="CameraCutScene" type="Camera3D" parent="TUDO/GerenciadorDeCutsceneInicial" unique_id=2034025022]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.179951, 3.1442432, 4.2426796)
+current = true
+
+[editable path="TUDO/ItensDeGameplay/Jogador/personagem_04"]
