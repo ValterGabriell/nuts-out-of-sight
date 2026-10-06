@@ -2,6 +2,9 @@ extends Node
 
 signal estoque_atualizado(quantidade_total_de_itens: int)
 
+const CENA_CREDITOS: PackedScene = preload("res://cenas/cena_creditos.tscn")
+const MENSAGEM_DE_VITORIA: String = "OBRIGADO!\n\nE assim, o pequeno esquilo conseguiu a comida suficiente para o inverno..."
+
 var itens_por_tipo: Dictionary = {
 	ItemColetavel.TipoItem.COLETAVEL_NOZ: 0,
 	ItemColetavel.TipoItem.COLETAVEL_NOZ_PESADA: 0
@@ -10,6 +13,7 @@ var itens_por_tipo: Dictionary = {
 var quantidade_total_de_itens: int = 0
 
 const MAX_QUANTIDADE_DE_ITENS: int = 9
+var _creditos_de_vitoria_ja_disparados: bool = false
 
 func _ready() -> void:
 	quantidade_total_de_itens = obter_quantidade_total_de_itens()
@@ -37,6 +41,7 @@ func guardar_itens(itens_para_guardar: Array[int]) -> Array[int]:
 	estoque_atualizado.emit(quantidade_total_de_itens)
 	if quantidade_total_de_itens >= MAX_QUANTIDADE_DE_ITENS:
 		GlobalGerenciadorDeSinais.estoque_atingiu_maximo_pra_aquele_dia.emit()
+		_disparar_creditos_de_vitoria()
 	return itens_guardados
 
 func guardar_item(tipo_item: int) -> bool:
@@ -47,6 +52,9 @@ func guardar_item(tipo_item: int) -> bool:
 	itens_por_tipo[tipo_item] += 1
 	quantidade_total_de_itens = obter_quantidade_total_de_itens()
 	estoque_atualizado.emit(quantidade_total_de_itens)
+	if quantidade_total_de_itens >= MAX_QUANTIDADE_DE_ITENS:
+		GlobalGerenciadorDeSinais.estoque_atingiu_maximo_pra_aquele_dia.emit()
+		_disparar_creditos_de_vitoria()
 	return true
 
 func obter_quantidade_total_de_itens() -> int:
@@ -66,6 +74,7 @@ func limpar_estoque() -> void:
 		ItemColetavel.TipoItem.COLETAVEL_NOZ_PESADA: 0
 	}
 	quantidade_total_de_itens = 0
+	_creditos_de_vitoria_ja_disparados = false
 	estoque_atualizado.emit(quantidade_total_de_itens)
 
 func retornar_itens_guardados() -> Array[int]:
@@ -99,4 +108,20 @@ func carregar_snapshot_do_salvamento(snapshot_do_estoque: Dictionary) -> void:
 		itens_por_tipo[tipo_item] = int(itens_por_tipo_do_salvamento[tipo_item_serializado])
 
 	quantidade_total_de_itens = obter_quantidade_total_de_itens()
+	if quantidade_total_de_itens < MAX_QUANTIDADE_DE_ITENS:
+		_creditos_de_vitoria_ja_disparados = false
 	estoque_atualizado.emit(quantidade_total_de_itens)
+
+func _disparar_creditos_de_vitoria() -> void:
+	if _creditos_de_vitoria_ja_disparados:
+		return
+	_creditos_de_vitoria_ja_disparados = true
+
+	GlobalGerenciadorDeSinais.configurar_contexto_dos_creditos(
+		GlobalGerenciadorDeSinais.ContextoDosCreditos.VITORIA,
+		MENSAGEM_DE_VITORIA,
+		false
+	)
+
+	if GlobalTransicaoDeCena != null and CENA_CREDITOS != null:
+		GlobalTransicaoDeCena.trocar_cena_com_fade(CENA_CREDITOS, "")

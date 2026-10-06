@@ -6,6 +6,11 @@ enum AreaAtualJogador {
 	ESTOQUE,
 }
 
+enum ContextoDosCreditos {
+	GAME_OVER,
+	VITORIA,
+}
+
 
 signal item_adicionado_ao_inventario(quantidadeDeItensNoInventario: int)
 signal velocidade_do_jogador_alterada(percentual_de_reducao: float)
@@ -19,6 +24,9 @@ signal area_atual_do_jogador_alterada(nova_area: AreaAtualJogador)
 signal jogador_entrou_no_estoque()
 
 var area_atual_do_jogador: AreaAtualJogador = AreaAtualJogador.AREA_PRINCIPAL
+var contexto_dos_creditos: ContextoDosCreditos = ContextoDosCreditos.GAME_OVER
+var mensagem_de_abertura_dos_creditos: String = ""
+var _deve_exibir_botao_tentar_novamente_nos_creditos: bool = true
 
 func iniciar_transicao_de_area_com_camera(id_area: String, duracao_movimento_automatico_em_segundos: float) -> void:
 	transicao_de_area_com_camera_iniciada.emit(id_area, max(duracao_movimento_automatico_em_segundos, 0.0))
@@ -39,3 +47,21 @@ func confirmar_entrada_no_estoque_se_estiver_na_area() -> void:
 		return
 	print("Área atual do jogador: ", area_atual_do_jogador)
 	jogador_entrou_no_estoque.emit()
+
+func configurar_contexto_dos_creditos(
+	novo_contexto: ContextoDosCreditos,
+	nova_mensagem_de_abertura: String = "",
+	exibir_botao_tentar_novamente: bool = true
+) -> void:
+	contexto_dos_creditos = novo_contexto
+	mensagem_de_abertura_dos_creditos = nova_mensagem_de_abertura
+	_deve_exibir_botao_tentar_novamente_nos_creditos = exibir_botao_tentar_novamente
+
+func obter_contexto_dos_creditos() -> ContextoDosCreditos:
+	return contexto_dos_creditos
+
+func obter_mensagem_de_abertura_dos_creditos() -> String:
+	return mensagem_de_abertura_dos_creditos
+
+func deve_exibir_botao_tentar_novamente_nos_creditos() -> bool:
+	return _deve_exibir_botao_tentar_novamente_nos_creditos

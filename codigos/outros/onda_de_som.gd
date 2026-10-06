@@ -1,10 +1,10 @@
 extends Node3D
 
 @onready var mesh_instance: MeshInstance3D = $MeshInstance3D 
-@export var duracao_animacao: float = 0.3
+@export var duracao_animacao: float = 0.5
 
 var espessura_anel: float = 0.05
-var raio_maximo_anel_shader: float = 0.45
+var raio_maximo_anel_shader: float = 4.45
 
 func _ready() -> void:
 	animar_onda()

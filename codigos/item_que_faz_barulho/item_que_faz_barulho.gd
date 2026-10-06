@@ -21,6 +21,7 @@ enum EstadoShaderOndaDeSom {
 @export var area_de_propagacao_do_som: Area3D
 @export var area_que_detecta_urso_pra_acordar: AreaQueDetectaUrsoPraAcordar
 @export var raio_maximo_propagacao: float = 5.0
+@export var multiplicador_raio_colisao_som: float = 3.0
 @export var duracao_propagacao: float = 0.6
 @export var raio_minimo_propagacao: float = 0.1
 @export var duracao_minima_propagacao: float = 0.05
@@ -112,7 +113,8 @@ func iniciar_propagacao_fisica(raio_alvo: float, duracao_alvo: float) -> void:
 
 func _obter_raio_propagacao_atual() -> float:
 	var fator_barulho = max(quantidade_de_barulho_em_pixels_em_area_anelar, 0.0)
-	return max(raio_maximo_propagacao * fator_barulho, raio_minimo_propagacao)
+	var raio_base: float = max(raio_maximo_propagacao * fator_barulho, raio_minimo_propagacao)
+	return raio_base * max(multiplicador_raio_colisao_som, 1.0)
 
 func _obter_duracao_propagacao_atual() -> float:
 	var fator_barulho = max(quantidade_de_barulho_em_pixels_em_area_anelar, 0.0)

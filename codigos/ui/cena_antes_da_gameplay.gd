@@ -13,18 +13,24 @@ var opening_fade_overlay: ColorRect
 var skip_dialog: ConfirmationDialog
 var is_skip_dialog_open: bool = false
 var is_transitioning: bool = false
-
 var frases: Array[String] = [
-	"O inverno está chegando",
-	"Dessa vez, eu estou sozinho",
-	"Mas nao tenho medo",
-	"Meus ancioes me ensinaram como coletar as nozes para viver no inverno",
-	"Apenas basta eu coletar com [b][wave][color=#ffb379]A/E[/color][/wave][/b] e entregar no estoque em minha toca",
-	"Basta eu fazer com cuidado para evitar acordar o grande urso da caverna",
-	"[wave]Senão, ele vai me atacar![wave]",
-	"Vou ficar bem..."
-]
 
+"Winter is coming",
+
+"This time, I'm all alone",
+
+"But I'm not afraid",
+
+"My elders taught me how to gather nuts to survive the winter",
+
+"I just need to collect them with [b][wave][color=#ffb379]A/E[/color][/wave][/b] and store them in my burrow",
+
+"I just need to be careful not to wake the big bear in the cave",
+
+"[wave]Otherwise, he'll attack me![wave]",
+
+"I'll be fine..."
+]
 func _ready() -> void:
 	setup_opening_fade_overlay()
 	setup_skip_dialog()

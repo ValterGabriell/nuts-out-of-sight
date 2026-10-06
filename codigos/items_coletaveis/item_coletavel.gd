@@ -14,6 +14,7 @@ enum EstadoItem {
 @export var label_acao: Label3D
 @export var percentual_reducao_velocidade: float = 0.0
 @export var id_unico_do_item_no_mapa: StringName
+@export var velocidade_rotacao_no_mundo_em_graus: float = 90.0
 
 var _jogador: Jogador = null
 var _estado_item: EstadoItem = EstadoItem.NO_MUNDO
@@ -39,6 +40,12 @@ func _on_body_exited(body: Node3D) -> void:
 	if body is Jogador:
 		_jogador = null
 		label_acao.visible = false
+
+func _process(delta: float) -> void:
+	if not _deve_girar_no_mundo():
+		return
+
+	rotate_y(deg_to_rad(velocidade_rotacao_no_mundo_em_graus) * delta)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if _jogador and _estado_item == EstadoItem.NO_MUNDO and event.is_action_pressed("interagir"):
@@ -71,4 +78,17 @@ func largar_na_posicao(posicao_global: Vector3) -> void:
 	collision_layer = _camada_colisao_original
 	collision_mask = _mascara_colisao_original
 	set_process_unhandled_input(true)
+
+func _deve_girar_no_mundo() -> bool:
+	if _estado_item != EstadoItem.NO_MUNDO:
+		return false
+
+	if not visible:
+		return false
+
+	# Itens visuais na mao do jogador sao instanciados com monitoramento desligado.
+	if not monitoring or not monitorable:
+		return false
+
+	return true
  

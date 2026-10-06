@@ -35,6 +35,37 @@ func _ready() -> void:
 		get_tree().scene_changed.connect(_ao_trocar_de_cena_para_restaurar_urso)
 	super._ready()
 
+func apagar_save_e_reiniciar_progresso() -> void:
+	ids_de_itens_coletados.clear()
+	itens_dropados_por_cena.clear()
+	sequencial_id_item_dropado = 0
+
+	snapshots_de_folhas_por_cena.clear()
+	registros_do_urso_por_cena.clear()
+	snapshots_da_caverna_por_cena.clear()
+
+	if GlobalItensQueOJogadorCarrega != null:
+		GlobalItensQueOJogadorCarrega.remover_todos_itens_do_inventario()
+	if GlobalEstoque != null:
+		GlobalEstoque.limpar_estoque()
+	if GlobalGerenciadorDeFase != null:
+		GlobalGerenciadorDeFase.fase_atual = GlobalGerenciadorDeFase.FasesRodada.PRIMEIRA
+	if GlobalGerenciadorDeSinais != null:
+		GlobalGerenciadorDeSinais.configurar_contexto_dos_creditos(
+			GlobalGerenciadorDeSinais.ContextoDosCreditos.GAME_OVER,
+			"",
+			true
+		)
+		GlobalGerenciadorDeSinais.item_adicionado_ao_inventario.emit(0)
+		GlobalGerenciadorDeSinais.velocidade_do_jogador_resetada.emit()
+
+	if FileAccess.file_exists(CAMINHO_DO_ARQUIVO_DE_SALVAMENTO):
+		var resultado_remocao: Error = DirAccess.remove_absolute(CAMINHO_DO_ARQUIVO_DE_SALVAMENTO)
+		if resultado_remocao != OK:
+			push_warning("Nao foi possivel apagar o arquivo de salvamento: %s" % CAMINHO_DO_ARQUIVO_DE_SALVAMENTO)
+
+	estado_do_arquivo_de_salvamento = EstadoDoArquivoDeSalvamento.CARREGADO
+
 
 func salvar_jogo(motivo_do_salvamento: MotivoDeSalvamento) -> void:
 	if deve_persistir_posicao_das_folhas:
