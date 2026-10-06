@@ -7,6 +7,11 @@ enum EstadoMovimento {
 	IDLE_COM_ITEM
 }
 
+enum EstadoControleDoJogador {
+	CONTROLE_DO_JOGADOR,
+	MOVIMENTO_AUTOMATICO_NA_TRANSICAO
+}
+
 @export var jogador: Jogador
 @export var animationPlayer: AnimationPlayer
 @export var no_visual_corpo: Node3D
@@ -27,6 +32,10 @@ var tipo_item_visual_na_mao: int = -1
 var posicao_local_inicial_da_mao: Vector3 = Vector3.ZERO
 var cache_nome_animacao_por_estado: Dictionary = {}
 var alvo_rotacao_corpo: Node3D
+var estado_controle: EstadoControleDoJogador = EstadoControleDoJogador.CONTROLE_DO_JOGADOR
+var ultima_direcao_de_movimento: Vector3 = Vector3.FORWARD
+var direcao_automatica: Vector3 = Vector3.ZERO
+var token_do_movimento_automatico: int = 0
 
 func _ready() -> void:
 	garantir_animation_player()
@@ -34,6 +43,7 @@ func _ready() -> void:
 	preparar_cache_de_animacoes()
 	GlobalGerenciadorDeSinais.velocidade_do_jogador_alterada.connect(reduzir_velocidade)
 	GlobalGerenciadorDeSinais.velocidade_do_jogador_resetada.connect(resetar_velocidade)
+	GlobalGerenciadorDeSinais.transicao_de_area_com_camera_iniciada.connect(_on_transicao_de_area_com_camera_iniciada)
 	if mao_jogador_direcao != null:
 		posicao_local_inicial_da_mao = mao_jogador_direcao.position
 
@@ -45,10 +55,12 @@ func _physics_process(delta: float) -> void:
 	if not jogador.is_on_floor():
 		jogador.velocity += jogador.get_gravity() * delta
 
-	if Input.is_action_just_pressed("ui_accept") and jogador.is_on_floor():
+	if estado_controle == EstadoControleDoJogador.CONTROLE_DO_JOGADOR and Input.is_action_just_pressed("ui_accept") and jogador.is_on_floor():
 		jogador.velocity.y = Jogador.JUMP_VELOCITY
 
-	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	var input_dir: Vector2 = Vector2.ZERO
+	if estado_controle == EstadoControleDoJogador.CONTROLE_DO_JOGADOR:
+		input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	var reference_node: Node3D = jogador.camera_pivot if jogador.camera_pivot != null else jogador
 	var basis := reference_node.global_transform.basis
 	var camera_forward := basis.z
@@ -57,9 +69,16 @@ func _physics_process(delta: float) -> void:
 	var camera_right := basis.x
 	camera_right.y = 0.0
 	camera_right = camera_right.normalized()
-	# Input axes are inverted in this setup, so flip both components before applying movement.
-	var corrected_input_dir: Vector2 = -input_dir
-	var direction := (camera_right * corrected_input_dir.x + camera_forward * corrected_input_dir.y).normalized()
+
+	var direction: Vector3 = Vector3.ZERO
+	if estado_controle == EstadoControleDoJogador.MOVIMENTO_AUTOMATICO_NA_TRANSICAO:
+		direction = _obter_direcao_automatica(reference_node)
+	else:
+		# Input axes are inverted in this setup, so flip both components before applying movement.
+		var corrected_input_dir: Vector2 = -input_dir
+		direction = (camera_right * corrected_input_dir.x + camera_forward * corrected_input_dir.y).normalized()
+		if direction.length_squared() > 0.0001:
+			ultima_direcao_de_movimento = direction
 	
 	atualizar_rotacao_do_corpo(direction, delta)
 	if direction:
@@ -280,3 +299,50 @@ func reduzir_velocidade(percentual: float) -> void:
 
 func resetar_velocidade() -> void:
 	jogador.velocidade_atual = jogador.VELOCIDADE_PADRAO
+
+func _on_transicao_de_area_com_camera_iniciada(_id_area: String, duracao_movimento_automatico_em_segundos: float) -> void:
+	estado_controle = EstadoControleDoJogador.MOVIMENTO_AUTOMATICO_NA_TRANSICAO
+	direcao_automatica = _obter_direcao_automatica_inicial()
+ 
+	token_do_movimento_automatico += 1
+	var token_atual: int = token_do_movimento_automatico
+	var duracao_final: float = max(duracao_movimento_automatico_em_segundos, 0.0)
+	if duracao_final <= 0.0:
+		encerrar_movimento_automatico_e_restaurar_controle(token_atual)
+		return
+
+	encerrar_movimento_automatico_e_restaurar_controle_apos_duracao(token_atual, duracao_final)
+
+func encerrar_movimento_automatico_e_restaurar_controle_apos_duracao(token: int, duracao_em_segundos: float) -> void:
+	await get_tree().create_timer(duracao_em_segundos).timeout
+	encerrar_movimento_automatico_e_restaurar_controle(token)
+
+func encerrar_movimento_automatico_e_restaurar_controle(token: int) -> void:
+	if token != token_do_movimento_automatico:
+		return
+
+	estado_controle = EstadoControleDoJogador.CONTROLE_DO_JOGADOR
+	direcao_automatica = Vector3.ZERO
+	GlobalGerenciadorDeSinais.confirmar_entrada_no_estoque_se_estiver_na_area()
+
+func _obter_direcao_automatica(reference_node: Node3D) -> Vector3:
+	if direcao_automatica.length_squared() > 0.0001:
+		return direcao_automatica
+
+	var direcao_base: Vector3 = _obter_direcao_automatica_inicial()
+	if direcao_base.length_squared() <= 0.0001 and reference_node != null:
+		direcao_base = -reference_node.global_transform.basis.z
+
+	direcao_base.y = 0.0
+	direcao_automatica = direcao_base.normalized()
+	return direcao_automatica
+
+func _obter_direcao_automatica_inicial() -> Vector3:
+	var direcao_pela_velocidade: Vector3 = Vector3(jogador.velocity.x, 0.0, jogador.velocity.z)
+	if direcao_pela_velocidade.length_squared() > 0.0001:
+		return direcao_pela_velocidade.normalized()
+
+	if ultima_direcao_de_movimento.length_squared() > 0.0001:
+		return ultima_direcao_de_movimento.normalized()
+
+	return Vector3.ZERO

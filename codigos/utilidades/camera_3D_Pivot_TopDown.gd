@@ -5,6 +5,9 @@ extends Node3D
 var area_ativa_id: String = ""
 var tween_ativo: Tween
 
+func area_ativa_corresponde(id_area: String) -> bool:
+	return area_ativa_id == id_area
+
 func aplicar_novo_pivot(id_area: String, novo_transform: Transform3D, res: AreaQueAlteraOMovimentoCameraRecurso) -> void:
 	# Se o jogador estiver em cutscene, cancela a alteração de câmera da área
 	if jogador_movimento != null and jogador_movimento.em_cutscene:

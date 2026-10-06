@@ -26,6 +26,8 @@ GlobalGerenciadorDeBarulho="*res://codigos/global/global_gerenciador_de_barulho.
 GlobalInicializacaoMapa="*res://codigos/global/global_inicializacao_mapa.gd"
 GlobalGerenciadorDeQuantidadeDeFolhasNasAreas="*res://codigos/global/global_gerenciador_de_quantidade_de_folhas_nas_areas.gd"
 GlobalGerenciadorDeFase="*res://codigos/global/global_gerenciador_de_fase.gd"
+Signal_Debugger="*uid://bs77j6tmhma40"
+SceneManager="*uid://j20v4cg7v8m1"
 
 [display]
 
@@ -37,7 +39,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/anthonyec.camera_preview/plugin.cfg")
+enabled=PackedStringArray("res://addons/SignalVisualizer/plugin.cfg", "res://addons/anthonyec.camera_preview/plugin.cfg", "res://addons/scene_manager/plugin.cfg")
 
 [input]
 

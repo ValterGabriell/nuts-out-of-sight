@@ -9,7 +9,7 @@ var itens_por_tipo: Dictionary = {
 
 var quantidade_total_de_itens: int = 0
 
-const MAX_QUANTIDADE_DE_ITENS: int = 4
+const MAX_QUANTIDADE_DE_ITENS: int = 9
 
 func _ready() -> void:
 	quantidade_total_de_itens = obter_quantidade_total_de_itens()
