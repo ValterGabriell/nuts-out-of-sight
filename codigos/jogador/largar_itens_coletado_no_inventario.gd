@@ -6,6 +6,8 @@ extends Node3D
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if 1==1:
+		return;
 	if not event.is_action_pressed("largar_itens"):
 		return
 	if jogador == null:
