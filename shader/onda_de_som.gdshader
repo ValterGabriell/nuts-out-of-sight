@@ -4,7 +4,7 @@ render_mode unshaded, blend_add, depth_draw_never;
 uniform vec4 cor_som : source_color = vec4(1.0, 0.8, 0.2, 1.0);
 uniform float progresso : hint_range(0.0, 1.0) = 0.0; 
 uniform float espessura : hint_range(0.01, 0.2) = 0.05;
-uniform float raio_maximo_anel : hint_range(0.05, 0.5) = 0.45;
+uniform float raio_maximo_anel : hint_range(0.05, 0.5) = 4.45;
 
 void fragment() {
     // Normaliza UV para o centro (de -0.5 a 0.5)

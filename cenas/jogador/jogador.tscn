@@ -10,7 +10,7 @@
 [ext_resource type="AudioStream" uid="uid://smqs3dk3us1v" path="res://arte/audio/passos/Wood/Steps_wood-005.ogg" id="9_1baqg"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bsnwm"]
-size = Vector3(0.12719727, 0.10986328, 0.10620117)
+size = Vector3(0.08517456, 0.10986328, 0.10620117)
 
 [node name="Jogador" type="CharacterBody3D" unique_id=830939475]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
@@ -19,7 +19,7 @@ collision_mask = 657
 script = ExtResource("1_ismvl")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=445834647]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008605957, 0.04553923, -0.036942333)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0048065186, 0.04553923, -0.036942333)
 shape = SubResource("BoxShape3D_bsnwm")
 
 [node name="personagem_04" parent="." unique_id=1526473314 instance=ExtResource("2_1baqg")]

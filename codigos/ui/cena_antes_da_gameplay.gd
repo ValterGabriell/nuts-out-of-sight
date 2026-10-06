@@ -15,17 +15,15 @@ var is_skip_dialog_open: bool = false
 var is_transitioning: bool = false
 var frases: Array[String] = [
 
-"Winter is coming",
-
-"This time, I'm all alone",
+"Winter is coming and this time, I'm all alone",
 
 "But I'm not afraid",
 
 "My elders taught me how to gather nuts to survive the winter",
 
-"I just need to collect them with [b][wave][color=#ffb379]A/E[/color][/wave][/b] and store them in my burrow",
+"I just need to collect them with [b][wave][color=#ffb379]F[/color][/wave][/b] and store them in my burrow with [b][wave][color=#ffb379]F[/color][/wave][/b] too",
 
-"I just need to be careful not to wake the big bear in the cave",
+"I just have to be careful not to wake the big bear in the cave and understand that they change places with each trip to the stock",
 
 "[wave]Otherwise, he'll attack me![wave]",
 

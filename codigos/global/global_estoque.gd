@@ -3,7 +3,7 @@ extends Node
 signal estoque_atualizado(quantidade_total_de_itens: int)
 
 const CENA_CREDITOS: PackedScene = preload("res://cenas/cena_creditos.tscn")
-const MENSAGEM_DE_VITORIA: String = "OBRIGADO!\n\nE assim, o pequeno esquilo conseguiu a comida suficiente para o inverno..."
+const MENSAGEM_DE_VITORIA: String = "THANK YOU!\n\nAnd so, the little squirrel gathered enough food for the winter..."
 
 var itens_por_tipo: Dictionary = {
 	ItemColetavel.TipoItem.COLETAVEL_NOZ: 0,
@@ -12,7 +12,7 @@ var itens_por_tipo: Dictionary = {
 
 var quantidade_total_de_itens: int = 0
 
-const MAX_QUANTIDADE_DE_ITENS: int = 9
+const MAX_QUANTIDADE_DE_ITENS: int = 6
 var _creditos_de_vitoria_ja_disparados: bool = false
 
 func _ready() -> void:

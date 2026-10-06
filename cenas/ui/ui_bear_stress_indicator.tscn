@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://ccp87jibs6573"]
+
+[ext_resource type="Script" uid="uid://cd2nncnkc6a0" path="res://codigos/ui/ui_bear_stress_indicator.gd" id="1_script"]
+
+[node name="UIBearStressIndicator" type="CanvasLayer" unique_id=850804567 node_paths=PackedStringArray("stress_label", "stress_bar")]
+layer = 10
+script = ExtResource("1_script")
+stress_label = NodePath("MarginContainer/VBoxContainer/StressLabel")
+stress_bar = NodePath("MarginContainer/VBoxContainer/StressBar")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1578232851]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -420.0
+offset_bottom = 70.0
+grow_horizontal = 0
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1852772288]
+layout_mode = 2
+
+[node name="StressLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=192777134]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+text = "Bear Noise Stress Level: 0 / 100"
+horizontal_alignment = 2
+
+[node name="StressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer" unique_id=756695373]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+show_percentage = false

@@ -2,8 +2,8 @@ extends Control
 
 
 @export var texto_label: RichTextLabel
-@export var tempo_por_caractere: float = 0.05
-@export var tempo_pausa_entre_frases: float = 1.5
+@export var tempo_por_caractere: float = 0.02
+@export var tempo_pausa_entre_frases: float = 0.8
 @export var audioVento: AudioStreamPlayer
 @export var opening_fade_duration: float = 0.8
 

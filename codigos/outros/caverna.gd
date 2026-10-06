@@ -5,7 +5,7 @@ const LIMITE_DE_BARULHO :float = 100.0
 const CAMINHO_AUDIO_ALERTA_CAVERNA: String = "res://arte/audio/sfx/urso_gritando.mp3"
 const CENA_CREDITOS: PackedScene = preload("res://cenas/cena_creditos.tscn")
 const MENSAGEM_DE_GAME_OVER: String = "The bear woke up.\n\nTRY AGAIN"
-const EXPOENTE_DA_CURVA_DE_TREMOR: float = 4.0
+const EXPOENTE_DA_CURVA_DE_TREMOR: float = 1.5
 
 enum EstadoDaSequenciaDeRugido {
 	OCIOSO,
@@ -14,21 +14,18 @@ enum EstadoDaSequenciaDeRugido {
 
 @export var audio_alerta_caverna: AudioStreamPlayer
 @export var olhos_luminosos: Node3D
-@export var particulas_de_vento: GPUParticles3D
-@export var duracao_do_tremor_em_segundos: float = 0.65
-@export var intensidade_do_tremor: float = 0.55
 @export var distancia_do_arremesso_em_metros: float = 3.8
 @export var duracao_do_arremesso_em_segundos: float = 2.5
 @export var atraso_antes_da_transicao_em_segundos: float = 3.35
 @export var nome_da_area_de_spawn_na_cabana: String = "CABANA"
 @export var distancia_minima_do_drop_em_metros: float = 1.0
 @export var distancia_maxima_do_drop_em_metros: float = 1.8
-@export var taxa_de_reducao_de_barulho_por_segundo: float = 9.0
+@export var taxa_de_reducao_de_barulho_por_segundo: float = 0.0
 @export var limiar_minimo_para_inquietacao_visual: float = 1.0
-@export var intensidade_maxima_do_tremor_local: float = 0.25
-@export var frequencia_do_tremor_local: float = 11.0
-@export var duracao_do_tremor_camera_por_estagio: float = 0.30
-@export var intervalo_minimo_entre_tremores_de_estagio: float = 0.2
+@export var intensidade_maxima_do_tremor_local: float = 0.12
+@export var frequencia_do_tremor_local: float = 5.0
+@export var camera_shake_max_amplitude: float = 0.1
+@export var camera_shake_cap_stress_level: float = 20.0
 
 var percentual_de_barulho_atual: float = 0.0
 var estado_da_sequencia_de_rugido: EstadoDaSequenciaDeRugido = EstadoDaSequenciaDeRugido.OCIOSO
@@ -36,8 +33,6 @@ var _posicao_local_inicial_da_caverna: Vector3 = Vector3.ZERO
 var _escala_inicial_olhos: Vector3 = Vector3.ONE
 var _intensidade_visual_inercial: float = 0.0
 var _tempo_feedback_inquietacao: float = 0.0
-var _ultimo_estagio_de_alerta_emitido: int = -1
-var _tempo_desde_ultimo_tremor_de_estagio: float = 999.0
 
 
 func _ready() -> void:
@@ -46,15 +41,11 @@ func _ready() -> void:
 	if olhos_luminosos != null:
 		olhos_luminosos.visible = false
 		_escala_inicial_olhos = olhos_luminosos.scale
-	if particulas_de_vento != null:
-		particulas_de_vento.emitting = false
-		particulas_de_vento.visible = false
 	_posicao_local_inicial_da_caverna = position
 	_restaurar_snapshot_da_caverna_da_cena_atual()
 
 func _process(delta: float) -> void:
 	_tempo_feedback_inquietacao += delta
-	_tempo_desde_ultimo_tremor_de_estagio += delta
 
 	if estado_da_sequencia_de_rugido == EstadoDaSequenciaDeRugido.EXECUTANDO:
 		# Durante o rugido final, mantem a caverna no pico de inquietacao visual.
@@ -105,7 +96,6 @@ func _iniciar_sequencia_de_rugido_da_caverna() -> void:
 	estado_da_sequencia_de_rugido = EstadoDaSequenciaDeRugido.EXECUTANDO
 	_tocar_audio_alerta_caverna()
 	_ativar_efeitos_visuais_da_caverna()
-	_aplicar_tremor_de_camera()
 	GlobalGerenciadorDeSinais.configurar_contexto_dos_creditos(
 		GlobalGerenciadorDeSinais.ContextoDosCreditos.GAME_OVER,
 		MENSAGEM_DE_GAME_OVER,
@@ -121,29 +111,16 @@ func _ativar_efeitos_visuais_da_caverna() -> void:
 	if olhos_luminosos != null:
 		olhos_luminosos.visible = true
 
-	if particulas_de_vento != null:
-		particulas_de_vento.visible = true
-		particulas_de_vento.restart()
-		particulas_de_vento.emitting = true
 
-func _aplicar_tremor_de_camera() -> void:
-	var camera_node: Node = _obter_no_camera_da_cena()
-	if camera_node == null:
+func _apply_camera_shake(intensity: float) -> void:
+	var camera: Camera3D = get_viewport().get_camera_3d()
+	if camera == null:
 		return
 
-	if camera_node.has_method("executar_tremor"):
-		camera_node.call("executar_tremor", duracao_do_tremor_em_segundos, intensidade_do_tremor)
-
-func _obter_no_camera_da_cena() -> Node:
-	var cena_atual: Node = get_tree().current_scene
-	if cena_atual == null:
-		return null
-
-	var camera_direta: Node = cena_atual.get_node_or_null("TUDO/ConfiguracaoGlobal/Camera")
-	if camera_direta != null:
-		return camera_direta
-
-	return cena_atual.find_child("Camera", true, false)
+	var capped_intensity: float = minf(intensity, camera_shake_cap_stress_level / LIMITE_DE_BARULHO)
+	var amplitude: float = camera_shake_max_amplitude * pow(capped_intensity, EXPOENTE_DA_CURVA_DE_TREMOR)
+	camera.h_offset = randf_range(-amplitude, amplitude)
+	camera.v_offset = randf_range(-amplitude, amplitude)
 
 func _obter_jogador_da_cena() -> Jogador:
 	var cena_atual: Node = get_tree().current_scene
@@ -298,8 +275,7 @@ func _atualizar_feedback_visual_da_inquietacao(delta: float) -> void:
 
 	_aplicar_tremor_local_da_caverna(intensidade_normalizada)
 	_atualizar_olhos_luminosos(intensidade_normalizada)
-	_atualizar_particulas_de_vento(intensidade_normalizada)
-	_aplicar_tremor_de_camera_por_estagio(intensidade_normalizada)
+	_apply_camera_shake(intensidade_alvo)
 
 func _aplicar_tremor_local_da_caverna(intensidade_normalizada: float) -> void:
 	var amplitude: float = intensidade_maxima_do_tremor_local * pow(intensidade_normalizada, EXPOENTE_DA_CURVA_DE_TREMOR)
@@ -321,55 +297,13 @@ func _atualizar_olhos_luminosos(intensidade_normalizada: float) -> void:
 	var pulsacao: float = 1.0 + (0.32 * intensidade_normalizada * (0.5 + 0.5 * sin(_tempo_feedback_inquietacao * 11.0)))
 	olhos_luminosos.scale = _escala_inicial_olhos * pulsacao
 
-func _atualizar_particulas_de_vento(intensidade_normalizada: float) -> void:
-	if particulas_de_vento == null:
-		return
-
-	particulas_de_vento.visible = true
-	particulas_de_vento.emitting = true
-	particulas_de_vento.amount_ratio = clampf(0.25 + (intensidade_normalizada * 0.75), 0.25, 1.0)
-
-func _aplicar_tremor_de_camera_por_estagio(intensidade_normalizada: float) -> void:
-	var estagio_atual: int = int(floor(intensidade_normalizada * 6.0))
-	estagio_atual = clampi(estagio_atual, 0, 5)
-	if estagio_atual <= 0:
-		_ultimo_estagio_de_alerta_emitido = 0
-		return
-
-	if estagio_atual < _ultimo_estagio_de_alerta_emitido:
-		_ultimo_estagio_de_alerta_emitido = estagio_atual
-
-	var intervalo_dinamico: float = lerpf(
-		max(intervalo_minimo_entre_tremores_de_estagio * 2.25, 0.05),
-		max(intervalo_minimo_entre_tremores_de_estagio, 0.05),
-		intensidade_normalizada
-	)
-	var avancou_de_estagio: bool = estagio_atual > _ultimo_estagio_de_alerta_emitido
-	if not avancou_de_estagio and _tempo_desde_ultimo_tremor_de_estagio < intervalo_dinamico:
-		return
-
-	_ultimo_estagio_de_alerta_emitido = estagio_atual
-	_tempo_desde_ultimo_tremor_de_estagio = 0.0
-	var intensidade_tremor_estagio: float = lerpf(0.03, 0.55, pow(intensidade_normalizada, EXPOENTE_DA_CURVA_DE_TREMOR))
-	if avancou_de_estagio:
-		intensidade_tremor_estagio *= 1.0 + (float(estagio_atual) * 0.08)
-	intensidade_tremor_estagio = clampf(intensidade_tremor_estagio, 0.03, 0.9)
-	var duracao_tremor: float = lerpf(0.12, duracao_do_tremor_camera_por_estagio, intensidade_normalizada)
-
-	var camera_node: Node = _obter_no_camera_da_cena()
-	if camera_node != null and camera_node.has_method("executar_tremor"):
-		camera_node.call("executar_tremor", duracao_tremor, intensidade_tremor_estagio)
 
 func _resetar_feedback_visual_da_inquietacao() -> void:
 	position = _posicao_local_inicial_da_caverna
 	_intensidade_visual_inercial = 0.0
-	_ultimo_estagio_de_alerta_emitido = -1
+	_apply_camera_shake(0.0)
 
 	if olhos_luminosos != null:
 		olhos_luminosos.visible = false
 		olhos_luminosos.scale = _escala_inicial_olhos
 
-	if particulas_de_vento != null:
-		particulas_de_vento.emitting = false
-		particulas_de_vento.visible = false
-		particulas_de_vento.amount_ratio = 0.0

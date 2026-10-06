@@ -16,7 +16,7 @@ enum EstadoShaderOndaDeSom {
 
 @export var tipoDoItem: ItemTipo = ItemTipo.FOLHA
 @export var tipoDeAreaDePropagacaoDoSom: TipoDeAreaDePropagacaoDoSom = TipoDeAreaDePropagacaoDoSom.CILINDRICA
-@export var quantidade_de_barulho_em_pixels_em_area_anelar: float = 1.0
+@export var quantidade_de_barulho_em_pixels_em_area_anelar: float = 3.0
 @export var cena_onda_de_som: PackedScene
 @export var area_de_propagacao_do_som: Area3D
 @export var area_que_detecta_urso_pra_acordar: AreaQueDetectaUrsoPraAcordar

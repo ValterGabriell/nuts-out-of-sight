@@ -1,12 +1,14 @@
 [gd_scene format=3 uid="uid://dsaca221woyvn"]
 
 [ext_resource type="Script" uid="uid://c23nhs6jp4u72" path="res://codigos/outros/estoque.gd" id="1_flglf"]
-[ext_resource type="Texture2D" uid="uid://c0s31ry0xmj1e" path="res://arte/sprites_2d/estoque.png" id="1_j6kwq"]
+[ext_resource type="PackedScene" uid="uid://cc5txq3unbahi" path="res://arte/3d/estoque.glb" id="2_poaa8"]
 [ext_resource type="Script" uid="uid://cdg64hev0d0xv" path="res://codigos/outros/area_para_guardar_os_itens.gd" id="3_dkidg"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_g4v7s"]
+size = Vector3(6.539116, 2.3708496, 5.5527496)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yf5fn"]
+size = Vector3(0.27545166, 1, 0.2856903)
 
 [node name="Estoque" type="Area3D" unique_id=1559190117 node_paths=PackedStringArray("itens_no_estoque_label", "area_que_os_itens_guardados_spawnam")]
 collision_layer = 32
@@ -15,13 +17,10 @@ script = ExtResource("1_flglf")
 itens_no_estoque_label = NodePath("ItensNoEstoque")
 area_que_os_itens_guardados_spawnam = NodePath("AreaParaGuardarOsItens")
 
-[node name="Sprite3D" type="Sprite3D" parent="." unique_id=213039905]
-transform = Transform3D(3.58, 0, 0, 0, 3.58, 0, 0, 0, 3.58, 0, 0, 0)
-billboard = 1
-texture_filter = 2
-texture = ExtResource("1_j6kwq")
+[node name="estoque" parent="." unique_id=416227353 instance=ExtResource("2_poaa8")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1830017500]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0038642883, 0.08068848, 0.30576324)
 shape = SubResource("BoxShape3D_g4v7s")
 
 [node name="ItensNoEstoque" type="Label3D" parent="." unique_id=1637628407]
@@ -34,7 +33,7 @@ collision_mask = 8
 script = ExtResource("3_dkidg")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AreaParaGuardarOsItens" unique_id=673323289]
-transform = Transform3D(8, 0, 0, 0, 1, 0, 0, 0, 8, 0, 0, 0)
+transform = Transform3D(8, 0, 0, 0, 1, 0, 0, 0, 8, -0.09643555, 0.7149713, 4.9979935)
 shape = SubResource("BoxShape3D_yf5fn")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

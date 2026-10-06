@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cvqos22k487uc" path="res://cenas/entradas_portas/porta_cabana.tscn" id="7_5hle0"]
 [ext_resource type="PackedScene" uid="uid://4jnt4pnkbk5t" path="res://cenas/jogador/jogador.tscn" id="8_2n0ck"]
 [ext_resource type="PackedScene" uid="uid://dsaca221woyvn" path="res://cenas/outros/estoque.tscn" id="9_4pwu7"]
-[ext_resource type="AudioStream" uid="uid://btp4u43b8opc" path="res://arte/audio/musicas/Aventura/MusicaCabana.wav" id="10_djeqo"]
+[ext_resource type="AudioStream" uid="uid://bre8adk7vbyxs" path="res://arte/audio/musicas/Aventura/Title forest.wav" id="10_djeqo"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_djeqo"]
 sky_top_color = Color(1, 0.7019608, 0.4745098, 1)

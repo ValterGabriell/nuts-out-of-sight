@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://datq07lrwh5wl"]
 
 [ext_resource type="Script" uid="uid://d2p80sy4yhhxh" path="res://cenas/cena_creditos.gd" id="1_piah7"]
-[ext_resource type="Texture2D" uid="uid://7vxnn4s21bib" path="res://arte/sprites_2d/image_init.png" id="2_nhn4a"]
+[ext_resource type="Texture2D" uid="uid://dlu80spw5bxee" path="res://arte/sprites_2d/image_init.png" id="2_nhn4a"]
 [ext_resource type="FontFile" uid="uid://c1mvdb2wcjmtv" path="res://fonte/vcr_osd_mono/VCR_OSD_MONO_1.001.ttf" id="3_dlpc7"]
 [ext_resource type="AudioStream" uid="uid://dggqujevj7cme" path="res://arte/audio/sfx/vento.mp3" id="4_ryhoq"]
-[ext_resource type="AudioStream" uid="uid://clbk1gawje4q2" path="res://arte/audio/musicas/track 6.wav" id="5_nmdw1"]
+[ext_resource type="AudioStream" uid="uid://vwo8uompu0tw" path="res://arte/audio/musicas/track 6.wav" id="5_nmdw1"]
 
 [node name="CenaCreditos" type="Control" unique_id=1431355579 node_paths=PackedStringArray("texto_label", "audioVento")]
 layout_mode = 3

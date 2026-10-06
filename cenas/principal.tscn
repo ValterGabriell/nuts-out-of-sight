@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://tc4hgo4rjv41" path="res://codigos/utilidades/camera_3D_Pivot_TopDown.gd" id="2_nprih"]
 [ext_resource type="AudioStream" uid="uid://chw0j3ptv6llo" path="res://arte/audio/musicas/Aventura/MusicaGameplay.wav" id="4_eewb4"]
-[ext_resource type="AudioStream" uid="uid://ykqyd0kwd8c6" path="res://arte/audio/musicas/Chase down.wav" id="5_bsnwm"]
 [ext_resource type="PackedScene" uid="uid://dsaca221woyvn" path="res://cenas/outros/estoque.tscn" id="6_8nexe"]
 [ext_resource type="MeshLibrary" uid="uid://bmjcwtwm6d4pr" path="res://mesh_tiles.meshlib" id="6_qcg16"]
 [ext_resource type="Script" uid="uid://vaw1fl4202js" path="res://codigos/utilidades/randomizar_spawn_de_um_objeto.gd" id="7_7qhmh"]
@@ -23,12 +22,14 @@
 [ext_resource type="Script" uid="uid://x81cfquodfv" path="res://codigos/jogador/tocar_audios.gd" id="19_3e1yu"]
 [ext_resource type="AudioStream" uid="uid://bd0gj3wllbpyf" path="res://arte/audio/passos/passo_folha_of.mp3" id="20_j1ylr"]
 [ext_resource type="Script" uid="uid://bjkbmevb7bmws" path="res://codigos/utilidades/recursos/area_que_altera_o_movimento_camera_recurso.gd" id="20_quko3"]
-[ext_resource type="AudioStream" uid="uid://da3a446tgf27n" path="res://arte/audio/musicas/Aventura/Iceyyy.wav" id="20_vum4w"]
+[ext_resource type="AudioStream" uid="uid://dx20ib8slyjgv" path="res://arte/audio/musicas/Aventura/Iceyyy.wav" id="20_vum4w"]
 [ext_resource type="AudioStream" uid="uid://c0m61r8jtmspt" path="res://arte/audio/passos/Dirt/Steps_dirt-021.ogg" id="21_lbghw"]
 [ext_resource type="AudioStream" uid="uid://bre8adk7vbyxs" path="res://arte/audio/musicas/Aventura/Title forest.wav" id="21_vum4w"]
 [ext_resource type="AudioStream" uid="uid://smqs3dk3us1v" path="res://arte/audio/passos/Wood/Steps_wood-005.ogg" id="22_80olr"]
 [ext_resource type="Shader" uid="uid://cxh4rrusc78dj" path="res://shader/agua.gdshader" id="29_qfbtr"]
 [ext_resource type="Script" uid="uid://lovrdqjqtjck" path="res://cenas/gerenciador_de_cutscene.gd" id="29_ql7ju"]
+[ext_resource type="PackedScene" uid="uid://ccp87jibs6573" path="res://cenas/ui/ui_bear_stress_indicator.tscn" id="30_bear_stress_ui"]
+[ext_resource type="Script" uid="uid://fhcucru8nqmf" path="res://cenas/camera_screenshot.gd" id="30_qfbtr"]
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_nprih"]
 
@@ -333,9 +334,6 @@ size = 0.984
 
 [node name="MusicaGameplay" type="AudioStreamPlayer" parent="TUDO/ConfiguracaoGlobal" unique_id=903849656]
 stream = ExtResource("4_eewb4")
-
-[node name="MusicaPerseguicao" type="AudioStreamPlayer" parent="TUDO/ConfiguracaoGlobal" unique_id=1706356121]
-stream = ExtResource("5_bsnwm")
 
 [node name="GridMap" type="GridMap" parent="TUDO/ConfiguracaoGlobal" unique_id=315389087]
 mesh_library = ExtResource("6_qcg16")
@@ -652,7 +650,7 @@ cena_da_folha = ExtResource("9_eewb4")
 offset_vertical_spawn_em_metros = 0.35
 
 [node name="AreaParaSpawnarOItem" type="Area3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas" unique_id=1273190360]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0827179, -1.3, -0.86178946)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0827179, -1.0630443, -0.86178946)
 script = ExtResource("9_cfg_area_folha")
 quantidade_inicial_de_folhas = 35
 deslocamento_base_rajada_em_metros = 0.2
@@ -663,7 +661,7 @@ shape = SubResource("CylinderShape3D_bsnwm")
 debug_color = Color(0, 17.84424, 12.122338, 1)
 
 [node name="AreaParaSpawnarOItem2" type="Area3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas" unique_id=203367934]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.177401, -1.3, 4.8143196)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.177401, -1.0630443, 4.8143196)
 script = ExtResource("9_cfg_area_folha")
 quantidade_inicial_de_folhas = 35
 deslocamento_base_rajada_em_metros = 0.2
@@ -674,7 +672,7 @@ shape = SubResource("CylinderShape3D_qcg16")
 debug_color = Color(0, 17.84424, 12.122338, 1)
 
 [node name="AreaParaSpawnarOItem3" type="Area3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas" unique_id=521907719]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.667967, -1.3, -3.736943)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.667967, -1.0630443, -3.736943)
 script = ExtResource("9_cfg_area_folha")
 quantidade_inicial_de_folhas = 65
 deslocamento_base_rajada_em_metros = 0.2
@@ -685,7 +683,7 @@ shape = SubResource("CylinderShape3D_b42ct")
 debug_color = Color(0, 17.84424, 12.122338, 1)
 
 [node name="AreaParaSpawnarOItem4" type="Area3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas" unique_id=805195242]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.929, -1.3, 2.976)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.929, -1.0630443, 2.976)
 script = ExtResource("9_cfg_area_folha")
 quantidade_inicial_de_folhas = 65
 deslocamento_base_rajada_em_metros = 0.2
@@ -804,9 +802,9 @@ debug_color = Color(17.835724, 0, 0, 0.41960785)
 [node name="Audios" type="Node3D" parent="TUDO/ItensDeGameplay" unique_id=312291490]
 
 [node name="MusicaCabana" type="AudioStreamPlayer3D" parent="TUDO/ItensDeGameplay/Audios" unique_id=1773678620]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.800837, 3.852623, 43.96976)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.800837, 3.852623, 36.296)
 stream = ExtResource("21_vum4w")
-volume_db = 30.0
+volume_db = 45.0
 autoplay = true
 max_distance = 30.0
 
@@ -829,5 +827,12 @@ current = true
 [node name="MeshInstance3D" type="MeshInstance3D" parent="TUDO/AGUA" unique_id=69205547]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.296238, 1.2030978, 11.8798485)
 mesh = SubResource("BoxMesh_g4v7s")
+
+[node name="UIBearStressIndicator" parent="." unique_id=128798166 node_paths=PackedStringArray("cave") instance=ExtResource("30_bear_stress_ui")]
+cave = NodePath("../TUDO/ItensDeGameplay/Caverna")
+
+[node name="CAMERA_SCREENSHOT" type="Camera3D" parent="." unique_id=467784475]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7800674, 5.902937, 27.764584)
+script = ExtResource("30_qfbtr")
 
 [editable path="TUDO/ItensDeGameplay/Jogador/personagem_04"]
