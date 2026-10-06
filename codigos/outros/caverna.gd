@@ -4,7 +4,8 @@ extends StaticBody3D
 const LIMITE_DE_BARULHO :float = 100.0
 const CAMINHO_AUDIO_ALERTA_CAVERNA: String = "res://arte/audio/sfx/urso_gritando.mp3"
 const CENA_CREDITOS: PackedScene = preload("res://cenas/cena_creditos.tscn")
-const MENSAGEM_DE_GAME_OVER: String = "O urso despertou.\n\nTENTE NOVAMENTE"
+const MENSAGEM_DE_GAME_OVER: String = "The bear woke up.\n\nTRY AGAIN"
+const EXPOENTE_DA_CURVA_DE_TREMOR: float = 4.0
 
 enum EstadoDaSequenciaDeRugido {
 	OCIOSO,
@@ -24,7 +25,7 @@ enum EstadoDaSequenciaDeRugido {
 @export var distancia_maxima_do_drop_em_metros: float = 1.8
 @export var taxa_de_reducao_de_barulho_por_segundo: float = 9.0
 @export var limiar_minimo_para_inquietacao_visual: float = 1.0
-@export var intensidade_maxima_do_tremor_local: float = 0.38
+@export var intensidade_maxima_do_tremor_local: float = 0.25
 @export var frequencia_do_tremor_local: float = 11.0
 @export var duracao_do_tremor_camera_por_estagio: float = 0.30
 @export var intervalo_minimo_entre_tremores_de_estagio: float = 0.2
@@ -33,6 +34,7 @@ var percentual_de_barulho_atual: float = 0.0
 var estado_da_sequencia_de_rugido: EstadoDaSequenciaDeRugido = EstadoDaSequenciaDeRugido.OCIOSO
 var _posicao_local_inicial_da_caverna: Vector3 = Vector3.ZERO
 var _escala_inicial_olhos: Vector3 = Vector3.ONE
+var _intensidade_visual_inercial: float = 0.0
 var _tempo_feedback_inquietacao: float = 0.0
 var _ultimo_estagio_de_alerta_emitido: int = -1
 var _tempo_desde_ultimo_tremor_de_estagio: float = 999.0
@@ -57,11 +59,12 @@ func _process(delta: float) -> void:
 	if estado_da_sequencia_de_rugido == EstadoDaSequenciaDeRugido.EXECUTANDO:
 		# Durante o rugido final, mantem a caverna no pico de inquietacao visual.
 		percentual_de_barulho_atual = LIMITE_DE_BARULHO
-		_atualizar_feedback_visual_da_inquietacao()
+		_intensidade_visual_inercial = 1.0
+		_atualizar_feedback_visual_da_inquietacao(delta)
 		return
 
 	_reduzir_percentual_de_barulho_ao_longo_do_tempo(delta)
-	_atualizar_feedback_visual_da_inquietacao()
+	_atualizar_feedback_visual_da_inquietacao(delta)
 
 func obter_snapshot_para_salvamento() -> Dictionary:
 	return {
@@ -73,6 +76,7 @@ func aplicar_snapshot_do_salvamento(snapshot: Dictionary) -> void:
 		return
 
 	percentual_de_barulho_atual = clampf(float(snapshot.get("percentual_de_barulho_atual", 0.0)), 0.0, LIMITE_DE_BARULHO)
+	_intensidade_visual_inercial = clampf(percentual_de_barulho_atual / LIMITE_DE_BARULHO, 0.0, 1.0)
 
 func _restaurar_snapshot_da_caverna_da_cena_atual() -> void:
 	if GlobalGerenciadorDeSalvamento == null:
@@ -90,7 +94,7 @@ func registrar_disparo_de_barulho_detectado(barulho: float) -> void:
 func _definir_percentual_de_barulho_atual(percentual: float) -> void:
 	var percentual_anterior = percentual_de_barulho_atual
 	percentual_de_barulho_atual = clampf(percentual_de_barulho_atual + clampf(percentual, 0.0, LIMITE_DE_BARULHO), 0.0, LIMITE_DE_BARULHO)
-	_atualizar_feedback_visual_da_inquietacao()
+	_intensidade_visual_inercial = max(_intensidade_visual_inercial, percentual_de_barulho_atual / LIMITE_DE_BARULHO)
 	if percentual_anterior < LIMITE_DE_BARULHO and percentual_de_barulho_atual >= LIMITE_DE_BARULHO:
 		_iniciar_sequencia_de_rugido_da_caverna()
 
@@ -281,23 +285,33 @@ func _reduzir_percentual_de_barulho_ao_longo_do_tempo(delta: float) -> void:
 	var reducao: float = max(taxa_de_reducao_de_barulho_por_segundo, 0.0) * delta
 	percentual_de_barulho_atual = max(percentual_de_barulho_atual - reducao, 0.0)
 
-func _atualizar_feedback_visual_da_inquietacao() -> void:
-	if percentual_de_barulho_atual <= limiar_minimo_para_inquietacao_visual:
+func _atualizar_feedback_visual_da_inquietacao(delta: float) -> void:
+	var intensidade_alvo: float = clampf(percentual_de_barulho_atual / LIMITE_DE_BARULHO, 0.0, 1.0)
+	# A intensidade visual so sobe: depois que comeca a tremer, nunca para ate reiniciar o jogo.
+	if intensidade_alvo > _intensidade_visual_inercial:
+		_intensidade_visual_inercial = move_toward(_intensidade_visual_inercial, intensidade_alvo, 9.5 * delta)
+
+	var intensidade_normalizada: float = clampf(_intensidade_visual_inercial, 0.0, 1.0)
+	if intensidade_normalizada <= 0.001 and percentual_de_barulho_atual <= limiar_minimo_para_inquietacao_visual:
 		_resetar_feedback_visual_da_inquietacao()
 		return
 
-	var intensidade_normalizada: float = clampf(percentual_de_barulho_atual / LIMITE_DE_BARULHO, 0.0, 1.0)
 	_aplicar_tremor_local_da_caverna(intensidade_normalizada)
 	_atualizar_olhos_luminosos(intensidade_normalizada)
 	_atualizar_particulas_de_vento(intensidade_normalizada)
 	_aplicar_tremor_de_camera_por_estagio(intensidade_normalizada)
 
 func _aplicar_tremor_local_da_caverna(intensidade_normalizada: float) -> void:
-	var amplitude: float = intensidade_maxima_do_tremor_local * intensidade_normalizada
-	var frequencia: float = max(frequencia_do_tremor_local, 0.1)
-	var deslocamento_x: float = sin(_tempo_feedback_inquietacao * frequencia) * amplitude
-	var deslocamento_z: float = cos(_tempo_feedback_inquietacao * (frequencia * 1.25)) * amplitude
-	position = _posicao_local_inicial_da_caverna + Vector3(deslocamento_x, 0.0, deslocamento_z)
+	var amplitude: float = intensidade_maxima_do_tremor_local * pow(intensidade_normalizada, EXPOENTE_DA_CURVA_DE_TREMOR)
+	# Pulsos lentos simulam o rosnado; o jitter aleatorio rapido evita o balanco suave que desloca a caverna.
+	var pulso_de_rosnado: float = 0.5 + 0.5 * sin(_tempo_feedback_inquietacao * max(frequencia_do_tremor_local, 0.1) * 0.35)
+	var amplitude_com_rosnado: float = amplitude * lerpf(0.4, 1.0, pulso_de_rosnado * pulso_de_rosnado)
+	var deslocamento: Vector3 = Vector3(
+		randf_range(-1.0, 1.0),
+		randf_range(-1.0, 1.0) * 0.4,
+		randf_range(-1.0, 1.0)
+	) * amplitude_com_rosnado
+	position = _posicao_local_inicial_da_caverna + deslocamento
 
 func _atualizar_olhos_luminosos(intensidade_normalizada: float) -> void:
 	if olhos_luminosos == null:
@@ -318,21 +332,37 @@ func _atualizar_particulas_de_vento(intensidade_normalizada: float) -> void:
 func _aplicar_tremor_de_camera_por_estagio(intensidade_normalizada: float) -> void:
 	var estagio_atual: int = int(floor(intensidade_normalizada * 6.0))
 	estagio_atual = clampi(estagio_atual, 0, 5)
-	if estagio_atual <= _ultimo_estagio_de_alerta_emitido:
+	if estagio_atual <= 0:
+		_ultimo_estagio_de_alerta_emitido = 0
 		return
-	if _tempo_desde_ultimo_tremor_de_estagio < intervalo_minimo_entre_tremores_de_estagio:
+
+	if estagio_atual < _ultimo_estagio_de_alerta_emitido:
+		_ultimo_estagio_de_alerta_emitido = estagio_atual
+
+	var intervalo_dinamico: float = lerpf(
+		max(intervalo_minimo_entre_tremores_de_estagio * 2.25, 0.05),
+		max(intervalo_minimo_entre_tremores_de_estagio, 0.05),
+		intensidade_normalizada
+	)
+	var avancou_de_estagio: bool = estagio_atual > _ultimo_estagio_de_alerta_emitido
+	if not avancou_de_estagio and _tempo_desde_ultimo_tremor_de_estagio < intervalo_dinamico:
 		return
 
 	_ultimo_estagio_de_alerta_emitido = estagio_atual
 	_tempo_desde_ultimo_tremor_de_estagio = 0.0
-	var intensidade_tremor_estagio: float = lerpf(0.12, 0.55, pow(intensidade_normalizada, 1.35))
+	var intensidade_tremor_estagio: float = lerpf(0.03, 0.55, pow(intensidade_normalizada, EXPOENTE_DA_CURVA_DE_TREMOR))
+	if avancou_de_estagio:
+		intensidade_tremor_estagio *= 1.0 + (float(estagio_atual) * 0.08)
+	intensidade_tremor_estagio = clampf(intensidade_tremor_estagio, 0.03, 0.9)
+	var duracao_tremor: float = lerpf(0.12, duracao_do_tremor_camera_por_estagio, intensidade_normalizada)
 
 	var camera_node: Node = _obter_no_camera_da_cena()
 	if camera_node != null and camera_node.has_method("executar_tremor"):
-		camera_node.call("executar_tremor", duracao_do_tremor_camera_por_estagio, intensidade_tremor_estagio)
+		camera_node.call("executar_tremor", duracao_tremor, intensidade_tremor_estagio)
 
 func _resetar_feedback_visual_da_inquietacao() -> void:
 	position = _posicao_local_inicial_da_caverna
+	_intensidade_visual_inercial = 0.0
 	_ultimo_estagio_de_alerta_emitido = -1
 
 	if olhos_luminosos != null:

@@ -1,20 +1,17 @@
 CREDITS
-GABORI
 
 Programming
+Gabori
+
 Game Design
+Gabori
+
 3D Art
+Gabori
 
 MUSIC
-
-Cozy Music
 Cute/Cozy Music Pack 2 — 1144ghost
 Woodland Music — Foggy Sunrise
 
-Chase Music
-Espionage Music Pack — Xanderwood
-
 SOUND EFFECTS
-
-Footsteps
 Footsteps Sounds — Dryoma

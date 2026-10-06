@@ -27,6 +27,7 @@
 [ext_resource type="AudioStream" uid="uid://c0m61r8jtmspt" path="res://arte/audio/passos/Dirt/Steps_dirt-021.ogg" id="21_lbghw"]
 [ext_resource type="AudioStream" uid="uid://bre8adk7vbyxs" path="res://arte/audio/musicas/Aventura/Title forest.wav" id="21_vum4w"]
 [ext_resource type="AudioStream" uid="uid://smqs3dk3us1v" path="res://arte/audio/passos/Wood/Steps_wood-005.ogg" id="22_80olr"]
+[ext_resource type="Shader" uid="uid://cxh4rrusc78dj" path="res://shader/agua.gdshader" id="29_qfbtr"]
 [ext_resource type="Script" uid="uid://lovrdqjqtjck" path="res://cenas/gerenciador_de_cutscene.gd" id="29_ql7ju"]
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_nprih"]
@@ -55,20 +56,23 @@ volumetric_fog_length = 307.61
 [sub_resource type="BoxShape3D" id="BoxShape3D_g4v7s"]
 size = Vector3(39.444336, 1, 71.76822)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_ql7ju"]
+size = Vector3(6.016968, 1, 7.1998124)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_57qmd"]
 size = Vector3(6.2834473, 1, 15.066284)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_bsnwm"]
-radius = 3.8930664
+radius = 4.550293
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_qcg16"]
-radius = 2.8706055
+radius = 4.1445313
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_b42ct"]
 radius = 6.4018555
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_8nexe"]
-radius = 4.7036133
+radius = 6.3481445
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bsnwm"]
 size = Vector3(0.12719727, 0.10986328, 0.10620117)
@@ -282,6 +286,26 @@ _data = {
 &"intro": SubResource("Animation_vum4w")
 }
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7qhmh"]
+render_priority = 0
+shader = ExtResource("29_qfbtr")
+shader_parameter/color_shallow = Color(0.39607844, 0.52156866, 0.42745098, 0.8509804)
+shader_parameter/color_deep = Color(0.19215687, 0.2784314, 0.2627451, 0.9490196)
+shader_parameter/color_edge = Color(0.9254902, 0.99607843, 0.7921569, 1)
+shader_parameter/wave_height = 0.12
+shader_parameter/wave_speed = 3.0
+shader_parameter/wave_scale = 10.0
+shader_parameter/normal_strength = 0.5
+shader_parameter/normal_speed = 0.15
+shader_parameter/normal_scale = 3.0
+shader_parameter/metallic_amount = 0.15
+shader_parameter/roughness_amount = 0.15
+shader_parameter/fresnel_strength = 2.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_g4v7s"]
+material = SubResource("ShaderMaterial_7qhmh")
+size = Vector3(100, 1, 100)
+
 [node name="Principal" type="Node3D" unique_id=830613941]
 
 [node name="TUDO" type="Node3D" parent="." unique_id=281836022]
@@ -294,8 +318,7 @@ _data = {
 environment = SubResource("Environment_j2ut6")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="TUDO/ConfiguracaoGlobal/Iluminacao" unique_id=1385581125]
-transform = Transform3D(-0.02340942, 0.99478716, -0.09924989, 0.37484062, 0.100768454, 0.92159647, 0.9267936, -0.015628846, -0.3752455, 16.529865, 13.265167, -15.93918)
-light_energy = 4.195
+transform = Transform3D(-0.117986806, 0.9915718, -0.053522117, -0.24211684, 0.023546241, 0.9699614, 0.9630464, 0.12740123, 0.23729813, 16.529865, 20.93791, -15.93918)
 light_volumetric_fog_energy = 7.64
 shadow_enabled = true
 
@@ -459,6 +482,93 @@ collision_mask = 4
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.222168, 1.514019, 23.82759)
 shape = SubResource("BoxShape3D_g4v7s")
 
+[node name="CHAO2" type="StaticBody3D" parent="TUDO/ConfiguracaoGlobal" unique_id=1450715705]
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/ConfiguracaoGlobal/CHAO2" unique_id=1711215018]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 15.919095, 4.0893517, 14.1870165)
+shape = SubResource("BoxShape3D_ql7ju")
+debug_color = Color(17.551989, 0, 0, 0.41960785)
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="TUDO/ConfiguracaoGlobal/CHAO2" unique_id=636546951]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 10.119911, 4.0893517, 22.592201)
+shape = SubResource("BoxShape3D_ql7ju")
+debug_color = Color(17.551989, 0, 0, 0.41960785)
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="TUDO/ConfiguracaoGlobal/CHAO2" unique_id=1817442212]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 10.119911, 4.0893517, 29.725393)
+shape = SubResource("BoxShape3D_ql7ju")
+debug_color = Color(17.551989, 0, 0, 0.41960785)
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="TUDO/ConfiguracaoGlobal/CHAO2" unique_id=156121645]
+transform = Transform3D(-2.835871e-09, 0.06487717, -0.9978933, -1, -4.371139e-08, 0, -4.3619302e-08, 0.9978933, 0.06487717, 12.644907, 4.0893517, 18.506132)
+shape = SubResource("BoxShape3D_ql7ju")
+debug_color = Color(17.551989, 0, 0, 0.41960785)
+
+[node name="CollisionShape3D6" type="CollisionShape3D" parent="TUDO/ConfiguracaoGlobal/CHAO2" unique_id=127704914]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 23.895424, 4.0893517, 29.725393)
+shape = SubResource("BoxShape3D_ql7ju")
+debug_color = Color(17.551989, 0, 0, 0.41960785)
+
+[node name="CollisionShape3D11" type="CollisionShape3D" parent="TUDO/ConfiguracaoGlobal/CHAO2" unique_id=1582305033]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 23.856333, 4.0893517, 21.584053)
+shape = SubResource("BoxShape3D_ql7ju")
+debug_color = Color(17.551989, 0, 0, 0.41960785)
+
+[node name="CollisionShape3D12" type="CollisionShape3D" parent="TUDO/ConfiguracaoGlobal/CHAO2" unique_id=1785952630]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 28.683552, 4.0893517, 7.0576134)
+shape = SubResource("BoxShape3D_ql7ju")
+debug_color = Color(17.551989, 0, 0, 0.41960785)
+
+[node name="CollisionShape3D13" type="CollisionShape3D" parent="TUDO/ConfiguracaoGlobal/CHAO2" unique_id=1730007468]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 28.683552, 4.0893517, -2.5460806)
+shape = SubResource("BoxShape3D_ql7ju")
+debug_color = Color(17.551989, 0, 0, 0.41960785)
+
+[node name="CollisionShape3D14" type="CollisionShape3D" parent="TUDO/ConfiguracaoGlobal/CHAO2" unique_id=222217765]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 11.533134, 4.0893517, -2.5460806)
+shape = SubResource("BoxShape3D_ql7ju")
+debug_color = Color(17.551989, 0, 0, 0.41960785)
+
+[node name="CollisionShape3D15" type="CollisionShape3D" parent="TUDO/ConfiguracaoGlobal/CHAO2" unique_id=927779061]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 11.533134, 4.0893517, 1.3167458)
+shape = SubResource("BoxShape3D_ql7ju")
+debug_color = Color(17.551989, 0, 0, 0.41960785)
+
+[node name="CollisionShape3D16" type="CollisionShape3D" parent="TUDO/ConfiguracaoGlobal/CHAO2" unique_id=899767291]
+transform = Transform3D(1.9106855e-15, -4.371139e-08, 1, -1, -4.371139e-08, 0, 4.371139e-08, -1, -4.371139e-08, 13.052208, 4.0893517, -8.356213)
+shape = SubResource("BoxShape3D_ql7ju")
+debug_color = Color(17.551989, 0, 0, 0.41960785)
+
+[node name="CollisionShape3D17" type="CollisionShape3D" parent="TUDO/ConfiguracaoGlobal/CHAO2" unique_id=1606182717]
+transform = Transform3D(1.9106855e-15, -4.371139e-08, 1, -1, -4.371139e-08, 0, 4.371139e-08, -1, -4.371139e-08, 20.18571, 4.0893517, -8.356213)
+shape = SubResource("BoxShape3D_ql7ju")
+debug_color = Color(17.551989, 0, 0, 0.41960785)
+
+[node name="CollisionShape3D7" type="CollisionShape3D" parent="TUDO/ConfiguracaoGlobal/CHAO2" unique_id=152668660]
+transform = Transform3D(-2.835871e-09, 0.06487717, -0.9978933, -1, -4.371139e-08, 0, -4.3619302e-08, 0.9978933, 0.06487717, 23.479822, 4.0893517, 17.546753)
+shape = SubResource("BoxShape3D_ql7ju")
+debug_color = Color(17.551989, 0, 0, 0.41960785)
+
+[node name="CollisionShape3D9" type="CollisionShape3D" parent="TUDO/ConfiguracaoGlobal/CHAO2" unique_id=1210546409]
+transform = Transform3D(1.9106855e-15, -4.371139e-08, 1, -1, -4.371139e-08, 0, 4.371139e-08, -1, -4.371139e-08, 14.55274, 4.0893517, 30.303272)
+shape = SubResource("BoxShape3D_ql7ju")
+debug_color = Color(17.551989, 0, 0, 0.41960785)
+
+[node name="CollisionShape3D10" type="CollisionShape3D" parent="TUDO/ConfiguracaoGlobal/CHAO2" unique_id=1753523073]
+transform = Transform3D(1.9106855e-15, -4.371139e-08, 1, -1, -4.371139e-08, 0, 4.371139e-08, -1, -4.371139e-08, 19.4478, 4.0893517, 30.303272)
+shape = SubResource("BoxShape3D_ql7ju")
+debug_color = Color(17.551989, 0, 0, 0.41960785)
+
+[node name="CHAO3" type="StaticBody3D" parent="TUDO/ConfiguracaoGlobal" unique_id=1505864459]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.102213, 0, 0)
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/ConfiguracaoGlobal/CHAO3" unique_id=1213044048]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 9.17584, 4.424737, 13.9074955)
+shape = SubResource("BoxShape3D_ql7ju")
+debug_color = Color(17.551989, 0, 0, 0.41960785)
+
 [node name="PosicoesCameraPivot" type="Node3D" parent="TUDO/ConfiguracaoGlobal" unique_id=1474081026]
 
 [node name="Principal2" type="Node3D" parent="TUDO/ConfiguracaoGlobal/PosicoesCameraPivot" unique_id=1868714029 node_paths=PackedStringArray("jogador_movimento")]
@@ -485,7 +595,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0548005, 0, 0.18327951)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.114479, 0, -4.46729)
 script = ExtResource("7_7qhmh")
 tipo_de_objeto = 1
-lista_de_objetos = [NodePath("Noz/Noz"), NodePath("Noz/Noz2"), NodePath("Noz/Noz4"), NodePath("Noz/Noz5"), NodePath("Noz/Noz6"), NodePath("Noz/Noz7"), NodePath("Noz/Noz3"), NodePath("Noz/Noz8"), NodePath("Noz/Noz9")]
+lista_de_objetos = [NodePath("Noz/Noz"), NodePath("Noz/Noz2"), null, NodePath("Noz/Noz5"), null, NodePath("Noz/Noz7"), null, NodePath("Noz/Noz8"), NodePath("Noz/Noz9")]
 lista_de_areas_para_randomizar_o_spawn = [NodePath("AreasParaRandomizarOSpawn/AreaParaRandomizarOSpawn1"), NodePath("AreasParaRandomizarOSpawn/AreaParaRandomizarOSpawn2")]
 
 [node name="Noz" type="Node3D" parent="TUDO/ItensDeGameplay/Areas/ItensColetaveis" unique_id=999117848]
@@ -495,25 +605,12 @@ transform = Transform3D(2, 0, 0, 0, 1.6036208, 1.195157, 0, -1.195157, 1.6036208
 id_unico_do_item_no_mapa = &"principal_noz_1"
 
 [node name="Noz2" parent="TUDO/ItensDeGameplay/Areas/ItensColetaveis/Noz" unique_id=532814948 instance=ExtResource("8_djk5k")]
-transform = Transform3D(2, 0, 0, 0, 1.6036208, 1.195157, 0, -1.195157, 1.6036208, 14.186106, 2.2405007, 7.3781605)
-id_unico_do_item_no_mapa = &"principal_noz_1"
-
-[node name="Noz4" parent="TUDO/ItensDeGameplay/Areas/ItensColetaveis/Noz" unique_id=811081087 instance=ExtResource("8_djk5k")]
-transform = Transform3D(2, 0, 0, 0, 1.6036208, 1.195157, 0, -1.195157, 1.6036208, 16.63896, 2.2405007, 5.451943)
+transform = Transform3D(2, 0, 0, 0, 1.6036208, 1.195157, 0, -1.195157, 1.6036208, 20.734375, 2.2405007, 7.3781605)
 id_unico_do_item_no_mapa = &"principal_noz_1"
 
 [node name="Noz5" parent="TUDO/ItensDeGameplay/Areas/ItensColetaveis/Noz" unique_id=1014856503 instance=ExtResource("8_djk5k")]
 transform = Transform3D(2, 0, 0, 0, 1.6036208, 1.195157, 0, -1.195157, 1.6036208, 26.931902, 2.2405007, 6.220858)
 id_unico_do_item_no_mapa = &"principal_noz_1"
-
-[node name="Noz6" parent="TUDO/ItensDeGameplay/Areas/ItensColetaveis/Noz" unique_id=888947884 instance=ExtResource("8_djk5k")]
-transform = Transform3D(2, 0, 0, 0, 1.6036208, 1.195157, 0, -1.195157, 1.6036208, 25.464441, 2.2405007, 8.401944)
-id_unico_do_item_no_mapa = &"principal_noz_1"
-
-[node name="Noz3" parent="TUDO/ItensDeGameplay/Areas/ItensColetaveis/Noz" unique_id=1824542932 instance=ExtResource("9_sflf3")]
-transform = Transform3D(4, 0, 0, 0, 1.1861145, 3.8200958, 0, -3.8200958, 1.1861145, 18.271017, 2.1885672, 3.0193722)
-percentual_reducao_velocidade = 10.0
-id_unico_do_item_no_mapa = &"principal_noz_3"
 
 [node name="Noz7" parent="TUDO/ItensDeGameplay/Areas/ItensColetaveis/Noz" unique_id=1506976320 instance=ExtResource("9_sflf3")]
 transform = Transform3D(4, 0, 0, 0, 1.1861145, 3.8200958, 0, -3.8200958, 1.1861145, 26.957865, 2.1885672, 0.18483686)
@@ -557,7 +654,7 @@ offset_vertical_spawn_em_metros = 0.35
 [node name="AreaParaSpawnarOItem" type="Area3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas" unique_id=1273190360]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0827179, -1.3, -0.86178946)
 script = ExtResource("9_cfg_area_folha")
-quantidade_inicial_de_folhas = 45
+quantidade_inicial_de_folhas = 35
 deslocamento_base_rajada_em_metros = 0.2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem" unique_id=861790661]
@@ -568,55 +665,33 @@ debug_color = Color(0, 17.84424, 12.122338, 1)
 [node name="AreaParaSpawnarOItem2" type="Area3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas" unique_id=203367934]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.177401, -1.3, 4.8143196)
 script = ExtResource("9_cfg_area_folha")
-quantidade_inicial_de_folhas = 45
+quantidade_inicial_de_folhas = 35
 deslocamento_base_rajada_em_metros = 0.2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem2" unique_id=1704221220]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5479336, 0.39982176, -1.7939065)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5479336, 0.39982176, -0.87280416)
 shape = SubResource("CylinderShape3D_qcg16")
 debug_color = Color(0, 17.84424, 12.122338, 1)
 
 [node name="AreaParaSpawnarOItem3" type="Area3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas" unique_id=521907719]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.667967, -1.3, -3.736943)
 script = ExtResource("9_cfg_area_folha")
-quantidade_inicial_de_folhas = 45
+quantidade_inicial_de_folhas = 65
 deslocamento_base_rajada_em_metros = 0.2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem3" unique_id=1096264430]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.226719, 0.39982176, 0.83816695)
-shape = SubResource("CylinderShape3D_b42ct")
-debug_color = Color(0, 17.84424, 12.122338, 1)
-
-[node name="AreaParaSpawnarOItem5" type="Area3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas" unique_id=1272823165]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0898552, -1.3, 7.9179406)
-script = ExtResource("9_cfg_area_folha")
-quantidade_inicial_de_folhas = 45
-deslocamento_base_rajada_em_metros = 0.2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem5" unique_id=61695690]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.720911, 0.39982176, -1.7859879)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.226719, 0.39982176, 1.6378868)
 shape = SubResource("CylinderShape3D_b42ct")
 debug_color = Color(0, 17.84424, 12.122338, 1)
 
 [node name="AreaParaSpawnarOItem4" type="Area3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas" unique_id=805195242]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.929, -1.3, 2.976)
 script = ExtResource("9_cfg_area_folha")
-quantidade_inicial_de_folhas = 45
+quantidade_inicial_de_folhas = 65
 deslocamento_base_rajada_em_metros = 0.2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem4" unique_id=455321383]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.32706547, 0.39982176, -0.6303263)
-shape = SubResource("CylinderShape3D_8nexe")
-debug_color = Color(0, 17.84424, 12.122338, 1)
-
-[node name="AreaParaSpawnarOItem6" type="Area3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas" unique_id=1183880556]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9516354, -1.3, 6.5803094)
-script = ExtResource("9_cfg_area_folha")
-quantidade_inicial_de_folhas = 45
-deslocamento_base_rajada_em_metros = 0.2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TUDO/ItensDeGameplay/Areas/AreasDeAparecimentoDasFolhas/AreaParaSpawnarOItem6" unique_id=698453269]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.150631, 0.39982176, -1.2262373)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.751359, 0.39982176, -0.14726973)
 shape = SubResource("CylinderShape3D_8nexe")
 debug_color = Color(0, 17.84424, 12.122338, 1)
 
@@ -748,5 +823,11 @@ autoplay = &"intro"
 [node name="CameraCutScene" type="Camera3D" parent="TUDO/GerenciadorDeCutsceneInicial" unique_id=2034025022]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.179951, 3.1442432, 4.2426796)
 current = true
+
+[node name="AGUA" type="Node3D" parent="TUDO" unique_id=1051168341]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TUDO/AGUA" unique_id=69205547]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.296238, 1.2030978, 11.8798485)
+mesh = SubResource("BoxMesh_g4v7s")
 
 [editable path="TUDO/ItensDeGameplay/Jogador/personagem_04"]

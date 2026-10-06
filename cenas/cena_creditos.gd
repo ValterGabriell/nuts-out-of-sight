@@ -21,6 +21,16 @@ func _ready() -> void:
 
 	await play_opening_fade()
 
+	var contexto: int = int(GlobalGerenciadorDeSinais.obter_contexto_dos_creditos())
+	if contexto == int(GlobalGerenciadorDeSinais.ContextoDosCreditos.GAME_OVER):
+		if texto_label != null:
+			texto_label.bbcode_enabled = true
+			texto_label.text = "[center][b]" + GlobalGerenciadorDeSinais.obter_mensagem_de_abertura_dos_creditos().strip_edges() + "[/b][/center]"
+			texto_label.visible_ratio = 1.0
+		botao_tentar_novamente.visible = true
+		botao_tentar_novamente.grab_focus()
+		return
+
 	if texto_label == null:
 		return
 
@@ -43,7 +53,7 @@ func _configurar_loop_do_audio_de_vento() -> void:
 func _setup_botao_tentar_novamente() -> void:
 	botao_tentar_novamente = Button.new()
 	botao_tentar_novamente.name = "BotaoTentarNovamente"
-	botao_tentar_novamente.text = "TENTAR NOVAMENTE"
+	botao_tentar_novamente.text = "TRY AGAIN"
 	botao_tentar_novamente.visible = false
 	botao_tentar_novamente.focus_mode = Control.FOCUS_ALL
 	botao_tentar_novamente.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -101,19 +111,19 @@ func _montar_texto_final_dos_creditos() -> String:
 	if mensagem_de_abertura.is_empty():
 		var contexto: int = int(GlobalGerenciadorDeSinais.obter_contexto_dos_creditos())
 		if contexto == int(GlobalGerenciadorDeSinais.ContextoDosCreditos.VITORIA):
-			mensagem_de_abertura = "OBRIGADO!\n\nE assim, o pequeno esquilo conseguiu a comida suficiente para o inverno..."
+			mensagem_de_abertura = "THANK YOU!\n\nAnd so, the little squirrel gathered enough food for the winter..."
 		else:
-			mensagem_de_abertura = "O urso despertou.\n\nTENTE NOVAMENTE"
+			mensagem_de_abertura = "The bear woke up.\n\nTRY AGAIN"
 
 	return "[center][b]" + mensagem_de_abertura + "[/b][/center]\n\n" + creditos_formatados
 
 func _carregar_linhas_do_arquivo_de_creditos() -> PackedStringArray:
 	if not FileAccess.file_exists(CREDITOS_FILE_PATH):
-		return PackedStringArray(["Créditos indisponíveis no momento."])
+		return PackedStringArray(["Credits are unavailable at the moment."])
 
 	var arquivo: FileAccess = FileAccess.open(CREDITOS_FILE_PATH, FileAccess.READ)
 	if arquivo == null:
-		return PackedStringArray(["Créditos indisponíveis no momento."])
+		return PackedStringArray(["Credits are unavailable at the moment."])
 
 	var conteudo: String = arquivo.get_as_text()
 	return conteudo.split("\n")
@@ -134,7 +144,7 @@ func _formatar_creditos_com_bbcode(linhas: PackedStringArray) -> String:
 	if not bloco_atual.is_empty():
 		blocos.append(bloco_atual)
 
-	var texto_final: String = "[center][color=#ffe3a1][b]CRÉDITOS[/b][/color][/center]\n\n"
+	var texto_final: String = "[center][color=#ffe3a1][b]CREDITS[/b][/color][/center]\n\n"
 	for bloco in blocos:
 		if bloco.is_empty():
 			continue
